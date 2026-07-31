@@ -97,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <Link to="/login" className="text-[14.5px] font-semibold">
             Sign in
           </Link>
-          <Link to="/login" className="btn btn-dark">
+          <Link to="/login" className="btn btn-gradient">
             Start free
           </Link>
         </div>

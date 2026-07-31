@@ -10,17 +10,17 @@ body,
 
 body {
   margin: 0;
-  background: #f7f7f7;
+  /* Soft lavender-tinted canvas — premium, not the usual flat grey. */
+  background: #f5f4fb;
   color: #1e1d29;
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Reusable button styles */
 @layer components {
   .btn {
-    @apply inline-flex items-center gap-2 font-semibold text-[14.5px] rounded-[10px] px-[18px] py-[10px] cursor-pointer transition-colors border border-transparent;
+    @apply inline-flex items-center gap-2 font-semibold text-[14.5px] rounded-[11px] px-[18px] py-[11px] cursor-pointer transition-all border border-transparent;
   }
   .btn-dark {
     @apply bg-ink text-white hover:bg-black;
@@ -30,5 +30,25 @@ body {
   }
   .btn-accent {
     @apply bg-accent text-white font-bold hover:brightness-105;
+  }
+  /* Signature brand gradient button — the memorable Empathetic AI accent. */
+  .btn-gradient {
+    @apply text-white font-semibold border-none;
+    background-image: linear-gradient(100deg, #3b82f6, #7c5cff 52%, #e24be0);
+    box-shadow: 0 8px 22px -6px rgba(124, 92, 255, 0.5);
+  }
+  .btn-gradient:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 10px 26px -6px rgba(124, 92, 255, 0.6);
+  }
+}
+
+@layer utilities {
+  /* Gradient text — the brand's signature headline treatment. */
+  .grad-text {
+    background-image: linear-gradient(100deg, #3b82f6, #7c5cff 50%, #e24be0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }

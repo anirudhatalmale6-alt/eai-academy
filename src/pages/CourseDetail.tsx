@@ -93,7 +93,9 @@ export function CourseDetail() {
             </div>
             <button
               onClick={() => free && setEnrollOpen(true)}
-              className="btn btn-dark w-full justify-center mt-4"
+              className={`btn w-full justify-center mt-4 ${
+                free ? "btn-gradient" : "btn-dark"
+              }`}
             >
               {free ? "Get free access →" : "Enrol (coming soon)"}
             </button>

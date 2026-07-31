@@ -4,11 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#F7F7F7",
+        bg: "#F5F4FB",
         panel: "#ffffff",
         ink: "#1E1D29",
         ink2: "#6b6a78",
         line: "rgba(24,26,31,0.09)",
+        // Rich deep-violet for dark sections — branded, premium (not flat black).
+        plum: "#191233",
         // Empathetic AI brand accent — the finance-blue from the logo (the
         // logo's gradient runs blue -> violet -> pink; blue is the trust anchor
         // used for links, labels and small UI, gradients carry the full range).
