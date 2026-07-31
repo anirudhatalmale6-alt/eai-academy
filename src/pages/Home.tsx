@@ -12,7 +12,7 @@ export function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="rounded-[22px] overflow-hidden relative min-h-[390px] flex items-center p-8 sm:p-14 text-white bg-gradient-to-br from-[#0aa4d8] via-[#22bde6] to-[#e05bd6]">
+      <section className="rounded-[22px] overflow-hidden relative min-h-[390px] flex items-center p-8 sm:p-14 text-white bg-gradient-to-br from-[#2563eb] via-[#7c5cff] to-[#e24be0]">
         <div className="absolute inset-0 bg-[radial-gradient(700px_300px_at_80%_120%,rgba(255,255,255,0.25),transparent)]" />
         <div className="relative z-10 max-w-[640px]">
           <PartnerBadge variant="glass" />
@@ -71,7 +71,7 @@ export function Home() {
         <div className="flex gap-3">
           <a
             href="https://www.empathetic-ai.com"
-            className="btn btn-cyan"
+            className="btn btn-accent"
           >
             Explore our AI products →
           </a>

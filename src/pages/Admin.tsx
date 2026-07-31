@@ -34,7 +34,7 @@ export function Admin() {
       <div className="bg-panel border border-line rounded-[20px] p-6 sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="text-cyan-ink text-[12px] font-bold uppercase tracking-wide">
+            <div className="text-accent-ink text-[12px] font-bold uppercase tracking-wide">
               Admin
             </div>
             <h1 className="text-[28px] sm:text-[32px] font-bold tracking-[-0.5px] mt-1">

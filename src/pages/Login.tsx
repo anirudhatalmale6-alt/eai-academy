@@ -13,7 +13,7 @@ export function Login() {
           the free course from the home page to get access by email.
         </p>
         <input
-          className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-cyan mt-5"
+          className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-accent mt-5"
           placeholder="Email address"
           disabled
         />

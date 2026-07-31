@@ -3,7 +3,7 @@ export type Level = "Beginner" | "Intermediate" | "Advanced" | "Certificate";
 export interface Course {
   slug: string;
   title: string;
-  tagline: string; // small cyan eyebrow, e.g. "Great for people new to AI"
+  tagline: string; // small accent eyebrow, e.g. "Great for people new to AI"
   summary: string;
   level: Level;
   priceCents: number; // 0 = free
@@ -30,7 +30,7 @@ export const COURSES: Course[] = [
     priceCents: 0,
     durationLabel: "1h 20m",
     lessonsLabel: "6 lessons",
-    gradient: "from-[#22bde6] to-[#4f7bff]",
+    gradient: "from-[#3b82f6] to-[#6366f1]",
     outcomes: [
       "Understand where AI genuinely helps in finance work, and where it doesn't",
       "Use AI responsibly within professional and regulatory obligations",
@@ -55,7 +55,7 @@ export const COURSES: Course[] = [
     priceCents: 7900,
     durationLabel: "2h 40m",
     lessonsLabel: "11 lessons",
-    gradient: "from-[#7c6bff] to-[#22bde6]",
+    gradient: "from-[#4f6bff] to-[#7c5cff]",
     outcomes: [
       "Write prompts that produce consistent, defensible answers",
       "Build source-traceability into every output",
@@ -77,7 +77,7 @@ export const COURSES: Course[] = [
     priceCents: 14900,
     durationLabel: "4h 10m",
     lessonsLabel: "18 lessons",
-    gradient: "from-[#e05bd6] to-[#7c6bff]",
+    gradient: "from-[#7c5cff] to-[#c14be0]",
     outcomes: [
       "Map a firm task into an automatable agent workflow",
       "Keep a human in the loop for accuracy and accountability",
@@ -98,7 +98,7 @@ export const COURSES: Course[] = [
     priceCents: 14900,
     durationLabel: "3h 30m",
     lessonsLabel: "14 lessons",
-    gradient: "from-[#0aa4d8] to-[#22bde6]",
+    gradient: "from-[#3b82f6] to-[#7c5cff]",
     outcomes: [
       "Put the right review controls and audit trails in place",
       "Handle client data securely and compliantly",
@@ -119,7 +119,7 @@ export const COURSES: Course[] = [
     priceCents: 19900,
     durationLabel: "5h 00m",
     lessonsLabel: "22 lessons",
-    gradient: "from-[#4f7bff] to-[#e05bd6]",
+    gradient: "from-[#8b5cf6] to-[#e24be0]",
     outcomes: [
       "Plan a private assistant tailored to your firm",
       "Connect it safely to your own documents and data",
@@ -140,7 +140,7 @@ export const COURSES: Course[] = [
     priceCents: 39900,
     durationLabel: "5-course path",
     lessonsLabel: "Assessment included",
-    gradient: "from-[#12b39a] to-[#22bde6]",
+    gradient: "from-[#4f6bff] to-[#a855f7]",
     outcomes: [
       "Complete the full learning path end to end",
       "Pass the practitioner assessment",

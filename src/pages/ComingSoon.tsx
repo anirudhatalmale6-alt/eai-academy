@@ -1,7 +1,7 @@
 export function ComingSoon({ title }: { title: string }) {
   return (
     <div className="bg-panel border border-line rounded-[20px] p-10 sm:p-14 mt-1">
-      <div className="text-cyan-ink text-[12px] font-bold uppercase tracking-wide">
+      <div className="text-accent-ink text-[12px] font-bold uppercase tracking-wide">
         Coming soon
       </div>
       <h1 className="text-[30px] sm:text-[36px] font-bold tracking-[-0.6px] mt-2">

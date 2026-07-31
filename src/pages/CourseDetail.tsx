@@ -49,7 +49,7 @@ export function CourseDetail() {
             <ul className="mt-4 space-y-3">
               {course.outcomes.map((o) => (
                 <li key={o} className="flex gap-3 text-[15px]">
-                  <span className="text-cyan-ink font-bold">✓</span>
+                  <span className="text-accent-ink font-bold">✓</span>
                   <span>{o}</span>
                 </li>
               ))}

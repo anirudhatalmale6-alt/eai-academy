@@ -18,7 +18,7 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-[248px] shrink-0 border-r border-line px-4 py-5 sticky top-0 h-screen bg-bg">
       <Link to="/" className="flex items-center gap-2.5 px-2.5 pb-4">
-        <span className="w-[30px] h-[30px] rounded-lg bg-gradient-to-br from-cyan to-[#7c5cff] text-white flex items-center justify-center text-sm">
+        <span className="w-[30px] h-[30px] rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#e24be0] text-white flex items-center justify-center text-sm">
           ≋
         </span>
         <span className="leading-none">
@@ -41,7 +41,7 @@ export function Sidebar() {
           href="https://www.empathetic-ai.com"
           className="flex items-center gap-3 px-3 py-2 rounded-[9px] text-[14.5px] font-medium hover:bg-black/5"
         >
-          <span className="w-[18px] text-center text-cyan">↗</span> AI Products
+          <span className="w-[18px] text-center text-accent">↗</span> AI Products
         </a>
         <SideLink to="/help" label="Help" icon="?" />
       </nav>
@@ -66,14 +66,14 @@ function SideLink({
       end={end}
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded-[9px] text-[14.5px] font-medium mb-0.5 ${
-          isActive ? "text-cyan-ink" : "text-ink hover:bg-black/5"
+          isActive ? "text-accent-ink" : "text-ink hover:bg-black/5"
         }`
       }
     >
       {({ isActive }) => (
         <>
           <span
-            className={`w-[18px] text-center ${isActive ? "text-cyan" : "text-ink2"}`}
+            className={`w-[18px] text-center ${isActive ? "text-accent" : "text-ink2"}`}
           >
             {icon}
           </span>

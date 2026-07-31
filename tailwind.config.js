@@ -9,8 +9,15 @@ export default {
         ink: "#1E1D29",
         ink2: "#6b6a78",
         line: "rgba(24,26,31,0.09)",
-        cyan: { DEFAULT: "#00B1E2", ink: "#0090ba" },
-        brand: "#3C83F6",
+        // Empathetic AI brand accent — the finance-blue from the logo (the
+        // logo's gradient runs blue -> violet -> pink; blue is the trust anchor
+        // used for links, labels and small UI, gradients carry the full range).
+        accent: { DEFAULT: "#3B82F6", ink: "#2563EB" },
+        brand: {
+          blue: "#3B82F6",
+          violet: "#7C5CFF",
+          pink: "#E24BE0",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],

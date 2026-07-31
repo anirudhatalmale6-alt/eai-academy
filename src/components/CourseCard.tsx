@@ -20,7 +20,7 @@ export function CourseCard({ course }: { course: Course }) {
         </span>
       </div>
       <div className="px-[18px] pt-4 pb-[18px]">
-        <div className="text-cyan-ink text-[12px] font-bold uppercase tracking-wide">
+        <div className="text-accent-ink text-[12px] font-bold uppercase tracking-wide">
           {course.tagline}
         </div>
         <h3 className="text-[17px] font-semibold mt-1.5 tracking-[-0.2px]">

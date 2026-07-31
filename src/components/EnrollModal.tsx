@@ -84,7 +84,7 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
         </button>
         {done ? (
           <div className="text-center py-4">
-            <div className="w-14 h-14 rounded-full bg-cyan/15 text-cyan-ink flex items-center justify-center text-2xl mx-auto">
+            <div className="w-14 h-14 rounded-full bg-accent/15 text-accent-ink flex items-center justify-center text-2xl mx-auto">
               ✓
             </div>
             <h3 className="text-xl font-bold mt-4">You're in!</h3>
@@ -98,7 +98,7 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
           </div>
         ) : (
           <>
-            <div className="text-cyan-ink text-[12px] font-bold uppercase tracking-wide">
+            <div className="text-accent-ink text-[12px] font-bold uppercase tracking-wide">
               Free course
             </div>
             <h3 className="text-[22px] font-bold mt-1 tracking-[-0.4px]">
@@ -118,14 +118,14 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
                 />
               </div>
               <input
-                className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-cyan"
+                className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-accent"
                 placeholder="First name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
               <input
                 type="email"
-                className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-cyan"
+                className="w-full border border-line rounded-[10px] px-4 py-3 text-[15px] outline-none focus:border-accent"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

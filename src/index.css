@@ -28,7 +28,7 @@ body {
   .btn-white {
     @apply bg-white text-ink border-line hover:border-ink;
   }
-  .btn-cyan {
-    @apply bg-cyan text-[#08222b] font-bold hover:brightness-95;
+  .btn-accent {
+    @apply bg-accent text-white font-bold hover:brightness-105;
   }
 }
