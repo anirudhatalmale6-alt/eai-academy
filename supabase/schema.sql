@@ -134,3 +134,47 @@ create policy "orders own read" on public.orders
   for select using (
     auth.uid() = user_id or public.has_role(auth.uid(), 'admin')
   );
+
+-- ---------------------------------------------------------------------------
+-- Referral / affiliate program
+-- AFA members (and other approved referrers) get a unique code. When someone
+-- enrols in a paid course using that code, the referrer earns a commission.
+-- Referrals are recorded server-side by the Stripe webhook (service role).
+-- ---------------------------------------------------------------------------
+create table if not exists public.referrers (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,               -- e.g. "ANGELA10"
+  name text,
+  email text,
+  -- commission as a fraction of the sale (0.15 = 15%); or use flat_cents.
+  commission_rate numeric not null default 0.15,
+  flat_cents integer,                      -- optional fixed commission instead of %
+  buyer_discount_rate numeric default 0,   -- optional discount for the referred buyer
+  active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+alter table public.referrers enable row level security;
+
+create table if not exists public.referrals (
+  id uuid primary key default gen_random_uuid(),
+  referrer_id uuid references public.referrers(id) on delete set null,
+  code text,
+  order_id uuid references public.orders(id) on delete set null,
+  buyer_email text,
+  course_slug text,
+  sale_cents integer,
+  commission_cents integer,
+  status text not null default 'pending',  -- pending | approved | paid
+  created_at timestamptz not null default now()
+);
+alter table public.referrals enable row level security;
+
+-- Admin-only visibility by default. A referrer-facing view (their own
+-- referrals + earnings) can be exposed later via a signed token / auth.
+drop policy if exists "referrers admin read" on public.referrers;
+create policy "referrers admin read" on public.referrers
+  for select using (public.has_role(auth.uid(), 'admin'));
+
+drop policy if exists "referrals admin read" on public.referrals;
+create policy "referrals admin read" on public.referrals
+  for select using (public.has_role(auth.uid(), 'admin'));
