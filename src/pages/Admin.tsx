@@ -43,7 +43,7 @@ export function Admin() {
             <p className="text-ink2 mt-1">
               {isSupabaseConfigured
                 ? `${rows.length} enrolment${rows.length === 1 ? "" : "s"}`
-                : "Preview mode — connect Supabase to see live enrolments."}
+                : "Preview mode. Connect Supabase to see live enrolments."}
             </p>
           </div>
           <button className="btn btn-dark" disabled={!rows.length}>
@@ -72,9 +72,9 @@ export function Admin() {
               <tbody className="divide-y divide-line">
                 {rows.map((r) => (
                   <tr key={r.id}>
-                    <td className="px-4 py-3">{r.first_name || "—"}</td>
+                    <td className="px-4 py-3">{r.first_name || "-"}</td>
                     <td className="px-4 py-3">{r.email}</td>
-                    <td className="px-4 py-3">{r.course_slug || "—"}</td>
+                    <td className="px-4 py-3">{r.course_slug || "-"}</td>
                     <td className="px-4 py-3 text-ink2">
                       {new Date(r.created_at).toLocaleDateString()}
                     </td>
@@ -89,8 +89,8 @@ export function Admin() {
       <div className="bg-panel border border-line rounded-[20px] p-6 sm:p-8">
         <h2 className="text-[20px] font-bold">Manage courses</h2>
         <p className="text-ink2 mt-1 text-[15px]">
-          Add, edit and publish courses here — coming with the course schema so
-          you can manage everything yourself, no code.
+          Add, edit and publish courses here. This is coming with the course
+          schema so you can manage everything yourself, no code.
         </p>
       </div>
     </div>

@@ -20,7 +20,7 @@ export function Home() {
             Empathetic AI Academy
           </h1>
           <p className="text-[17px] sm:text-[18px] leading-relaxed mt-4 text-white/90 max-w-[520px]">
-            Master AI for tax, accounting and finance — practical, credible
+            Master AI for tax, accounting and finance. Practical, credible
             training from an OpenAI Select Partner. Start free, then go as deep
             as you like.
           </p>
@@ -56,15 +56,15 @@ export function Home() {
         </div>
       </section>
 
-      {/* We build AI products — funnel */}
+      {/* We build AI products (funnel) */}
       <section className="bg-ink text-white rounded-[20px] p-8 sm:p-9 mt-6 flex flex-wrap justify-between items-center gap-7">
         <div className="max-w-[540px]">
           <h3 className="text-[23px] font-bold tracking-[-0.4px]">
             Taught by a company that ships AI in production.
           </h3>
           <p className="text-white/70 mt-2 text-[15px] leading-relaxed">
-            Empathetic AI isn't a training brand that dabbles in AI — we build
-            the agents finance teams use every day. The Academy is the front
+            Empathetic AI isn't a training brand that dabbles in AI. We build
+            the agents finance teams use every day, and the Academy is the front
             door to what we build.
           </p>
         </div>

@@ -17,7 +17,7 @@ export interface Course {
 export const money = (cents: number) =>
   cents === 0 ? "Free" : `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
 
-// Seed catalog. Placeholder content — real courses will live in Supabase and
+// Seed catalog. Placeholder content; real courses will live in Supabase and
 // be editable from the admin. Titles/prices are tunable to the real offering.
 export const COURSES: Course[] = [
   {
@@ -32,7 +32,7 @@ export const COURSES: Course[] = [
     lessonsLabel: "6 lessons",
     gradient: "from-[#22bde6] to-[#4f7bff]",
     outcomes: [
-      "Understand where AI genuinely helps in finance work — and where it doesn't",
+      "Understand where AI genuinely helps in finance work, and where it doesn't",
       "Use AI responsibly within professional and regulatory obligations",
       "Build a simple, safe day-to-day workflow you can start using immediately",
     ],
@@ -72,7 +72,7 @@ export const COURSES: Course[] = [
     title: "Automating Tax Workflows with Agents",
     tagline: "For people ready to automate",
     summary:
-      "Design agent workflows that handle real firm tasks end to end — with a human in the loop.",
+      "Design agent workflows that handle real firm tasks end to end, with a human in the loop.",
     level: "Intermediate",
     priceCents: 14900,
     durationLabel: "4h 10m",
@@ -93,7 +93,7 @@ export const COURSES: Course[] = [
     title: "AI Governance, Risk & Compliance",
     tagline: "Stay compliant & safe",
     summary:
-      "Deploy AI without breaching duty of care — data security, review controls and audit trails.",
+      "Deploy AI without breaching duty of care: data security, review controls and audit trails.",
     level: "Intermediate",
     priceCents: 14900,
     durationLabel: "3h 30m",
@@ -147,8 +147,8 @@ export const COURSES: Course[] = [
       "Earn a shareable certificate backed by an OpenAI Select Partner",
     ],
     lessons: [
-      { title: "The five courses in the path", durationLabel: "—" },
-      { title: "Final assessment", durationLabel: "—" },
+      { title: "The five courses in the path", durationLabel: "" },
+      { title: "Final assessment", durationLabel: "" },
     ],
   },
 ];

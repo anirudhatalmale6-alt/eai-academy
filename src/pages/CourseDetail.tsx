@@ -95,7 +95,7 @@ export function CourseDetail() {
               onClick={() => free && setEnrollOpen(true)}
               className="btn btn-dark w-full justify-center mt-4"
             >
-              {free ? "Get free access →" : "Enrol — coming soon"}
+              {free ? "Get free access →" : "Enrol (coming soon)"}
             </button>
             {!free && (
               <p className="text-ink2 text-[12.5px] mt-3 text-center">

@@ -89,7 +89,7 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
             </div>
             <h3 className="text-xl font-bold mt-4">You're in!</h3>
             <p className="text-ink2 mt-2 text-[15px]">
-              Check your inbox — we've sent your access link for{" "}
+              Check your inbox. We've sent your access link for{" "}
               <span className="text-ink font-semibold">{courseTitle}</span>.
             </p>
             <button onClick={onClose} className="btn btn-dark mt-6">
