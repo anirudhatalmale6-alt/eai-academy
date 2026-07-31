@@ -178,3 +178,29 @@ create policy "referrers admin read" on public.referrers
 drop policy if exists "referrals admin read" on public.referrals;
 create policy "referrals admin read" on public.referrals
   for select using (public.has_role(auth.uid(), 'admin'));
+
+-- ---------------------------------------------------------------------------
+-- Inquiries (main-site "Request a Demo" / contact form -> replaces HubSpot)
+-- The empathetic-ai.com form posts here instead of HubSpot, so all leads live
+-- in one database the client owns. Email alert fires server-side on insert.
+-- ---------------------------------------------------------------------------
+create table if not exists public.inquiries (
+  id uuid primary key default gen_random_uuid(),
+  name text,
+  email text not null,
+  company text,
+  phone text,
+  message text,
+  source text,                              -- e.g. 'main-site-demo'
+  created_at timestamptz not null default now()
+);
+alter table public.inquiries enable row level security;
+
+drop policy if exists "inquiries anon insert" on public.inquiries;
+create policy "inquiries anon insert" on public.inquiries
+  for insert to anon, authenticated
+  with check (char_length(email) between 3 and 255);
+
+drop policy if exists "inquiries admin read" on public.inquiries;
+create policy "inquiries admin read" on public.inquiries
+  for select using (public.has_role(auth.uid(), 'admin'));
