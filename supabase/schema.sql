@@ -120,7 +120,7 @@ create table if not exists public.orders (
   email text,
   course_slug text,
   amount_cents integer,
-  currency text default 'usd',
+  currency text default 'aud',
   stripe_session_id text unique,
   status text not null default 'pending',
   created_at timestamptz not null default now()
