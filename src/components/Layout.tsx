@@ -18,7 +18,7 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-[248px] shrink-0 border-r border-line px-4 py-5 sticky top-0 h-screen bg-bg">
       <Link to="/" className="flex items-center gap-2.5 px-2.5 pb-4">
-        <span className="w-[30px] h-[30px] rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#e24be0] text-white flex items-center justify-center text-sm">
+        <span className="w-[30px] h-[30px] rounded-lg bg-accent text-white flex items-center justify-center text-sm">
           ≋
         </span>
         <span className="leading-none">
@@ -97,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <Link to="/login" className="text-[14.5px] font-semibold">
             Sign in
           </Link>
-          <Link to="/login" className="btn btn-gradient">
+          <Link to="/login" className="btn btn-accent">
             Start free
           </Link>
         </div>

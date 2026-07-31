@@ -23,14 +23,12 @@ export function Home() {
 
   return (
     <>
-      {/* Hero — soft, premium, brand gradient used as signature (text + button) */}
-      <section className="relative overflow-hidden rounded-[26px] border border-white/60 p-8 sm:p-14 bg-gradient-to-br from-[#ECEAFB] via-[#F1ECFB] to-[#FBEEF7]">
-        {/* decorative brand-gradient glow for depth */}
-        <div className="pointer-events-none absolute -top-24 -right-16 w-[420px] h-[420px] rounded-full opacity-40 blur-3xl bg-[conic-gradient(from_120deg,#3b82f6,#7c5cff,#e24be0,#3b82f6)]" />
+      {/* Hero — light, bright, clean (no gradients) */}
+      <section className="relative overflow-hidden rounded-[26px] bg-panel border border-line p-8 sm:p-14">
         <div className="relative z-10 max-w-[660px]">
           <PartnerBadge />
           <h1 className="text-[40px] sm:text-[58px] font-bold tracking-[-2px] leading-[1.0] mt-5 text-ink">
-            Master <span className="grad-text">AI for finance</span>, from the
+            Master <span className="text-accent">AI for finance</span>, from the
             people trusted to build it.
           </h1>
           <p className="text-[17px] sm:text-[18.5px] leading-relaxed mt-5 text-ink2 max-w-[540px]">
@@ -41,7 +39,7 @@ export function Home() {
           <div className="flex flex-wrap gap-3 mt-7">
             <button
               onClick={() => setEnrollOpen(true)}
-              className="btn btn-gradient"
+              className="btn btn-accent"
             >
               Start the free course →
             </button>
@@ -88,10 +86,9 @@ export function Home() {
         </div>
       </section>
 
-      {/* We build AI products (funnel) — premium deep-plum */}
-      <section className="relative overflow-hidden bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6 flex flex-wrap justify-between items-center gap-7">
-        <div className="pointer-events-none absolute -bottom-24 -left-10 w-[360px] h-[360px] rounded-full opacity-30 blur-3xl bg-[conic-gradient(from_120deg,#3b82f6,#7c5cff,#e24be0,#3b82f6)]" />
-        <div className="relative z-10 max-w-[560px]">
+      {/* We build AI products (funnel) — solid deep-plum */}
+      <section className="bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6 flex flex-wrap justify-between items-center gap-7">
+        <div className="max-w-[560px]">
           <h3 className="text-[24px] font-bold tracking-[-0.4px]">
             Taught by a company that ships AI in production.
           </h3>
@@ -102,7 +99,7 @@ export function Home() {
           </p>
         </div>
         <div className="relative z-10 flex gap-3">
-          <a href="https://www.empathetic-ai.com" className="btn btn-gradient">
+          <a href="https://www.empathetic-ai.com" className="btn btn-accent">
             Explore our AI products →
           </a>
           <a

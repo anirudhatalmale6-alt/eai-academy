@@ -9,7 +9,7 @@ export interface Course {
   priceCents: number; // 0 = free
   durationLabel: string; // "1h 20m" or "5-course path"
   lessonsLabel: string; // "6 lessons"
-  gradient: string; // tailwind gradient classes for the thumbnail
+  color: string; // one pure brand colour for the course (thumbnail + accent)
   outcomes: string[];
   lessons: { title: string; durationLabel: string }[];
 }
@@ -30,7 +30,7 @@ export const COURSES: Course[] = [
     priceCents: 0,
     durationLabel: "1h 20m",
     lessonsLabel: "6 lessons",
-    gradient: "from-[#3b82f6] to-[#6366f1]",
+    color: "#3B82F6",
     outcomes: [
       "Understand where AI genuinely helps in finance work, and where it doesn't",
       "Use AI responsibly within professional and regulatory obligations",
@@ -55,7 +55,7 @@ export const COURSES: Course[] = [
     priceCents: 7900,
     durationLabel: "2h 40m",
     lessonsLabel: "11 lessons",
-    gradient: "from-[#4f6bff] to-[#7c5cff]",
+    color: "#8B5CF6",
     outcomes: [
       "Write prompts that produce consistent, defensible answers",
       "Build source-traceability into every output",
@@ -77,7 +77,7 @@ export const COURSES: Course[] = [
     priceCents: 14900,
     durationLabel: "4h 10m",
     lessonsLabel: "18 lessons",
-    gradient: "from-[#7c5cff] to-[#c14be0]",
+    color: "#EC4899",
     outcomes: [
       "Map a firm task into an automatable agent workflow",
       "Keep a human in the loop for accuracy and accountability",
@@ -98,7 +98,7 @@ export const COURSES: Course[] = [
     priceCents: 14900,
     durationLabel: "3h 30m",
     lessonsLabel: "14 lessons",
-    gradient: "from-[#3b82f6] to-[#7c5cff]",
+    color: "#14B8A6",
     outcomes: [
       "Put the right review controls and audit trails in place",
       "Handle client data securely and compliantly",
@@ -119,7 +119,7 @@ export const COURSES: Course[] = [
     priceCents: 19900,
     durationLabel: "5h 00m",
     lessonsLabel: "22 lessons",
-    gradient: "from-[#8b5cf6] to-[#e24be0]",
+    color: "#F59E0B",
     outcomes: [
       "Plan a private assistant tailored to your firm",
       "Connect it safely to your own documents and data",
@@ -140,7 +140,7 @@ export const COURSES: Course[] = [
     priceCents: 39900,
     durationLabel: "5-course path",
     lessonsLabel: "Assessment included",
-    gradient: "from-[#4f6bff] to-[#a855f7]",
+    color: "#6366F1",
     outcomes: [
       "Complete the full learning path end to end",
       "Pass the practitioner assessment",

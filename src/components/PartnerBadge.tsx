@@ -11,7 +11,7 @@ export function PartnerBadge({
       className={`inline-flex items-center gap-2.5 rounded-full text-[13px] font-semibold px-4 py-1.5 ${
         glass
           ? "bg-white/16 border border-white/30 backdrop-blur text-white"
-          : "bg-white border border-line text-ink"
+          : "bg-[#F1F5FF] border border-[#dbe6fb] text-ink"
       }`}
     >
       <span className="w-[18px] h-[18px] rounded-full bg-black text-white flex items-center justify-center text-[10px]">

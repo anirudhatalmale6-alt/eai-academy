@@ -25,7 +25,8 @@ export function CourseDetail() {
     <div className="mt-1">
       {/* Hero */}
       <section
-        className={`rounded-[20px] p-8 sm:p-11 text-white bg-gradient-to-br ${course.gradient}`}
+        className="rounded-[20px] p-8 sm:p-11 text-white"
+        style={{ backgroundColor: course.color }}
       >
         <Link to="/courses" className="text-white/85 text-sm hover:text-white">
           ← All courses
@@ -49,7 +50,9 @@ export function CourseDetail() {
             <ul className="mt-4 space-y-3">
               {course.outcomes.map((o) => (
                 <li key={o} className="flex gap-3 text-[15px]">
-                  <span className="text-accent-ink font-bold">✓</span>
+                  <span className="font-bold" style={{ color: course.color }}>
+                    ✓
+                  </span>
                   <span>{o}</span>
                 </li>
               ))}
@@ -94,7 +97,7 @@ export function CourseDetail() {
             <button
               onClick={() => free && setEnrollOpen(true)}
               className={`btn w-full justify-center mt-4 ${
-                free ? "btn-gradient" : "btn-dark"
+                free ? "btn-accent" : "btn-dark"
               }`}
             >
               {free ? "Get free access →" : "Enrol (coming soon)"}

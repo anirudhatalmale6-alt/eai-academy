@@ -134,7 +134,7 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn btn-gradient w-full justify-center disabled:opacity-60"
+                className="btn btn-accent w-full justify-center disabled:opacity-60"
               >
                 {submitting ? "Signing you up…" : "Get free access →"}
               </button>

@@ -9,18 +9,21 @@ export function CourseCard({ course }: { course: Course }) {
       className="block border border-line rounded-2xl overflow-hidden bg-white transition hover:shadow-[0_14px_30px_rgba(24,26,31,0.09)] hover:-translate-y-[3px]"
     >
       <div
-        className={`h-[120px] relative bg-gradient-to-br ${course.gradient}`}
+        className="h-[120px] relative"
+        style={{ backgroundColor: course.color }}
       >
         <span
-          className={`absolute top-3 left-3 rounded-md text-[11px] font-bold px-2.5 py-1 bg-white/90 ${
-            free ? "text-[#0a8f57]" : "text-ink"
-          }`}
+          className="absolute top-3 left-3 rounded-md text-[11px] font-bold px-2.5 py-1 bg-white/95"
+          style={{ color: course.color }}
         >
           {free ? "FREE" : course.level.toUpperCase()}
         </span>
       </div>
       <div className="px-[18px] pt-4 pb-[18px]">
-        <div className="text-accent-ink text-[12px] font-bold uppercase tracking-wide">
+        <div
+          className="text-[12px] font-bold uppercase tracking-wide"
+          style={{ color: course.color }}
+        >
           {course.tagline}
         </div>
         <h3 className="text-[17px] font-semibold mt-1.5 tracking-[-0.2px]">
