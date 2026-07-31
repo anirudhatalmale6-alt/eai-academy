@@ -14,8 +14,27 @@ export interface Course {
   lessons: { title: string; durationLabel: string }[];
 }
 
+// Prices are in Australian dollars (whole dollars), formatted "A$1,990".
 export const money = (cents: number) =>
-  cents === 0 ? "Free" : `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
+  cents === 0 ? "Free" : `A$${(cents / 100).toLocaleString("en-AU")}`;
+
+// Launch bundle: the 4 paid courses + assessment + certificate, sold as one
+// premium program. Anchored to the ~A$2,400 Australian market rate for a
+// 4-part AI-in-finance program, with a bundle saving.
+export const BUNDLE = {
+  title: "Certified AI-in-Finance Practitioner",
+  blurb:
+    "All four paid courses, the practitioner assessment and your certificate, as one complete program.",
+  priceCents: 199000,
+  color: "#6366F1",
+  includes: [
+    "Prompting for Auditable Answers",
+    "Automating Tax Workflows with Agents",
+    "AI Governance, Risk & Compliance",
+    "Your Firm's Private AI Assistant",
+    "Practitioner assessment + certificate",
+  ],
+};
 
 // Seed catalog. Placeholder content; real courses will live in Supabase and
 // be editable from the admin. Titles/prices are tunable to the real offering.
@@ -52,7 +71,7 @@ export const COURSES: Course[] = [
     summary:
       "Get reliable, source-traceable outputs you can defend in regulated work. Templates included.",
     level: "Beginner",
-    priceCents: 7900,
+    priceCents: 59000,
     durationLabel: "2h 40m",
     lessonsLabel: "11 lessons",
     color: "#8B5CF6",
@@ -74,7 +93,7 @@ export const COURSES: Course[] = [
     summary:
       "Design agent workflows that handle real firm tasks end to end, with a human in the loop.",
     level: "Intermediate",
-    priceCents: 14900,
+    priceCents: 59000,
     durationLabel: "4h 10m",
     lessonsLabel: "18 lessons",
     color: "#EC4899",
@@ -95,7 +114,7 @@ export const COURSES: Course[] = [
     summary:
       "Deploy AI without breaching duty of care: data security, review controls and audit trails.",
     level: "Intermediate",
-    priceCents: 14900,
+    priceCents: 59000,
     durationLabel: "3h 30m",
     lessonsLabel: "14 lessons",
     color: "#14B8A6",
@@ -116,7 +135,7 @@ export const COURSES: Course[] = [
     summary:
       "Stand up a secure, firm-specific assistant on your own data. From pilot to rollout.",
     level: "Advanced",
-    priceCents: 19900,
+    priceCents: 69000,
     durationLabel: "5h 00m",
     lessonsLabel: "22 lessons",
     color: "#F59E0B",
@@ -128,27 +147,6 @@ export const COURSES: Course[] = [
     lessons: [
       { title: "Architecture of a private assistant", durationLabel: "18m" },
       { title: "Grounding it in your data", durationLabel: "20m" },
-    ],
-  },
-  {
-    slug: "certified-ai-in-finance-practitioner",
-    title: "Certified AI-in-Finance Practitioner",
-    tagline: "The capstone credential",
-    summary:
-      "The capstone path. Complete the courses, pass the assessment, and earn the credential.",
-    level: "Certificate",
-    priceCents: 39900,
-    durationLabel: "5-course path",
-    lessonsLabel: "Assessment included",
-    color: "#6366F1",
-    outcomes: [
-      "Complete the full learning path end to end",
-      "Pass the practitioner assessment",
-      "Earn a shareable certificate backed by an OpenAI Select Partner",
-    ],
-    lessons: [
-      { title: "The five courses in the path", durationLabel: "" },
-      { title: "Final assessment", durationLabel: "" },
     ],
   },
 ];

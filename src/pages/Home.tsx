@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { COURSES } from "../data/courses";
 import { CourseCard } from "../components/CourseCard";
+import { BundleCard } from "../components/BundleCard";
 import { EnrollModal } from "../components/EnrollModal";
 import { PartnerBadge } from "../components/PartnerBadge";
 
@@ -85,6 +86,9 @@ export function Home() {
           ))}
         </div>
       </section>
+
+      {/* Complete-program bundle */}
+      <BundleCard />
 
       {/* We build AI products (funnel) — solid deep-plum */}
       <section className="bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6 flex flex-wrap justify-between items-center gap-7">
