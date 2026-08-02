@@ -1,29 +1,31 @@
 import { PartnerBadge } from "../components/PartnerBadge";
 
+// Audience: executives, CFOs, partners and boards. Focus is on roadmap,
+// strategy, readiness and governance, NOT on product or building agents.
 const OFFERINGS: { title: string; body: string }[] = [
   {
     title: "AI readiness assessment",
-    body: "We review how your firm works today and map where Copilot and OpenAI Enterprise deliver real, safe gains, with a clear priority order.",
+    body: "A clear-eyed view of where your firm stands today: capability, data, risk and the gaps between you and where you want to be.",
   },
   {
-    title: "Rollout strategy",
-    body: "A practical plan to introduce AI across the firm: tools, licences, pilot teams and the change management that makes it stick.",
+    title: "AI strategy and roadmap",
+    body: "A board-level plan for adopting AI across the firm, with priorities, sequencing and the investment case, tied to real business outcomes.",
   },
   {
-    title: "Governance and compliance",
-    body: "Data security, review controls, audit trails and a firm AI policy so you deploy within your professional and regulatory obligations.",
+    title: "Governance and risk",
+    body: "The controls, policies and accountability a regulated firm needs so leadership can adopt AI with confidence, not exposure.",
   },
   {
-    title: "Custom AI agents",
-    body: "We build the production agents finance teams use every day, tailored to your workflows, with a human kept in the loop.",
+    title: "Executive and board briefings",
+    body: "Bring your leadership team up to speed on what AI genuinely means for finance, cutting through the hype to what matters for your firm.",
   },
   {
-    title: "Team enablement",
-    body: "Hands-on training for your people through the Academy, with team pricing and progress you can track across the firm.",
+    title: "Change and adoption",
+    body: "How to take your people with you: the operating model, ways of working and enablement that turn a strategy into everyday practice.",
   },
   {
-    title: "Ongoing partnership",
-    body: "We stay on as your technical partner as tools evolve, so your firm keeps its edge without building an AI team from scratch.",
+    title: "Ongoing advisory partnership",
+    body: "A trusted partner in your corner as the landscape shifts, so your firm's AI direction stays current without building an internal team.",
   },
 ];
 
@@ -37,22 +39,21 @@ export function EnterpriseAdvisory() {
             Enterprise AI Advisory
           </div>
           <h1 className="text-[34px] sm:text-[46px] font-bold tracking-[-1.4px] leading-[1.03] mt-2 text-ink">
-            Deploy AI across your firm, safely and for real.
+            AI strategy and roadmap for finance leaders.
           </h1>
-          <p className="text-[16.5px] sm:text-[18px] leading-relaxed mt-4 text-ink2 max-w-[560px]">
-            Beyond training, we advise and build. As an OpenAI Select Partner
-            that ships production AI, we help finance and accounting firms adopt
-            AI with the governance and control that regulated work demands.
+          <p className="text-[16.5px] sm:text-[18px] leading-relaxed mt-4 text-ink2 max-w-[580px]">
+            For executives, CFOs and partners deciding how their firm should
+            approach AI. We help you set the direction: readiness, roadmap,
+            strategy and governance, so your firm adopts AI deliberately and
+            safely. As an OpenAI Select Partner, our advice is grounded in what
+            actually works in production, not theory.
           </p>
           <div className="flex flex-wrap gap-3 mt-7">
             <a href="https://www.empathetic-ai.com" className="btn btn-accent">
-              Book a consultation →
+              Book an executive briefing →
             </a>
-            <a
-              href="https://www.empathetic-ai.com"
-              className="btn btn-white"
-            >
-              See our AI products
+            <a href="https://www.empathetic-ai.com" className="btn btn-white">
+              Talk to our team
             </a>
           </div>
         </div>
@@ -60,8 +61,12 @@ export function EnterpriseAdvisory() {
 
       <section className="bg-panel border border-line rounded-[22px] p-6 sm:p-9 mt-6">
         <h2 className="text-[24px] sm:text-[28px] font-bold tracking-[-0.6px]">
-          How we work with firms
+          How we advise firms
         </h2>
+        <p className="text-ink2 mt-2 text-[15.5px] max-w-[620px]">
+          Advisory engagements shaped around your leadership team and where your
+          firm is heading, not a one-size template.
+        </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-7">
           {OFFERINGS.map((o) => (
             <div
@@ -82,15 +87,16 @@ export function EnterpriseAdvisory() {
       <section className="bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6 flex flex-wrap justify-between items-center gap-7">
         <div className="max-w-[560px]">
           <h3 className="text-[24px] font-bold tracking-[-0.4px]">
-            Let's map your firm's AI roadmap.
+            Let's shape your firm's AI roadmap.
           </h3>
           <p className="text-white/70 mt-2.5 text-[15px] leading-relaxed">
-            A short conversation to see where AI fits your firm, what to roll out
-            first, and how to keep it governed. No obligation.
+            A focused conversation for your leadership team: where you stand,
+            what to prioritise, and how to move with the right governance in
+            place. No obligation.
           </p>
         </div>
         <a href="https://www.empathetic-ai.com" className="btn btn-accent">
-          Book a consultation →
+          Book an executive briefing →
         </a>
       </section>
     </>
