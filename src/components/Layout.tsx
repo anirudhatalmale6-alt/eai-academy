@@ -1,6 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
 import mark from "../assets/empathetic-mark.png";
+import { useAuth } from "../lib/auth";
 
 const nav = [
   { to: "/", label: "Home", icon: "⌂", end: true },
@@ -82,6 +83,7 @@ function SideLink({
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
+  const { user, signOut } = useAuth();
   return (
     <div className="grid md:grid-cols-[248px_1fr] min-h-screen">
       <Sidebar />
@@ -90,12 +92,28 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="hidden sm:flex items-center gap-2 bg-panel border border-line rounded-[10px] px-3.5 py-2 text-ink2 text-sm w-[240px]">
             ⌕ Search courses
           </span>
-          <Link to="/login" className="text-[14.5px] font-semibold">
-            Sign in
-          </Link>
-          <Link to="/login" className="btn btn-accent">
-            Start free
-          </Link>
+          {user ? (
+            <>
+              <Link to="/my-courses" className="text-[14.5px] font-semibold">
+                My Courses
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="text-[14.5px] font-semibold text-ink2 hover:text-ink"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-[14.5px] font-semibold">
+                Sign in
+              </Link>
+              <Link to="/login" className="btn btn-accent">
+                Start free
+              </Link>
+            </>
+          )}
         </div>
         <div key={pathname}>{children}</div>
       </main>
