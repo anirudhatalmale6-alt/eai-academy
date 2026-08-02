@@ -1,13 +1,20 @@
-import { BUNDLE, COURSES, money } from "../data/courses";
+import {
+  BUNDLE,
+  money,
+  bundleIncludes,
+  bundleIndividualCents,
+  bundleLearningHours,
+} from "../data/courses";
 
-// Premium "complete program" bundle: the 4 paid courses + certificate, sold
-// as one program at a saving versus buying individually.
+// Premium "complete program" bundle. Contents, individual total, saving and
+// learning hours are all derived from the paid courses, so the bundle stays in
+// sync automatically when courses are added or removed. Only the bundle price
+// is a fixed number set in courses.ts.
 export function BundleCard() {
-  const individualTotal = COURSES.filter((c) => c.priceCents > 0).reduce(
-    (sum, c) => sum + c.priceCents,
-    0,
-  );
+  const includes = bundleIncludes();
+  const individualTotal = bundleIndividualCents();
   const saving = individualTotal - BUNDLE.priceCents;
+  const hours = bundleLearningHours();
 
   return (
     <section className="bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6">
@@ -25,8 +32,11 @@ export function BundleCard() {
           <p className="text-white/70 mt-2 text-[15px] max-w-[520px]">
             {BUNDLE.blurb}
           </p>
+          <div className="text-white/60 text-[13px] font-semibold mt-3">
+            {hours} Learning Hours in total
+          </div>
           <ul className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-2">
-            {BUNDLE.includes.map((i) => (
+            {includes.map((i) => (
               <li key={i} className="flex gap-2.5 text-[14px] text-white/90">
                 <span style={{ color: "#a5b4fc" }} className="font-bold">
                   ✓
@@ -44,12 +54,14 @@ export function BundleCard() {
           <div className="text-[38px] font-bold tracking-[-1px] leading-none mt-1">
             {money(BUNDLE.priceCents)}
           </div>
-          <div
-            className="inline-block mt-2 text-[12px] font-bold rounded-full px-3 py-1"
-            style={{ backgroundColor: "#6366F1" }}
-          >
-            Save {money(saving)}
-          </div>
+          {saving > 0 && (
+            <div
+              className="inline-block mt-2 text-[12px] font-bold rounded-full px-3 py-1"
+              style={{ backgroundColor: "#6366F1" }}
+            >
+              Save {money(saving)}
+            </div>
+          )}
           <button className="btn btn-accent w-full justify-center mt-5">
             Get the full program →
           </button>

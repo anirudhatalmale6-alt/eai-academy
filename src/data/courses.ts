@@ -7,7 +7,7 @@ export interface Course {
   summary: string;
   level: Level;
   priceCents: number; // 0 = free
-  durationLabel: string; // "1h 20m" or "5-course path"
+  learningHours: number; // total learning hours (shown as "N Learning Hours")
   lessonsLabel: string; // "6 lessons"
   color: string; // one pure brand colour for the course (thumbnail + accent)
   outcomes: string[];
@@ -18,23 +18,36 @@ export interface Course {
 export const money = (cents: number) =>
   cents === 0 ? "Free" : `A$${(cents / 100).toLocaleString("en-AU")}`;
 
+// Duration is expressed in "Learning Hours" (professionals track learning hours).
+export const hoursLabel = (n: number) =>
+  `${n} Learning Hour${n === 1 ? "" : "s"}`;
+
 // Launch bundle: the 4 paid courses + assessment + certificate, sold as one
 // premium program. Anchored to the ~A$2,400 Australian market rate for a
 // 4-part AI-in-finance program, with a bundle saving.
+// The bundle PRICE is a fixed business decision you set here. Everything else
+// (which courses are included, the individual total, the saving, the learning
+// hours) is derived from the paid courses below, so adding or removing a course
+// keeps the bundle in sync automatically. `extras` are non-course inclusions.
 export const BUNDLE = {
   title: "Certified AI-in-Finance Practitioner",
   blurb:
-    "All four paid courses, the practitioner assessment and your certificate, as one complete program.",
+    "Every paid course, the practitioner assessment and your certificate, as one complete program.",
   priceCents: 199000,
   color: "#6366F1",
-  includes: [
-    "Microsoft 365 Copilot for Finance",
-    "Prompting for Reliable, Auditable Answers",
-    "Automating Finance Workflows with AI Agents",
-    "AI Governance, Risk & Compliance for Firms",
-    "Practitioner assessment + certificate",
-  ],
+  extras: ["Practitioner assessment + certificate"],
 };
+
+// Paid courses in the bundle (derived, always in sync with the catalog).
+export const bundleCourses = () => COURSES.filter((c) => c.priceCents > 0);
+export const bundleIncludes = () => [
+  ...bundleCourses().map((c) => c.title),
+  ...BUNDLE.extras,
+];
+export const bundleIndividualCents = () =>
+  bundleCourses().reduce((sum, c) => sum + c.priceCents, 0);
+export const bundleLearningHours = () =>
+  bundleCourses().reduce((sum, c) => sum + c.learningHours, 0);
 
 // Team pricing: volume discount when a firm enrols several people at once.
 // Percentages are easy to change here. `discount: null` = custom / let's talk.
@@ -57,7 +70,7 @@ export const COURSES: Course[] = [
       "What AI can and can't do in finance, plus the Copilot, ChatGPT and OpenAI Enterprise landscape for Australian firms. Used responsibly.",
     level: "Beginner",
     priceCents: 0,
-    durationLabel: "1h 20m",
+    learningHours: 2,
     lessonsLabel: "6 lessons",
     color: "#3B82F6",
     outcomes: [
@@ -82,7 +95,7 @@ export const COURSES: Course[] = [
       "Use Microsoft 365 Copilot across Excel, Outlook, Word, Teams and PowerPoint for everyday finance and accounting work.",
     level: "Beginner",
     priceCents: 59000,
-    durationLabel: "2h 40m",
+    learningHours: 3,
     lessonsLabel: "11 lessons",
     color: "#8B5CF6",
     outcomes: [
@@ -105,7 +118,7 @@ export const COURSES: Course[] = [
       "Get source-traceable, defensible outputs from Copilot and ChatGPT that stand up in regulated work. Prompt templates included.",
     level: "Beginner",
     priceCents: 59000,
-    durationLabel: "2h 20m",
+    learningHours: 3,
     lessonsLabel: "10 lessons",
     color: "#EC4899",
     outcomes: [
@@ -127,7 +140,7 @@ export const COURSES: Course[] = [
       "Design agent workflows in Copilot Studio and OpenAI that handle real firm tasks end to end, with a human in the loop.",
     level: "Intermediate",
     priceCents: 59000,
-    durationLabel: "4h 10m",
+    learningHours: 5,
     lessonsLabel: "18 lessons",
     color: "#14B8A6",
     outcomes: [
@@ -149,7 +162,7 @@ export const COURSES: Course[] = [
       "Roll out Copilot and OpenAI Enterprise without breaching duty of care: data security, review controls, audit trails and a firm AI policy.",
     level: "Advanced",
     priceCents: 69000,
-    durationLabel: "3h 30m",
+    learningHours: 4,
     lessonsLabel: "14 lessons",
     color: "#F59E0B",
     outcomes: [

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { type Course, money } from "../data/courses";
+import { type Course, money, hoursLabel } from "../data/courses";
 
 export function CourseCard({ course }: { course: Course }) {
   const free = course.priceCents === 0;
@@ -34,7 +34,7 @@ export function CourseCard({ course }: { course: Course }) {
         </p>
         <div className="flex justify-between items-center mt-3.5 pt-3 border-t border-line text-[13px] text-ink2">
           <span>
-            ◷ {course.durationLabel} · {course.lessonsLabel}
+            ◷ {hoursLabel(course.learningHours)} · {course.lessonsLabel}
           </span>
           <span className="font-bold text-ink text-[15px]">
             {money(course.priceCents)}

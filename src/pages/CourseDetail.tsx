@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getCourse, money } from "../data/courses";
+import { getCourse, money, hoursLabel } from "../data/courses";
 import { EnrollModal } from "../components/EnrollModal";
 
 export function CourseDetail() {
@@ -32,7 +32,7 @@ export function CourseDetail() {
           ← All courses
         </Link>
         <div className="text-white/85 text-[12px] font-bold uppercase tracking-wide mt-5">
-          {course.level} · {course.durationLabel}
+          {course.level} · {hoursLabel(course.learningHours)}
         </div>
         <h1 className="text-[34px] sm:text-[44px] font-bold tracking-[-1px] leading-[1.05] mt-2 max-w-[760px]">
           {course.title}
@@ -108,7 +108,7 @@ export function CourseDetail() {
               </p>
             )}
             <ul className="mt-5 space-y-2 text-[13.5px] text-ink2">
-              <li>◷ {course.durationLabel}</li>
+              <li>◷ {hoursLabel(course.learningHours)}</li>
               <li>▤ {course.lessonsLabel}</li>
               <li>✦ Certificate of completion</li>
               <li>◎ Backed by an OpenAI Select Partner</li>
