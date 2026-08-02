@@ -60,7 +60,7 @@ export function EnterpriseAdvisory() {
               Executive Advisory Program
             </div>
             <h2 className="text-[28px] sm:text-[32px] font-bold tracking-[-0.7px] mt-2">
-              A 6-month executive engagement
+              A tailored executive engagement
             </h2>
             <p className="text-white/70 mt-3 text-[15px] max-w-[560px] leading-relaxed">
               Partner directly with Empathetic AI, an OpenAI Select Partner, to
@@ -88,10 +88,11 @@ export function EnterpriseAdvisory() {
               Engagement
             </div>
             <div className="text-[26px] font-bold tracking-[-0.6px] mt-1.5 leading-tight">
-              6-month program
+              Flexible term
             </div>
             <p className="text-white/60 text-[13.5px] mt-2 leading-relaxed">
-              Tailored to your firm. Get in touch and we'll scope it with you.
+              Typically 3 to 6 months, scoped to your firm. Get in touch and we'll
+              shape it around what you need.
             </p>
             <button
               onClick={() => setOpen(true)}
