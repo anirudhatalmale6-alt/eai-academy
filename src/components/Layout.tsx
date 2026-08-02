@@ -10,8 +10,7 @@ const nav = [
 ];
 
 const navSecondary = [
-  { to: "/for-teams", label: "For Teams", icon: "◨" },
-  { to: "/for-firms", label: "For Firms", icon: "⛁" },
+  { to: "/enterprise-advisory", label: "Enterprise AI Advisory", icon: "⛁" },
 ];
 
 export function Sidebar() {

@@ -5,6 +5,8 @@ import { Courses } from "./pages/Courses";
 import { CourseDetail } from "./pages/CourseDetail";
 import { Login } from "./pages/Login";
 import { Admin } from "./pages/Admin";
+import { EnterpriseAdvisory } from "./pages/EnterpriseAdvisory";
+import { TeamPricingPage } from "./pages/TeamPricingPage";
 import { ComingSoon } from "./pages/ComingSoon";
 
 export default function App() {
@@ -19,8 +21,8 @@ export default function App() {
         <Route path="/certifications" element={<ComingSoon title="Certifications" />} />
         <Route path="/events" element={<ComingSoon title="Events" />} />
         <Route path="/community" element={<ComingSoon title="Community" />} />
-        <Route path="/for-teams" element={<ComingSoon title="For Teams" />} />
-        <Route path="/for-firms" element={<ComingSoon title="For Firms" />} />
+        <Route path="/enterprise-advisory" element={<EnterpriseAdvisory />} />
+        <Route path="/team-pricing" element={<TeamPricingPage />} />
         <Route path="/help" element={<ComingSoon title="Help & Support" />} />
         <Route path="*" element={<ComingSoon title="Page not found" />} />
       </Routes>

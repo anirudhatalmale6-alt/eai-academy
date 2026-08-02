@@ -1,6 +1,7 @@
 import { COURSES } from "../data/courses";
 import { CourseCard } from "../components/CourseCard";
 import { BundleCard } from "../components/BundleCard";
+import { TeamPricing } from "../components/TeamPricing";
 
 export function Courses() {
   return (
@@ -23,6 +24,7 @@ export function Courses() {
       </section>
 
       <BundleCard />
+      <TeamPricing />
     </>
   );
 }

@@ -36,6 +36,14 @@ export const BUNDLE = {
   ],
 };
 
+// Team pricing: volume discount when a firm enrols several people at once.
+// Percentages are easy to change here. `discount: null` = custom / let's talk.
+export const TEAM_TIERS: { size: string; discount: number | null }[] = [
+  { size: "3 to 9 people", discount: 15 },
+  { size: "10 to 24 people", discount: 25 },
+  { size: "25 or more", discount: null },
+];
+
 // Launch catalog, oriented to the tools Australian firms actually use:
 // Microsoft 365 Copilot first, with OpenAI / ChatGPT Enterprise coverage.
 // Placeholder lesson detail; real content will be produced via the playbook
