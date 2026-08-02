@@ -3,11 +3,19 @@ import { Link } from "react-router-dom";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../lib/auth";
 import { getCourse, hoursLabel } from "../data/courses";
+import { downloadCertificate } from "../lib/certificate";
 
 export function MyCourses() {
   const { user, loading } = useAuth();
   const [slugs, setSlugs] = useState<string[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [certName, setCertName] = useState("");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("eai_cert_name");
+    if (saved) setCertName(saved);
+    else if (user?.email) setCertName(user.email.split("@")[0]);
+  }, [user]);
 
   useEffect(() => {
     if (!user || !supabase) return;
@@ -73,30 +81,54 @@ export function MyCourses() {
             </Link>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-            {courses.map((c) => (
-              <div
-                key={c.slug}
-                className="border border-line rounded-2xl overflow-hidden bg-white"
-              >
-                <div className="h-[90px]" style={{ backgroundColor: c.color }} />
-                <div className="p-5">
-                  <h3 className="font-semibold text-[16px] tracking-[-0.2px]">
-                    {c.title}
-                  </h3>
-                  <p className="text-ink2 text-[13px] mt-1">
-                    {hoursLabel(c.learningHours)} · {c.lessonsLabel}
-                  </p>
-                  <Link
-                    to={`/course/${c.slug}`}
-                    className="btn btn-dark w-full justify-center mt-4 text-[14px]"
-                  >
-                    Continue →
-                  </Link>
+          <>
+            <div className="mt-6 flex flex-wrap items-center gap-3 bg-bg border border-line rounded-xl p-3.5">
+              <label className="text-[13.5px] text-ink2">
+                Name on your certificates:
+              </label>
+              <input
+                className="border border-line rounded-[9px] px-3 py-2 text-[14px] outline-none focus:border-accent min-w-[220px]"
+                value={certName}
+                onChange={(e) => {
+                  setCertName(e.target.value);
+                  localStorage.setItem("eai_cert_name", e.target.value);
+                }}
+                placeholder="Your full name"
+              />
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
+              {courses.map((c) => (
+                <div
+                  key={c.slug}
+                  className="border border-line rounded-2xl overflow-hidden bg-white"
+                >
+                  <div className="h-[90px]" style={{ backgroundColor: c.color }} />
+                  <div className="p-5">
+                    <h3 className="font-semibold text-[16px] tracking-[-0.2px]">
+                      {c.title}
+                    </h3>
+                    <p className="text-ink2 text-[13px] mt-1">
+                      {hoursLabel(c.learningHours)} · {c.lessonsLabel}
+                    </p>
+                    <Link
+                      to={`/course/${c.slug}`}
+                      className="btn btn-dark w-full justify-center mt-4 text-[14px]"
+                    >
+                      Continue →
+                    </Link>
+                    <button
+                      onClick={() =>
+                        downloadCertificate(certName.trim(), c.title)
+                      }
+                      className="btn btn-white w-full justify-center mt-2 text-[14px]"
+                    >
+                      ✦ Download certificate
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </section>
     </div>
