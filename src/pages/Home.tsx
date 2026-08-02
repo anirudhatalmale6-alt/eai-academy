@@ -4,6 +4,7 @@ import { COURSES } from "../data/courses";
 import { CourseCard } from "../components/CourseCard";
 import { BundleCard } from "../components/BundleCard";
 import { EnrollModal } from "../components/EnrollModal";
+import { InquiryModal } from "../components/InquiryModal";
 import { PartnerBadge } from "../components/PartnerBadge";
 
 // Premium, memorable topic tags — soft pastels, on-brand toward lavender/blue/pink.
@@ -20,6 +21,7 @@ const TOPICS: { label: string; cls: string }[] = [
 
 export function Home() {
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
   const freeCourse = COURSES.find((c) => c.priceCents === 0)!;
 
   return (
@@ -106,12 +108,12 @@ export function Home() {
           <a href="https://www.empathetic-ai.com" className="btn btn-accent">
             Explore our AI products →
           </a>
-          <a
-            href="https://www.empathetic-ai.com"
+          <button
+            onClick={() => setDemoOpen(true)}
             className="btn bg-white/10 border border-white/25 text-white"
           >
             Request a demo
-          </a>
+          </button>
         </div>
       </section>
 
@@ -120,6 +122,13 @@ export function Home() {
         onClose={() => setEnrollOpen(false)}
         courseTitle={freeCourse.title}
         courseSlug={freeCourse.slug}
+      />
+      <InquiryModal
+        open={demoOpen}
+        onClose={() => setDemoOpen(false)}
+        title="Empathetic AI"
+        source="ai-product"
+        intro="Tell us about your firm and what you'd like to see, and we'll set up a demo of our AI products."
       />
     </>
   );

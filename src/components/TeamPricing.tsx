@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { TEAM_TIERS } from "../data/courses";
+import { InquiryModal } from "./InquiryModal";
 
 // Team pricing block: shown in the buying flow (Courses page) and as its own
 // page. Replaces the old "For Teams" section with a clear volume-discount offer.
 export function TeamPricing() {
+  const [open, setOpen] = useState(false);
   return (
     <section className="bg-panel border border-line rounded-[22px] p-6 sm:p-9 mt-6">
       <div className="max-w-[640px]">
@@ -37,13 +40,21 @@ export function TeamPricing() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mt-7">
-        <a href="https://www.empathetic-ai.com" className="btn btn-accent">
+        <button onClick={() => setOpen(true)} className="btn btn-accent">
           Request team pricing →
-        </a>
+        </button>
         <span className="text-ink2 text-[13.5px]">
           Invoicing and central billing available for firms.
         </span>
       </div>
+
+      <InquiryModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Team pricing"
+        source="team-pricing"
+        intro="Tell us roughly how many people you'd like to enrol and which courses, and we'll send you team pricing."
+      />
     </section>
   );
 }
