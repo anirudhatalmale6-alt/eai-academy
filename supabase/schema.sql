@@ -119,12 +119,17 @@ create table if not exists public.orders (
   user_id uuid references auth.users(id) on delete set null,
   email text,
   course_slug text,
+  kind text,                                 -- 'course' | 'bundle'
+  seats integer not null default 1,
   amount_cents integer,
   currency text default 'aud',
   stripe_session_id text unique,
   status text not null default 'pending',
   created_at timestamptz not null default now()
 );
+-- Backfill columns on existing installs.
+alter table public.orders add column if not exists kind text;
+alter table public.orders add column if not exists seats integer not null default 1;
 alter table public.orders enable row level security;
 
 -- Users can read their own orders; admins can read all. Writes happen
@@ -133,6 +138,33 @@ drop policy if exists "orders own read" on public.orders;
 create policy "orders own read" on public.orders
   for select using (
     auth.uid() = user_id or public.has_role(auth.uid(), 'admin')
+  );
+
+-- ---------------------------------------------------------------------------
+-- Entitlements (who has access to which course). Written server-side by the
+-- Stripe webhook (service role). A student sees their own once their login
+-- email is linked to the row.
+-- ---------------------------------------------------------------------------
+create table if not exists public.entitlements (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete set null,
+  email text not null,
+  course_slug text not null,
+  order_id uuid references public.orders(id) on delete set null,
+  source text,
+  created_at timestamptz not null default now(),
+  unique (email, course_slug)
+);
+alter table public.entitlements enable row level security;
+
+-- A logged-in student reads entitlements matching their own account (by linked
+-- user_id or by their verified email); admins read all.
+drop policy if exists "entitlements own read" on public.entitlements;
+create policy "entitlements own read" on public.entitlements
+  for select using (
+    user_id = auth.uid()
+    or lower(email) = lower(coalesce((auth.jwt() ->> 'email'), ''))
+    or public.has_role(auth.uid(), 'admin')
   );
 
 -- ---------------------------------------------------------------------------

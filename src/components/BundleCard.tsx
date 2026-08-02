@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BUNDLE,
   money,
@@ -5,6 +6,7 @@ import {
   bundleIndividualCents,
   bundleLearningHours,
 } from "../data/courses";
+import { startCheckout } from "../lib/checkout";
 
 // Premium "complete program" bundle. Contents, individual total, saving and
 // learning hours are all derived from the paid courses, so the bundle stays in
@@ -15,6 +17,16 @@ export function BundleCard() {
   const individualTotal = bundleIndividualCents();
   const saving = individualTotal - BUNDLE.priceCents;
   const hours = bundleLearningHours();
+  const [buying, setBuying] = useState(false);
+  const [buyMsg, setBuyMsg] = useState<string | null>(null);
+
+  async function buyBundle() {
+    setBuyMsg(null);
+    setBuying(true);
+    const err = await startCheckout({ type: "bundle" });
+    if (err) setBuyMsg(err);
+    setBuying(false);
+  }
 
   return (
     <section className="bg-plum text-white rounded-[22px] p-8 sm:p-10 mt-6">
@@ -62,11 +74,15 @@ export function BundleCard() {
               Save {money(saving)}
             </div>
           )}
-          <button className="btn btn-accent w-full justify-center mt-5">
-            Get the full program →
+          <button
+            onClick={buyBundle}
+            disabled={buying}
+            className="btn btn-accent w-full justify-center mt-5 disabled:opacity-60"
+          >
+            {buying ? "Starting checkout…" : "Get the full program →"}
           </button>
           <p className="text-white/50 text-[12px] mt-3">
-            Lifetime access · Certificate included
+            {buyMsg ?? "Lifetime access · Certificate included"}
           </p>
         </div>
       </div>

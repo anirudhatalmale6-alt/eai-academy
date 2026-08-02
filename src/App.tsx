@@ -7,6 +7,7 @@ import { Login } from "./pages/Login";
 import { Admin } from "./pages/Admin";
 import { EnterpriseAdvisory } from "./pages/EnterpriseAdvisory";
 import { TeamPricingPage } from "./pages/TeamPricingPage";
+import { CheckoutSuccess } from "./pages/CheckoutSuccess";
 import { ComingSoon } from "./pages/ComingSoon";
 
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
         <Route path="/certifications" element={<ComingSoon title="Certifications" />} />
         <Route path="/enterprise-advisory" element={<EnterpriseAdvisory />} />
         <Route path="/team-pricing" element={<TeamPricingPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccess />} />
+        <Route path="/my-courses" element={<ComingSoon title="My Courses" />} />
         <Route path="/help" element={<ComingSoon title="Help & Support" />} />
         <Route path="*" element={<ComingSoon title="Page not found" />} />
       </Routes>

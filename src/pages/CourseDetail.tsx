@@ -2,11 +2,22 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getCourse, money, hoursLabel } from "../data/courses";
 import { EnrollModal } from "../components/EnrollModal";
+import { startCheckout } from "../lib/checkout";
 
 export function CourseDetail() {
   const { slug = "" } = useParams();
   const course = getCourse(slug);
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [buying, setBuying] = useState(false);
+  const [buyMsg, setBuyMsg] = useState<string | null>(null);
+
+  async function buy(courseSlug: string) {
+    setBuyMsg(null);
+    setBuying(true);
+    const err = await startCheckout({ type: "course", slug: courseSlug });
+    if (err) setBuyMsg(err);
+    setBuying(false);
+  }
 
   if (!course) {
     return (
@@ -95,17 +106,25 @@ export function CourseDetail() {
               )}
             </div>
             <button
-              onClick={() => free && setEnrollOpen(true)}
-              className={`btn w-full justify-center mt-4 ${
+              onClick={() => (free ? setEnrollOpen(true) : buy(course.slug))}
+              disabled={buying}
+              className={`btn w-full justify-center mt-4 disabled:opacity-60 ${
                 free ? "btn-accent" : "btn-dark"
               }`}
             >
-              {free ? "Get free access →" : "Enrol (coming soon)"}
+              {free
+                ? "Get free access →"
+                : buying
+                  ? "Starting checkout…"
+                  : "Enrol now →"}
             </button>
-            {!free && (
+            {!free && !buyMsg && (
               <p className="text-ink2 text-[12.5px] mt-3 text-center">
                 Secure checkout via Stripe. Lifetime access.
               </p>
+            )}
+            {buyMsg && (
+              <p className="text-ink2 text-[12.5px] mt-3 text-center">{buyMsg}</p>
             )}
             <ul className="mt-5 space-y-2 text-[13.5px] text-ink2">
               <li>◷ {hoursLabel(course.learningHours)}</li>
