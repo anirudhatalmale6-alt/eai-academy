@@ -19,8 +19,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/certifications" element={<ComingSoon title="Certifications" />} />
-        <Route path="/events" element={<ComingSoon title="Events" />} />
-        <Route path="/community" element={<ComingSoon title="Community" />} />
         <Route path="/enterprise-advisory" element={<EnterpriseAdvisory />} />
         <Route path="/team-pricing" element={<TeamPricingPage />} />
         <Route path="/help" element={<ComingSoon title="Help & Support" />} />

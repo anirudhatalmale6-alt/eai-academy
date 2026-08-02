@@ -5,8 +5,6 @@ const nav = [
   { to: "/", label: "Home", icon: "⌂", end: true },
   { to: "/courses", label: "Courses", icon: "◎" },
   { to: "/certifications", label: "Certifications", icon: "✦" },
-  { to: "/events", label: "Events", icon: "▤" },
-  { to: "/community", label: "Community", icon: "◍" },
 ];
 
 const navSecondary = [
