@@ -1,5 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
+import mark from "../assets/empathetic-mark.png";
 
 const nav = [
   { to: "/", label: "Home", icon: "⌂", end: true },
@@ -15,9 +16,7 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-[248px] shrink-0 border-r border-line px-4 py-5 sticky top-0 h-screen bg-bg">
       <Link to="/" className="flex items-center gap-2.5 px-2.5 pb-4">
-        <span className="w-[30px] h-[30px] rounded-lg bg-accent text-white flex items-center justify-center text-sm">
-          ≋
-        </span>
+        <img src={mark} alt="Empathetic AI" className="w-[32px] h-[32px]" />
         <span className="leading-none">
           <span className="block text-[15.5px] font-semibold">Empathetic AI</span>
           <span className="block text-[11px] font-medium text-ink2 tracking-[0.5px]">
