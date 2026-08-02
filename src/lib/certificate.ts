@@ -112,6 +112,27 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   const person = name || "Student";
 
   const [logo, badge] = await Promise.all([loadImage(mark), loadImage(oaiBadge)]);
+  // Ensure the handwriting signature font is ready before drawing.
+  try {
+    await (document as Document & { fonts: FontFaceSet }).fonts.load(
+      "54px 'Great Vibes'",
+    );
+  } catch {
+    /* falls back to cursive */
+  }
+
+  const star = (cx: number, cy: number, r: number) => {
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const rr = i % 2 ? r * 0.45 : r;
+      const a = -Math.PI / 2 + (i * Math.PI) / 5;
+      const x = cx + Math.cos(a) * rr;
+      const y = cy + Math.sin(a) * rr;
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+  };
 
   ctx.fillStyle = CREAM;
   ctx.fillRect(0, 0, W, H);
@@ -181,33 +202,33 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   ctx.textAlign = "center";
 
   // Header
-  ctx.drawImage(logo, W / 2 - 34, 96, 68, 68);
-  ctx.strokeStyle = goldGradient(ctx, W / 2 - 40, 96, W / 2 + 40, 164);
+  ctx.drawImage(logo, W / 2 - 34, 92, 68, 68);
+  ctx.strokeStyle = goldGradient(ctx, W / 2 - 40, 92, W / 2 + 40, 160);
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(W / 2, 130, 44, 0, 2 * Math.PI);
+  ctx.arc(W / 2, 126, 44, 0, 2 * Math.PI);
   ctx.stroke();
   ctx.fillStyle = NAVY;
   ctx.font = "600 22px Georgia, serif";
-  letterspaced(ctx, "EMPATHETIC AI ACADEMY", W / 2, 214, 6);
+  letterspaced(ctx, "EMPATHETIC AI ACADEMY", W / 2, 208, 6);
 
   ctx.fillStyle = NAVY;
-  ctx.font = "700 68px Georgia, 'Times New Roman', serif";
-  letterspaced(ctx, "CERTIFICATE", W / 2, 296, 4);
-  ctx.font = "600 26px Georgia, serif";
-  letterspaced(ctx, "OF COMPLETION", W / 2, 340, 7);
-  ctx.strokeStyle = goldGradient(ctx, W / 2 - 220, 352, W / 2 + 220, 352);
+  ctx.font = "700 66px Georgia, 'Times New Roman', serif";
+  letterspaced(ctx, "CERTIFICATE", W / 2, 288, 4);
+  ctx.font = "600 25px Georgia, serif";
+  letterspaced(ctx, "OF COMPLETION", W / 2, 330, 7);
+  ctx.strokeStyle = goldGradient(ctx, W / 2 - 220, 342, W / 2 + 220, 342);
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(W / 2 - 230, 350);
-  ctx.lineTo(W / 2 - 120, 350);
-  ctx.moveTo(W / 2 + 120, 350);
-  ctx.lineTo(W / 2 + 230, 350);
+  ctx.moveTo(W / 2 - 230, 340);
+  ctx.lineTo(W / 2 - 120, 340);
+  ctx.moveTo(W / 2 + 120, 340);
+  ctx.lineTo(W / 2 + 230, 340);
   ctx.stroke();
-  ctx.fillStyle = goldGradient(ctx, W / 2 - 130, 345, W / 2 - 110, 355);
+  ctx.fillStyle = goldGradient(ctx, W / 2 - 130, 335, W / 2 - 110, 345);
   [-118, 118].forEach((dx) => {
     ctx.save();
-    ctx.translate(W / 2 + dx, 350);
+    ctx.translate(W / 2 + dx, 340);
     ctx.rotate(Math.PI / 4);
     ctx.fillRect(-4, -4, 8, 8);
     ctx.restore();
@@ -215,24 +236,32 @@ export async function downloadCertificate(name: string, courseTitle: string) {
 
   ctx.fillStyle = "#5c5b69";
   ctx.font = "italic 27px Georgia, serif";
-  ctx.fillText("This certificate is proudly presented to", W / 2, 420);
+  ctx.fillText("This certificate is proudly presented to", W / 2, 406);
   ctx.fillStyle = NAVY2;
-  ctx.font = "700 76px Georgia, 'Times New Roman', serif";
-  ctx.fillText(person, W / 2, 512);
+  ctx.font = "700 74px Georgia, 'Times New Roman', serif";
+  ctx.fillText(person, W / 2, 494);
   ctx.fillStyle = "#5c5b69";
   ctx.font = "italic 26px Georgia, serif";
-  ctx.fillText("for successfully completing", W / 2, 576);
+  ctx.fillText("for successfully completing", W / 2, 556);
   ctx.fillStyle = INK;
-  ctx.font = "700 40px Georgia, 'Times New Roman', serif";
-  wrapText(ctx, courseTitle, W / 2, 648, W - 380, 50);
+  ctx.font = "700 38px Georgia, 'Times New Roman', serif";
+  wrapText(ctx, courseTitle, W / 2, 616, W - 420, 48);
 
-  // Gold seal
+  // Ornate gold seal, centred
   const scx = W / 2;
-  const scy = 792;
-  const R = 70;
+  const scy = 770;
+  const R = 72;
   ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
   ctx.beginPath();
-  ctx.arc(scx, scy, R + 9, 0, 2 * Math.PI);
+  const pts = 48;
+  for (let i = 0; i <= pts; i++) {
+    const a = (i / pts) * 2 * Math.PI - Math.PI / 2;
+    const rr = i % 2 === 0 ? R + 16 : R + 6;
+    const x = scx + Math.cos(a) * rr;
+    const y = scy + Math.sin(a) * rr;
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  }
+  ctx.closePath();
   ctx.fill();
   ctx.fillStyle = "#8a6a24";
   ctx.beginPath();
@@ -240,30 +269,26 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   ctx.fill();
   ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
   ctx.beginPath();
-  ctx.arc(scx, scy, R - 6, 0, 2 * Math.PI);
+  ctx.arc(scx, scy, R - 7, 0, 2 * Math.PI);
   ctx.fill();
-  ctx.drawImage(logo, scx - 30, scy - 26, 60, 60);
+  ctx.fillStyle = "#fff8e6";
+  star(scx, scy - 40, 11);
+  ctx.drawImage(logo, scx - 28, scy - 18, 56, 56);
   ctx.fillStyle = NAVY;
-  ctx.beginPath();
-  ctx.moveTo(scx - 34, scy + R + 2);
-  ctx.lineTo(scx - 14, scy + R + 2);
-  ctx.lineTo(scx - 24, scy + R + 40);
-  ctx.lineTo(scx - 40, scy + R + 30);
-  ctx.closePath();
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(scx + 34, scy + R + 2);
-  ctx.lineTo(scx + 14, scy + R + 2);
-  ctx.lineTo(scx + 24, scy + R + 40);
-  ctx.lineTo(scx + 40, scy + R + 30);
-  ctx.closePath();
-  ctx.fill();
+  [-1, 1].forEach((s) => {
+    ctx.beginPath();
+    ctx.moveTo(scx + s * 34, scy + R + 6);
+    ctx.lineTo(scx + s * 14, scy + R + 6);
+    ctx.lineTo(scx + s * 24, scy + R + 46);
+    ctx.lineTo(scx + s * 40, scy + R + 34);
+    ctx.closePath();
+    ctx.fill();
+  });
 
-  // Signature (left)
+  // Signature (left) in a handwriting font
   ctx.fillStyle = INK;
-  ctx.font =
-    "italic 44px 'Snell Roundhand', 'Brush Script MT', 'Segoe Script', Georgia, cursive";
-  ctx.fillText("Empathetic AI", 360, 972);
+  ctx.font = "54px 'Great Vibes', 'Snell Roundhand', cursive";
+  ctx.fillText("Empathetic AI", 360, 975);
   ctx.strokeStyle = goldGradient(ctx, 250, 992, 470, 992);
   ctx.lineWidth = 1.5;
   ctx.beginPath();
