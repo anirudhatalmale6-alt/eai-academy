@@ -212,6 +212,28 @@ create policy "referrals admin read" on public.referrals
   for select using (public.has_role(auth.uid(), 'admin'));
 
 -- ---------------------------------------------------------------------------
+-- Marketing contacts (email audience: imported lists + Academy signups).
+-- Stored in the database the client owns; sending happens via a separate email
+-- service (Resend). Nothing is ever emailed automatically from here.
+-- ---------------------------------------------------------------------------
+create table if not exists public.marketing_contacts (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  name text,
+  source text,                              -- e.g. 'luna', 'academy-signup'
+  plan text,
+  suspended boolean not null default false,
+  subscribed boolean not null default true, -- unsubscribe flips this to false
+  unsubscribed_at timestamptz,
+  created_at timestamptz not null default now()
+);
+alter table public.marketing_contacts enable row level security;
+
+drop policy if exists "marketing admin read" on public.marketing_contacts;
+create policy "marketing admin read" on public.marketing_contacts
+  for select using (public.has_role(auth.uid(), 'admin'));
+
+-- ---------------------------------------------------------------------------
 -- Inquiries (main-site "Request a Demo" / contact form -> replaces HubSpot)
 -- The empathetic-ai.com form posts here instead of HubSpot, so all leads live
 -- in one database the client owns. Email alert fires server-side on insert.
