@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../lib/auth";
 import { getCourse, hoursLabel } from "../data/courses";
-import { downloadCertificate } from "../lib/certificate";
+import { downloadCertificate, linkedInAddUrl } from "../lib/certificate";
 
 export function MyCourses() {
   const { user, loading } = useAuth();
@@ -116,14 +116,25 @@ export function MyCourses() {
                     >
                       Continue →
                     </Link>
-                    <button
-                      onClick={() =>
-                        downloadCertificate(certName.trim(), c.title)
-                      }
-                      className="btn btn-white w-full justify-center mt-2 text-[14px]"
-                    >
-                      ✦ Download certificate
-                    </button>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <button
+                        onClick={() =>
+                          downloadCertificate(certName.trim(), c.title)
+                        }
+                        className="btn btn-white justify-center text-[13.5px]"
+                      >
+                        ✦ Certificate
+                      </button>
+                      <a
+                        href={linkedInAddUrl(certName.trim(), c.title)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn justify-center text-[13.5px] text-white"
+                        style={{ backgroundColor: "#0a66c2" }}
+                      >
+                        Add to LinkedIn
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}

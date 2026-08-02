@@ -1,8 +1,13 @@
 import mark from "../assets/empathetic-mark.png";
 import oaiBadge from "../assets/openai-select-partner.png";
 
-// Generates a refined, premium completion certificate (PNG) client-side.
-// No server or dependency needed. Shareable on LinkedIn.
+// Premium navy + gold completion certificate (PNG), generated client-side.
+// Designed to be share-worthy on LinkedIn. No server or dependency needed.
+
+const NAVY = "#16233f";
+const NAVY2 = "#1e3a6e";
+const CREAM = "#FBFAF6";
+const INK = "#1b1b26";
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve) => {
@@ -11,6 +16,41 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     img.onerror = () => resolve(img);
     img.src = src;
   });
+}
+
+function goldGradient(
+  ctx: CanvasRenderingContext2D,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+) {
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  g.addColorStop(0, "#8a6a24");
+  g.addColorStop(0.25, "#e7cd82");
+  g.addColorStop(0.5, "#c69b46");
+  g.addColorStop(0.75, "#f0da97");
+  g.addColorStop(1, "#9a7830");
+  return g;
+}
+
+function letterspaced(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  cx: number,
+  y: number,
+  spacing: number,
+) {
+  const chars = [...text];
+  const widths = chars.map((c) => ctx.measureText(c).width + spacing);
+  const total = widths.reduce((a, b) => a + b, 0) - spacing;
+  let x = cx - total / 2;
+  ctx.textAlign = "left";
+  for (let i = 0; i < chars.length; i++) {
+    ctx.fillText(chars[i], x, y);
+    x += widths[i];
+  }
+  ctx.textAlign = "center";
 }
 
 function wrapText(
@@ -38,30 +78,27 @@ function wrapText(
   lines.forEach((l, i) => ctx.fillText(l, x, startY + i * lineHeight));
 }
 
-function letterspaced(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  cx: number,
-  y: number,
-  spacing: number,
-) {
-  const chars = [...text];
-  const widths = chars.map((c) => ctx.measureText(c).width + spacing);
-  const total = widths.reduce((a, b) => a + b, 0) - spacing;
-  let x = cx - total / 2;
-  ctx.textAlign = "left";
-  for (let i = 0; i < chars.length; i++) {
-    ctx.fillText(chars[i], x, y);
-    x += widths[i];
-  }
-  ctx.textAlign = "center";
-}
-
-function certId(name: string, course: string) {
+export function certId(name: string, course: string) {
   const s = (name + "|" + course).toLowerCase();
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
   return "EAI-" + h.toString(36).toUpperCase().padStart(7, "0").slice(0, 7);
+}
+
+// Opens LinkedIn's "Add to profile" for a certification, so students showcase
+// the credential on their profile with a link back to the Academy.
+export function linkedInAddUrl(name: string, courseTitle: string) {
+  const now = new Date();
+  const params = new URLSearchParams({
+    startTask: "CERTIFICATION_NAME",
+    name: courseTitle,
+    organizationName: "Empathetic AI Academy",
+    issueYear: String(now.getFullYear()),
+    issueMonth: String(now.getMonth() + 1),
+    certId: certId(name || "Student", courseTitle),
+    certUrl: "https://academy.empathetic-ai.com",
+  });
+  return `https://www.linkedin.com/profile/add?${params.toString()}`;
 }
 
 export async function downloadCertificate(name: string, courseTitle: string) {
@@ -72,129 +109,215 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
+  const person = name || "Student";
 
-  const [logo, badge] = await Promise.all([
-    loadImage(mark),
-    loadImage(oaiBadge),
-  ]);
+  const [logo, badge] = await Promise.all([loadImage(mark), loadImage(oaiBadge)]);
 
-  // Warm off-white background
-  ctx.fillStyle = "#FCFBF9";
+  ctx.fillStyle = CREAM;
   ctx.fillRect(0, 0, W, H);
 
-  // Faint watermark of the logo mark
+  // Guilloche watermark
   ctx.save();
-  ctx.globalAlpha = 0.05;
-  ctx.drawImage(logo, W / 2 - 280, H / 2 - 300, 560, 560);
+  ctx.globalAlpha = 0.06;
+  ctx.strokeStyle = "#4a5b86";
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 70; i++) {
+    ctx.save();
+    ctx.translate(W / 2, 560);
+    ctx.rotate((i * Math.PI) / 35);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 250, 150, 0, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.restore();
+  }
   ctx.restore();
 
-  // Refined double border
-  ctx.strokeStyle = "#2563EB";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(44, 44, W - 88, H - 88);
-  ctx.strokeStyle = "#cfe0fb";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(62, 62, W - 124, H - 124);
-  // Corner accents
-  ctx.strokeStyle = "#2563EB";
-  ctx.lineWidth = 2;
-  const c = 26;
-  [
-    [62, 62, 1, 1],
-    [W - 62, 62, -1, 1],
-    [62, H - 62, 1, -1],
-    [W - 62, H - 62, -1, -1],
-  ].forEach(([x, y, sx, sy]) => {
+  const tri = (p: number[], fill: string) => {
     ctx.beginPath();
-    ctx.moveTo(x + sx * c, y);
+    ctx.moveTo(p[0], p[1]);
+    ctx.lineTo(p[2], p[3]);
+    ctx.lineTo(p[4], p[5]);
+    ctx.closePath();
+    ctx.fillStyle = fill;
+    ctx.fill();
+  };
+  tri([0, 0, 300, 0, 0, 300], NAVY);
+  ctx.strokeStyle = goldGradient(ctx, 0, 0, 260, 260);
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(300, 0);
+  ctx.lineTo(0, 300);
+  ctx.stroke();
+  tri([W, H, W - 300, H, W, H - 300], NAVY);
+  ctx.beginPath();
+  ctx.moveTo(W - 300, H);
+  ctx.lineTo(W, H - 300);
+  ctx.stroke();
+
+  // Gold borders
+  ctx.strokeStyle = goldGradient(ctx, 50, 50, W - 50, H - 50);
+  ctx.lineWidth = 3;
+  ctx.strokeRect(50, 50, W - 100, H - 100);
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(64, 64, W - 128, H - 128);
+  ctx.lineWidth = 2;
+  const bx = 96;
+  const bl = 34;
+  (
+    [
+      [bx, bx, 1, 1],
+      [W - bx, bx, -1, 1],
+      [bx, H - bx, 1, -1],
+      [W - bx, H - bx, -1, -1],
+    ] as number[][]
+  ).forEach(([x, y, sx, sy]) => {
+    ctx.beginPath();
+    ctx.moveTo(x + sx * bl, y);
     ctx.lineTo(x, y);
-    ctx.lineTo(x, y + sy * c);
+    ctx.lineTo(x, y + sy * bl);
     ctx.stroke();
   });
 
   ctx.textAlign = "center";
 
-  // Header mark + wordmark
-  ctx.drawImage(logo, W / 2 - 33, 98, 66, 66);
-  ctx.fillStyle = "#8a8a97";
-  ctx.font = "600 21px Inter, Arial, sans-serif";
-  letterspaced(ctx, "EMPATHETIC AI ACADEMY", W / 2, 210, 4);
+  // Header
+  ctx.drawImage(logo, W / 2 - 34, 96, 68, 68);
+  ctx.strokeStyle = goldGradient(ctx, W / 2 - 40, 96, W / 2 + 40, 164);
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(W / 2, 130, 44, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.fillStyle = NAVY;
+  ctx.font = "600 22px Georgia, serif";
+  letterspaced(ctx, "EMPATHETIC AI ACADEMY", W / 2, 214, 6);
 
-  // Title
-  ctx.fillStyle = "#1E1D29";
-  ctx.font = "700 56px Georgia, 'Times New Roman', serif";
-  ctx.fillText("Certificate of Completion", W / 2, 302);
-
-  // Divider with centre diamond
-  ctx.strokeStyle = "#2563EB";
+  ctx.fillStyle = NAVY;
+  ctx.font = "700 68px Georgia, 'Times New Roman', serif";
+  letterspaced(ctx, "CERTIFICATE", W / 2, 296, 4);
+  ctx.font = "600 26px Georgia, serif";
+  letterspaced(ctx, "OF COMPLETION", W / 2, 340, 7);
+  ctx.strokeStyle = goldGradient(ctx, W / 2 - 220, 352, W / 2 + 220, 352);
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(W / 2 - 95, 338);
-  ctx.lineTo(W / 2 - 12, 338);
-  ctx.moveTo(W / 2 + 12, 338);
-  ctx.lineTo(W / 2 + 95, 338);
+  ctx.moveTo(W / 2 - 230, 350);
+  ctx.lineTo(W / 2 - 120, 350);
+  ctx.moveTo(W / 2 + 120, 350);
+  ctx.lineTo(W / 2 + 230, 350);
   ctx.stroke();
-  ctx.fillStyle = "#2563EB";
-  ctx.save();
-  ctx.translate(W / 2, 338);
-  ctx.rotate(Math.PI / 4);
-  ctx.fillRect(-5, -5, 10, 10);
-  ctx.restore();
+  ctx.fillStyle = goldGradient(ctx, W / 2 - 130, 345, W / 2 - 110, 355);
+  [-118, 118].forEach((dx) => {
+    ctx.save();
+    ctx.translate(W / 2 + dx, 350);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
+  });
 
-  // Recipient
-  ctx.fillStyle = "#6b6a78";
+  ctx.fillStyle = "#5c5b69";
+  ctx.font = "italic 27px Georgia, serif";
+  ctx.fillText("This certificate is proudly presented to", W / 2, 420);
+  ctx.fillStyle = NAVY2;
+  ctx.font = "700 76px Georgia, 'Times New Roman', serif";
+  ctx.fillText(person, W / 2, 512);
+  ctx.fillStyle = "#5c5b69";
   ctx.font = "italic 26px Georgia, serif";
-  ctx.fillText("This certificate is proudly presented to", W / 2, 410);
+  ctx.fillText("for successfully completing", W / 2, 576);
+  ctx.fillStyle = INK;
+  ctx.font = "700 40px Georgia, 'Times New Roman', serif";
+  wrapText(ctx, courseTitle, W / 2, 648, W - 380, 50);
 
-  ctx.fillStyle = "#2563EB";
-  ctx.font = "700 72px Georgia, 'Times New Roman', serif";
-  ctx.fillText(name || "Student", W / 2, 502);
-
-  ctx.fillStyle = "#6b6a78";
-  ctx.font = "italic 26px Georgia, serif";
-  ctx.fillText("for successfully completing", W / 2, 574);
-
-  ctx.fillStyle = "#1E1D29";
-  ctx.font = "600 40px Inter, Arial, sans-serif";
-  wrapText(ctx, courseTitle, W / 2, 646, W - 360, 50);
-
-  // Footer: signature (left), OpenAI badge (right), date + id (centre)
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#1E1D29";
-  ctx.font = "italic 40px Georgia, serif";
-  ctx.fillText("Empathetic AI", 400, 930);
-  ctx.strokeStyle = "#c9c8d4";
-  ctx.lineWidth = 1;
+  // Gold seal
+  const scx = W / 2;
+  const scy = 792;
+  const R = 70;
+  ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
   ctx.beginPath();
-  ctx.moveTo(280, 952);
-  ctx.lineTo(520, 952);
+  ctx.arc(scx, scy, R + 9, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.fillStyle = "#8a6a24";
+  ctx.beginPath();
+  ctx.arc(scx, scy, R, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
+  ctx.beginPath();
+  ctx.arc(scx, scy, R - 6, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.drawImage(logo, scx - 30, scy - 26, 60, 60);
+  ctx.fillStyle = NAVY;
+  ctx.beginPath();
+  ctx.moveTo(scx - 34, scy + R + 2);
+  ctx.lineTo(scx - 14, scy + R + 2);
+  ctx.lineTo(scx - 24, scy + R + 40);
+  ctx.lineTo(scx - 40, scy + R + 30);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(scx + 34, scy + R + 2);
+  ctx.lineTo(scx + 14, scy + R + 2);
+  ctx.lineTo(scx + 24, scy + R + 40);
+  ctx.lineTo(scx + 40, scy + R + 30);
+  ctx.closePath();
+  ctx.fill();
+
+  // Signature (left)
+  ctx.fillStyle = INK;
+  ctx.font =
+    "italic 44px 'Snell Roundhand', 'Brush Script MT', 'Segoe Script', Georgia, cursive";
+  ctx.fillText("Empathetic AI", 360, 972);
+  ctx.strokeStyle = goldGradient(ctx, 250, 992, 470, 992);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(250, 992);
+  ctx.lineTo(470, 992);
   ctx.stroke();
-  ctx.fillStyle = "#6b6a78";
-  ctx.font = "500 19px Inter, Arial, sans-serif";
-  ctx.fillText("Empathetic AI Academy", 400, 982);
+  ctx.fillStyle = "#5c5b69";
+  ctx.font = "500 18px Georgia, serif";
+  ctx.fillText("Empathetic AI Academy", 360, 1020);
 
-  // Official OpenAI Select Partner badge, right
-  const bw = 236;
-  const bh = (badge.height / badge.width) * bw || 112;
-  ctx.drawImage(badge, 1200 - bw / 2, 905 - bh / 2, bw, bh);
-
-  // Date + certificate id, centre bottom
+  // Date + id (centre)
   const dateStr = new Date().toLocaleDateString("en-AU", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
-  ctx.fillStyle = "#4a4956";
-  ctx.font = "500 22px Inter, Arial, sans-serif";
-  ctx.fillText(`Awarded ${dateStr}`, W / 2, 1000);
-  ctx.fillStyle = "#9a99a8";
-  ctx.font = "400 17px Inter, Arial, sans-serif";
-  ctx.fillText(`Certificate ID  ${certId(name, courseTitle)}`, W / 2, 1032);
+  ctx.fillStyle = NAVY;
+  ctx.font = "600 22px Georgia, serif";
+  ctx.fillText(`Awarded ${dateStr}`, W / 2, 978);
+  ctx.strokeStyle = goldGradient(ctx, W / 2 - 90, 996, W / 2 + 90, 996);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - 90, 996);
+  ctx.lineTo(W / 2 - 14, 996);
+  ctx.moveTo(W / 2 + 14, 996);
+  ctx.lineTo(W / 2 + 90, 996);
+  ctx.stroke();
+  ctx.fillStyle = "#7a7986";
+  ctx.font = "400 17px Georgia, serif";
+  ctx.fillText(`Certificate ID  ${certId(person, courseTitle)}`, W / 2, 1024);
+
+  // OpenAI badge in white card (right)
+  const bw = 200;
+  const bh = (badge.height / badge.width) * bw || 95;
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "#e2e2ea";
+  ctx.lineWidth = 1;
+  const cardX = 1240 - bw / 2 - 14;
+  const cardY = 946 - bh / 2 - 12;
+  if (ctx.roundRect) {
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, bw + 28, bh + 24, 12);
+    ctx.fill();
+    ctx.stroke();
+  } else {
+    ctx.fillRect(cardX, cardY, bw + 28, bh + 24);
+    ctx.strokeRect(cardX, cardY, bw + 28, bh + 24);
+  }
+  ctx.drawImage(badge, 1240 - bw / 2, 946 - bh / 2, bw, bh);
 
   const url = canvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Certificate - ${courseTitle}.png`;
+  a.download = `Empathetic AI Academy Certificate - ${courseTitle}.png`;
   document.body.appendChild(a);
   a.click();
   a.remove();
