@@ -115,7 +115,7 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   // Ensure the handwriting signature font is ready before drawing.
   try {
     await (document as Document & { fonts: FontFaceSet }).fonts.load(
-      "54px 'Great Vibes'",
+      "60px 'Sacramento'",
     );
   } catch {
     /* falls back to cursive */
@@ -136,22 +136,6 @@ export async function downloadCertificate(name: string, courseTitle: string) {
 
   ctx.fillStyle = CREAM;
   ctx.fillRect(0, 0, W, H);
-
-  // Guilloche watermark
-  ctx.save();
-  ctx.globalAlpha = 0.06;
-  ctx.strokeStyle = "#4a5b86";
-  ctx.lineWidth = 1;
-  for (let i = 0; i < 70; i++) {
-    ctx.save();
-    ctx.translate(W / 2, 560);
-    ctx.rotate((i * Math.PI) / 35);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 250, 150, 0, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.restore();
-  }
-  ctx.restore();
 
   const tri = (p: number[], fill: string) => {
     ctx.beginPath();
@@ -247,53 +231,94 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   ctx.font = "700 38px Georgia, 'Times New Roman', serif";
   wrapText(ctx, courseTitle, W / 2, 616, W - 420, 48);
 
-  // Ornate gold seal, centred
+  // Ornate gold award medallion, centred (beaded edge, star, laurel wreath, E monogram)
   const scx = W / 2;
-  const scy = 770;
-  const R = 72;
-  ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
-  ctx.beginPath();
-  const pts = 48;
-  for (let i = 0; i <= pts; i++) {
-    const a = (i / pts) * 2 * Math.PI - Math.PI / 2;
-    const rr = i % 2 === 0 ? R + 16 : R + 6;
-    const x = scx + Math.cos(a) * rr;
-    const y = scy + Math.sin(a) * rr;
-    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  const scy = 782;
+  const R = 76;
+  const gf = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
+  // Beaded / scalloped outer edge (rounded bumps)
+  const beads = 34;
+  ctx.fillStyle = gf;
+  for (let i = 0; i < beads; i++) {
+    const a = (i / beads) * 2 * Math.PI;
+    const bx = scx + Math.cos(a) * (R + 5);
+    const by = scy + Math.sin(a) * (R + 5);
+    ctx.beginPath();
+    ctx.arc(bx, by, 7.5, 0, 2 * Math.PI);
+    ctx.fill();
   }
-  ctx.closePath();
+  ctx.fillStyle = gf;
+  ctx.beginPath();
+  ctx.arc(scx, scy, R + 3, 0, 2 * Math.PI);
   ctx.fill();
+  // Rim + face
   ctx.fillStyle = "#8a6a24";
   ctx.beginPath();
   ctx.arc(scx, scy, R, 0, 2 * Math.PI);
   ctx.fill();
-  ctx.fillStyle = goldGradient(ctx, scx - R, scy - R, scx + R, scy + R);
+  ctx.fillStyle = gf;
   ctx.beginPath();
-  ctx.arc(scx, scy, R - 7, 0, 2 * Math.PI);
+  ctx.arc(scx, scy, R - 6, 0, 2 * Math.PI);
   ctx.fill();
-  ctx.fillStyle = "#fff8e6";
-  star(scx, scy - 40, 11);
-  ctx.drawImage(logo, scx - 28, scy - 18, 56, 56);
-  ctx.fillStyle = NAVY;
-  [-1, 1].forEach((s) => {
-    ctx.beginPath();
-    ctx.moveTo(scx + s * 34, scy + R + 6);
-    ctx.lineTo(scx + s * 14, scy + R + 6);
-    ctx.lineTo(scx + s * 24, scy + R + 46);
-    ctx.lineTo(scx + s * 40, scy + R + 34);
-    ctx.closePath();
-    ctx.fill();
-  });
-
-  // Signature (left) in a handwriting font
-  ctx.fillStyle = INK;
-  ctx.font = "54px 'Great Vibes', 'Snell Roundhand', cursive";
-  ctx.fillText("Empathetic AI", 360, 975);
-  ctx.strokeStyle = goldGradient(ctx, 250, 992, 470, 992);
+  ctx.strokeStyle = "#8a6a24";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(250, 992);
-  ctx.lineTo(470, 992);
+  ctx.arc(scx, scy, R - 13, 0, 2 * Math.PI);
+  ctx.stroke();
+  const EMB = "#7a5c1f";
+  // Star at top
+  ctx.fillStyle = EMB;
+  star(scx, scy - 44, 9);
+  // Laurel wreath: two symmetric leafy branches framing the E
+  const rw = R - 19;
+  const leaf = (a: number, tilt: number) => {
+    const lx = scx + Math.cos(a) * rw;
+    const ly = scy + 6 + Math.sin(a) * rw;
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(a + Math.PI / 2 + tilt);
+    ctx.beginPath();
+    ctx.ellipse(0, -7, 4, 10.5, 0, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.restore();
+  };
+  ctx.fillStyle = EMB;
+  const RN = 8;
+  for (let i = 0; i < RN; i++) {
+    const a = Math.PI * 0.44 + (-Math.PI * 0.3 - Math.PI * 0.44) * (i / (RN - 1));
+    leaf(a, -0.5);
+  }
+  for (let i = 0; i < RN; i++) {
+    const a = Math.PI * 0.56 + (Math.PI * 1.3 - Math.PI * 0.56) * (i / (RN - 1));
+    leaf(a, 0.5);
+  }
+  // E monogram: three rounded gold bars, embossed
+  const barW = 46;
+  const barH = 8;
+  const gap = 13;
+  const rbar = (x: number, y: number, w: number, h: number, r: number) => {
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+    else ctx.rect(x, y, w, h);
+    ctx.fill();
+  };
+  [-1, 0, 1].forEach((k) => {
+    const by = scy + 6 + k * gap;
+    ctx.fillStyle = "#6f5218";
+    rbar(scx - barW / 2, by - barH / 2 + 1.5, barW, barH, 4);
+    ctx.fillStyle = goldGradient(ctx, scx - barW / 2, by - 6, scx + barW / 2, by + 6);
+    rbar(scx - barW / 2, by - barH / 2, barW, barH, 4);
+  });
+
+  // Signature (left) in a natural handwriting font
+  ctx.fillStyle = INK;
+  ctx.font = "60px 'Sacramento', 'Snell Roundhand', cursive";
+  ctx.fillText("Empathetic AI", 360, 978);
+  ctx.strokeStyle = goldGradient(ctx, 250, 998, 470, 998);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(250, 998);
+  ctx.lineTo(470, 998);
   ctx.stroke();
   ctx.fillStyle = "#5c5b69";
   ctx.font = "500 18px Georgia, serif";
