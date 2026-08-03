@@ -31,6 +31,10 @@ export function CourseDetail() {
   }
 
   const free = course.priceCents === 0;
+  const onOffer =
+    !free &&
+    !!course.compareAtCents &&
+    course.compareAtCents > course.priceCents;
 
   return (
     <div className="mt-1">
@@ -97,14 +101,26 @@ export function CourseDetail() {
         {/* Sticky enroll card */}
         <aside className="lg:sticky lg:top-4 h-fit">
           <div className="bg-panel border border-line rounded-[20px] p-6">
-            <div className="flex items-baseline justify-between">
+            <div className="flex items-baseline gap-2.5">
               <span className="text-[30px] font-bold">
                 {money(course.priceCents)}
               </span>
-              {!free && (
-                <span className="text-ink2 text-sm">one-time</span>
+              {onOffer ? (
+                <span className="text-ink2 text-[16px] line-through">
+                  {money(course.compareAtCents!)}
+                </span>
+              ) : (
+                !free && <span className="text-ink2 text-sm">one-time</span>
               )}
             </div>
+            {onOffer && (
+              <div
+                className="inline-block mt-2 text-[12px] font-bold rounded-full px-2.5 py-1 text-white"
+                style={{ backgroundColor: course.color }}
+              >
+                Launch price · save {money(course.compareAtCents! - course.priceCents)}
+              </div>
+            )}
             <button
               onClick={() => (free ? setEnrollOpen(true) : buy(course.slug))}
               disabled={buying}

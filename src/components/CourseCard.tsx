@@ -3,6 +3,10 @@ import { type Course, money, hoursLabel } from "../data/courses";
 
 export function CourseCard({ course }: { course: Course }) {
   const free = course.priceCents === 0;
+  const onOffer =
+    !free &&
+    !!course.compareAtCents &&
+    course.compareAtCents > course.priceCents;
   return (
     <Link
       to={`/course/${course.slug}`}
@@ -18,6 +22,14 @@ export function CourseCard({ course }: { course: Course }) {
         >
           {free ? "FREE" : course.level.toUpperCase()}
         </span>
+        {onOffer && (
+          <span
+            className="absolute top-3 right-3 rounded-md text-[10px] font-bold px-2 py-1 bg-white/95 tracking-wide"
+            style={{ color: course.color }}
+          >
+            LAUNCH OFFER
+          </span>
+        )}
       </div>
       <div className="px-[18px] pt-4 pb-[18px]">
         <div
@@ -36,8 +48,15 @@ export function CourseCard({ course }: { course: Course }) {
           <span>
             ◷ {hoursLabel(course.learningHours)} · {course.lessonsLabel}
           </span>
-          <span className="font-bold text-ink text-[15px]">
-            {money(course.priceCents)}
+          <span className="flex items-baseline gap-1.5">
+            {onOffer && (
+              <span className="text-ink2 text-[12.5px] line-through">
+                {money(course.compareAtCents!)}
+              </span>
+            )}
+            <span className="font-bold text-ink text-[15px]">
+              {money(course.priceCents)}
+            </span>
           </span>
         </div>
       </div>

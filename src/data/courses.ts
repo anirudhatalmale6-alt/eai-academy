@@ -7,6 +7,7 @@ export interface Course {
   summary: string;
   level: Level;
   priceCents: number; // 0 = free
+  compareAtCents?: number; // optional "regular" price shown struck through for a launch offer
   learningHours: number; // total learning hours (shown as "N Learning Hours")
   lessonsLabel: string; // "6 lessons"
   color: string; // one pure brand colour for the course (thumbnail + accent)
@@ -15,8 +16,15 @@ export interface Course {
 }
 
 // Prices are in Australian dollars (whole dollars), formatted "A$1,990".
-export const money = (cents: number) =>
-  cents === 0 ? "Free" : `A$${(cents / 100).toLocaleString("en-AU")}`;
+export const money = (cents: number) => {
+  if (cents === 0) return "Free";
+  const dollars = cents / 100;
+  // Whole dollars stay clean (A$590); fractional shows cents (A$442.50).
+  const opts = Number.isInteger(dollars)
+    ? {}
+    : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+  return `A$${dollars.toLocaleString("en-AU", opts)}`;
+};
 
 // Duration is expressed in "Learning Hours" (professionals track learning hours).
 export const hoursLabel = (n: number) =>
@@ -57,6 +65,18 @@ export const TEAM_TIERS: { size: string; discount: number | null }[] = [
   { size: "25 or more", discount: null },
 ];
 
+// Discount percent for a given number of seats. Mirrors the server catalogue
+// (api/_lib/catalog.js). null = custom pricing (25+), not sold online.
+// Used to show the live team price before checkout; the server is still the
+// source of truth for what is actually charged.
+export const teamTierPct = (seats: number): number | null => {
+  const n = Math.max(1, Math.floor(seats || 1));
+  if (n >= 25) return null;
+  if (n >= 10) return 25;
+  if (n >= 3) return 15;
+  return 0;
+};
+
 // Launch catalog, oriented to the tools Australian firms actually use:
 // Microsoft 365 Copilot first, with OpenAI / ChatGPT Enterprise coverage.
 // Placeholder lesson detail; real content will be produced via the playbook
@@ -95,6 +115,7 @@ export const COURSES: Course[] = [
       "Use Microsoft 365 Copilot across Excel, Outlook, Word, Teams and PowerPoint for everyday finance and accounting work.",
     level: "Beginner",
     priceCents: 59000,
+    compareAtCents: 69000,
     learningHours: 3,
     lessonsLabel: "11 lessons",
     color: "#8B5CF6",
@@ -118,6 +139,7 @@ export const COURSES: Course[] = [
       "Get source-traceable, defensible outputs from Copilot and ChatGPT that stand up in regulated work. Prompt templates included.",
     level: "Beginner",
     priceCents: 59000,
+    compareAtCents: 69000,
     learningHours: 3,
     lessonsLabel: "10 lessons",
     color: "#EC4899",
@@ -140,6 +162,7 @@ export const COURSES: Course[] = [
       "Design agent workflows in Copilot Studio and OpenAI that handle real firm tasks end to end, with a human in the loop.",
     level: "Intermediate",
     priceCents: 59000,
+    compareAtCents: 69000,
     learningHours: 5,
     lessonsLabel: "18 lessons",
     color: "#14B8A6",
@@ -162,6 +185,7 @@ export const COURSES: Course[] = [
       "Roll out Copilot and OpenAI Enterprise without breaching duty of care: data security, review controls, audit trails and a firm AI policy.",
     level: "Advanced",
     priceCents: 69000,
+    compareAtCents: 79000,
     learningHours: 4,
     lessonsLabel: "14 lessons",
     color: "#F59E0B",
