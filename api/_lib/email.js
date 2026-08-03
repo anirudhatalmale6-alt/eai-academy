@@ -29,13 +29,16 @@ export function audLabel(cents, currency) {
 }
 
 function layout(inner, preheader) {
+  const logo = `${siteUrl()}/email-logo.png`;
   return `<!doctype html><html><body style="margin:0;background:#f5f6f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1b1b26;">
 <span style="display:none;opacity:0;visibility:hidden;height:0;width:0;overflow:hidden">${esc(preheader || "")}</span>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f6f8;padding:28px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e6e7eb;border-radius:14px;overflow:hidden">
-<tr><td style="padding:22px 30px;border-bottom:1px solid #eef0f3">
-<span style="font-size:16px;font-weight:700;color:#0f172a">Empathetic AI</span>
-<span style="font-size:12px;font-weight:700;letter-spacing:1.5px;color:#2563EB;margin-left:6px">ACADEMY</span>
+<tr><td style="padding:20px 30px;border-bottom:1px solid #eef0f3">
+<table role="presentation" cellpadding="0" cellspacing="0"><tr>
+<td style="vertical-align:middle"><img src="${logo}" width="34" height="34" alt="Empathetic AI" style="display:block;border:0;outline:none"></td>
+<td style="vertical-align:middle;padding-left:10px"><span style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:-0.2px">Empathetic AI</span></td>
+</tr></table>
 </td></tr>
 <tr><td style="padding:28px 30px 32px">${inner}</td></tr>
 <tr><td style="padding:18px 30px;border-top:1px solid #eef0f3;color:#8a90a2;font-size:12px;line-height:1.6">
