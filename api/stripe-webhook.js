@@ -5,7 +5,8 @@
 // Stripe session id.
 import Stripe from "stripe";
 import { supabaseAdmin } from "./_lib/supabaseAdmin.js";
-import { COMMISSION_RATE } from "./_lib/catalog.js";
+import { COMMISSION_RATE, COURSES, BUNDLE } from "./_lib/catalog.js";
+import { sendReceiptEmail, audLabel } from "./_lib/email.js";
 
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -85,6 +86,29 @@ async function handleCompletedSession(session) {
         commission_cents: commission,
         status: "pending",
       });
+    }
+  }
+
+  // 4) Send the receipt / welcome email. Best-effort: a failure here must never
+  // break the webhook (which would make Stripe retry a completed order).
+  if (email) {
+    try {
+      const title =
+        kind === "bundle"
+          ? BUNDLE.title
+          : (COURSES[slugs[0]] && COURSES[slugs[0]].title) || "your course";
+      const fullName =
+        (session.customer_details && session.customer_details.name) || "";
+      const firstName = fullName.trim().split(/\s+/)[0] || "";
+      await sendReceiptEmail({
+        to: email,
+        firstName,
+        courseTitle: title,
+        amountLabel: audLabel(session.amount_total, session.currency),
+        orderRef: String(orderId).slice(0, 8).toUpperCase(),
+      });
+    } catch (e) {
+      console.error("receipt email error", e && e.message);
     }
   }
 }

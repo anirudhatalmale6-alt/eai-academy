@@ -64,6 +64,21 @@ export function EnrollModal({ open, onClose, courseTitle, courseSlug }: Props) {
         });
         if (insErr) throw insErr;
       }
+      // Send the welcome email (best effort, never blocks or fails the signup).
+      try {
+        void fetch("/api/welcome", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.trim(),
+            firstName: firstName.trim(),
+            courseTitle,
+            courseSlug,
+          }),
+        });
+      } catch {
+        /* ignore */
+      }
       setDone(true);
     } catch {
       setError("Sorry, we couldn't sign you up just now. Please try again.");
