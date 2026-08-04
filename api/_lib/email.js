@@ -248,6 +248,90 @@ export async function sendSignupNotification({ firstName, email, courseTitle }) 
   });
 }
 
+// Once-a-day summary of new free-course sign-ups (and any new enquiries), so
+// the inbox stays quiet but nothing is missed. Sent to the fixed admin inbox.
+export function dailyDigestHtml({ signups = [], inquiries = [], sinceLabel, leadsUrl }) {
+  const sRows = signups
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.first_name || "-",
+        )}</td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px"><a href="mailto:${esc(
+          r.email,
+        )}" style="color:#2563EB;text-decoration:none">${esc(
+          r.email,
+        )}</a></td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.courseTitle || r.course_slug || "-",
+        )}</td></tr>`,
+    )
+    .join("");
+  const iRows = inquiries
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.name || "-",
+        )}</td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px"><a href="mailto:${esc(
+          r.email,
+        )}" style="color:#2563EB;text-decoration:none">${esc(
+          r.email,
+        )}</a></td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.company || "-",
+        )}</td></tr>`,
+    )
+    .join("");
+  const section = (title, count, headers, rows, emptyText) => `
+<p style="font-size:15px;font-weight:700;color:#0f172a;margin:22px 0 8px">${esc(
+    title,
+  )} <span style="color:#8a90a2;font-weight:400">(${count})</span></p>
+${
+  count
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eef0f3;border-radius:10px;border-collapse:separate;overflow:hidden">
+<tr>${headers
+        .map(
+          (h) =>
+            `<th style="background:#0f172a;color:#fff;text-align:left;padding:8px 10px;font-size:12px;font-weight:600">${esc(
+              h,
+            )}</th>`,
+        )
+        .join("")}</tr>${rows}</table>`
+    : `<p style="font-size:14px;color:#8a90a2;margin:0">${esc(emptyText)}</p>`
+}`;
+  const inner = `
+<p style="font-size:15px;line-height:1.6;margin:0 0 4px">Here is your daily summary${
+    sinceLabel ? ` (${esc(sinceLabel)})` : ""
+  }.</p>
+${section(
+  "New free-course sign-ups",
+  signups.length,
+  ["Name", "Email", "Course"],
+  sRows,
+  "No new sign-ups today.",
+)}
+${section(
+  "New enquiries",
+  inquiries.length,
+  ["Name", "Email", "Company"],
+  iRows,
+  "No new enquiries today.",
+)}
+<p style="margin:24px 0 0">${button("Open your Leads page", leadsUrl || siteUrl())}</p>
+<p style="font-size:12px;line-height:1.6;color:#8a90a2;margin:14px 0 0">Enquiries also arrive instantly as they come in. This summary is once a day.</p>`;
+  return layout(inner, `Daily summary: ${signups.length} sign-ups, ${inquiries.length} enquiries`);
+}
+
+export async function sendDailyDigest({ signups, inquiries, sinceLabel, leadsUrl }) {
+  const to = process.env.EMAIL_ADMIN || "service@empathetic-ai.com";
+  const nS = (signups || []).length;
+  const nI = (inquiries || []).length;
+  return sendEmail({
+    to,
+    subject: `Daily summary — ${nS} new sign-up${nS === 1 ? "" : "s"}, ${nI} new enquir${
+      nI === 1 ? "y" : "ies"
+    }`,
+    html: dailyDigestHtml({ signups, inquiries, sinceLabel, leadsUrl }),
+  });
+}
+
 export async function sendReceiptEmail({
   to,
   firstName,
