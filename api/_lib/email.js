@@ -42,7 +42,7 @@ function layout(inner, preheader) {
 </td></tr>
 <tr><td style="padding:28px 30px 32px">${inner}</td></tr>
 <tr><td style="padding:18px 30px;border-top:1px solid #eef0f3;color:#8a90a2;font-size:12px;line-height:1.6">
-Empathetic AI, an OpenAI Select Partner building production AI for finance.<br>
+Empathetic AI, an OpenAI Select Partner building production AI for finance and business.<br>
 You are receiving this because you signed up at Empathetic AI Academy.
 </td></tr>
 </table></td></tr></table></body></html>`;
@@ -60,7 +60,7 @@ export function welcomeEmailHtml({ firstName, courseTitle, courseUrl }) {
 <p style="font-size:15px;line-height:1.65;margin:0 0 14px">Thanks for joining the Empathetic AI Academy. Your free course, ${ct}, is ready whenever you are.</p>
 <p style="font-size:15px;line-height:1.65;margin:0 0 20px">It is a handful of short lessons built for tax, accounting and finance professionals. No jargon, just what actually helps in your work.</p>
 <p style="margin:0 0 22px">${button("Start the free course", courseUrl)}</p>
-<p style="font-size:14px;line-height:1.65;color:#4b5563;margin:0 0 14px">We are Empathetic AI, an OpenAI Select Partner that builds production AI for finance. The Academy is how we share what we have learned, in practical form.</p>
+<p style="font-size:14px;line-height:1.65;color:#4b5563;margin:0 0 14px">We are Empathetic AI, an OpenAI Select Partner that builds production AI for finance and business. The Academy is how we share what we have learned, in practical form.</p>
 <p style="font-size:14px;line-height:1.65;color:#4b5563;margin:0 0 6px">If you have a question, just reply to this email, it comes straight to us.</p>
 <p style="font-size:15px;margin:16px 0 0">See you inside,<br>The Empathetic AI team</p>`;
   return layout(inner, "Your free course is ready.");
