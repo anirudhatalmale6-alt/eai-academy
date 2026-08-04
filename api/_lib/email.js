@@ -146,6 +146,7 @@ function sourceLabel(source) {
     "ai-product": "Product demo request",
     "demo": "Demo request",
     "demo-form": "Contact form (main site)",
+    "main-site-demo": "Contact form (main site)",
     "contact": "Contact form (main site)",
     "main-site": "Contact form (main site)",
   };
