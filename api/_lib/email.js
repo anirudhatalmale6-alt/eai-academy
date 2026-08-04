@@ -91,7 +91,7 @@ ${ct}${amountLabel ? ` &nbsp;&middot;&nbsp; ${esc(amountLabel)}` : ""}${orderRef
   return layout(inner, "You're enrolled.");
 }
 
-export async function sendEmail({ to, subject, html }) {
+export async function sendEmail({ to, subject, html, replyTo }) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.warn("email skipped: RESEND_API_KEY not set");
@@ -108,7 +108,7 @@ export async function sendEmail({ to, subject, html }) {
       body: JSON.stringify({
         from: fromAddress(),
         to: [String(to)],
-        reply_to: replyToAddress(),
+        reply_to: replyTo || replyToAddress(),
         subject,
         html,
       }),
@@ -134,6 +134,79 @@ export async function sendWelcomeEmail({ to, firstName, courseTitle, courseSlug 
     to,
     subject: "Welcome to Empathetic AI Academy, your free course is ready",
     html: welcomeEmailHtml({ firstName, courseTitle, courseUrl }),
+  });
+}
+
+// Friendly label for where an enquiry came from.
+function sourceLabel(source) {
+  const map = {
+    "team-pricing": "Team pricing enquiry",
+    "advisory": "Enterprise AI Advisory enquiry",
+    "enterprise-advisory": "Enterprise AI Advisory enquiry",
+    "ai-product": "Product demo request",
+    "demo": "Demo request",
+    "demo-form": "Contact form (main site)",
+    "contact": "Contact form (main site)",
+    "main-site": "Contact form (main site)",
+  };
+  return map[String(source || "").toLowerCase()] || "New enquiry";
+}
+
+// Internal alert to the team when a visitor submits an enquiry form (main site
+// contact / demo, Academy team pricing, Enterprise Advisory). Sent to the fixed
+// admin inbox only; reply-to is the enquirer so a reply goes straight to them.
+export function inquiryEmailHtml({ name, email, company, phone, message, source }) {
+  const label = sourceLabel(source);
+  const row = (k, v) =>
+    v
+      ? `<tr><td style="padding:6px 0;color:#6b7280;font-size:13px;width:120px;vertical-align:top">${esc(
+          k,
+        )}</td><td style="padding:6px 0;color:#0f172a;font-size:14px">${esc(v)}</td></tr>`
+      : "";
+  const inner = `
+<div style="display:inline-block;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:14px">${esc(
+    label,
+  )}</div>
+<p style="font-size:15px;line-height:1.6;margin:0 0 16px">You have a new enquiry from the website.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #eef0f3;border-radius:10px;margin:0 0 18px">
+<tr><td style="padding:14px 16px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+${row("Name", name)}
+${row("Email", email)}
+${row("Company", company)}
+${row("Phone", phone)}
+</table>
+</td></tr></table>
+${
+  message
+    ? `<p style="font-size:13px;color:#6b7280;margin:0 0 6px">Message</p>
+<div style="font-size:14px;line-height:1.65;color:#0f172a;white-space:pre-wrap;background:#ffffff;border:1px solid #eef0f3;border-radius:10px;padding:14px 16px">${esc(
+        message,
+      )}</div>`
+    : ""
+}
+<p style="font-size:13px;line-height:1.6;color:#8a90a2;margin:18px 0 0">Reply to this email to respond directly to ${esc(
+    name || "the enquirer",
+  )}.</p>`;
+  return layout(inner, `${label}: ${name || email || "new lead"}`);
+}
+
+export async function sendInquiryNotification({
+  name,
+  email,
+  company,
+  phone,
+  message,
+  source,
+}) {
+  const to = process.env.EMAIL_ADMIN || "service@empathetic-ai.com";
+  const label = sourceLabel(source);
+  const who = [name, company].filter(Boolean).join(", ");
+  return sendEmail({
+    to,
+    subject: `${label}${who ? ` — ${who}` : ""}`,
+    html: inquiryEmailHtml({ name, email, company, phone, message, source }),
+    replyTo: email && String(email).includes("@") ? String(email) : undefined,
   });
 }
 
