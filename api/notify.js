@@ -5,7 +5,14 @@
 // is fixed by EMAIL_ADMIN, so this endpoint cannot be abused to send mail to
 // third parties. Always returns 200 so the database trigger never retries.
 
-import { sendInquiryNotification } from "./_lib/email.js";
+import { sendInquiryNotification, sendSignupNotification } from "./_lib/email.js";
+import { COURSES, BUNDLE } from "./_lib/catalog.js";
+
+function courseTitleFromSlug(slug) {
+  if (!slug) return null;
+  if (slug === "bundle") return BUNDLE.title;
+  return (COURSES[slug] && COURSES[slug].title) || slug;
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -32,14 +39,26 @@ export default async function handler(req, res) {
     }
     // Supabase webhook shape is { type, table, record }. Also accept a bare row.
     const record = (body && body.record) || body || {};
-    await sendInquiryNotification({
-      name: record.name,
-      email: record.email,
-      company: record.company,
-      phone: record.phone,
-      message: record.message,
-      source: record.source,
-    });
+    const table = (body && body.table) || "inquiries";
+
+    if (table === "enrollments") {
+      // New free-course sign-up.
+      await sendSignupNotification({
+        firstName: record.first_name,
+        email: record.email,
+        courseTitle: courseTitleFromSlug(record.course_slug),
+      });
+    } else {
+      // Contact / enquiry form submission.
+      await sendInquiryNotification({
+        name: record.name,
+        email: record.email,
+        company: record.company,
+        phone: record.phone,
+        message: record.message,
+        source: record.source,
+      });
+    }
   } catch (err) {
     // Never fail loudly: log and still return ok so pg_net does not retry-storm.
     console.error("notify error", err && err.message);

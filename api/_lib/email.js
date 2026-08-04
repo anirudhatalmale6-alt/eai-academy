@@ -211,6 +211,43 @@ export async function sendInquiryNotification({
   });
 }
 
+// Internal alert to the team when someone signs up for a free course, so the
+// email lands with the team (not just in the database). Fixed admin recipient.
+export function signupEmailHtml({ firstName, email, courseTitle }) {
+  const ct = esc(courseTitle || "a free course");
+  const inner = `
+<div style="display:inline-block;background:#ecfdf5;color:#065f46;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:14px">New free-course sign-up</div>
+<p style="font-size:15px;line-height:1.6;margin:0 0 16px">A new learner just signed up for a free course.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #eef0f3;border-radius:10px;margin:0 0 18px">
+<tr><td style="padding:14px 16px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td style="padding:6px 0;color:#6b7280;font-size:13px;width:120px">Name</td><td style="padding:6px 0;color:#0f172a;font-size:14px">${esc(
+    firstName || "-",
+  )}</td></tr>
+<tr><td style="padding:6px 0;color:#6b7280;font-size:13px">Email</td><td style="padding:6px 0;color:#0f172a;font-size:14px">${esc(
+    email || "-",
+  )}</td></tr>
+<tr><td style="padding:6px 0;color:#6b7280;font-size:13px">Course</td><td style="padding:6px 0;color:#0f172a;font-size:14px">${ct}</td></tr>
+</table>
+</td></tr></table>
+<p style="font-size:13px;line-height:1.6;color:#8a90a2;margin:0">Reply to this email to reach ${esc(
+    firstName || "them",
+  )} directly.</p>`;
+  return layout(inner, `New sign-up: ${firstName || email || "new learner"}`);
+}
+
+export async function sendSignupNotification({ firstName, email, courseTitle }) {
+  const to = process.env.EMAIL_ADMIN || "service@empathetic-ai.com";
+  return sendEmail({
+    to,
+    subject: `New free-course sign-up${firstName ? ` — ${firstName}` : ""}${
+      email ? ` (${email})` : ""
+    }`,
+    html: signupEmailHtml({ firstName, email, courseTitle }),
+    replyTo: email && String(email).includes("@") ? String(email) : undefined,
+  });
+}
+
 export async function sendReceiptEmail({
   to,
   firstName,
