@@ -44,20 +44,20 @@ export function CourseCard({ course }: { course: Course }) {
         <p className="text-ink2 text-[13.5px] mt-1.5 leading-relaxed line-clamp-2">
           {course.summary}
         </p>
-        <div className="flex justify-between items-center mt-3.5 pt-3 border-t border-line text-[13px] text-ink2">
-          <span>
+        <div className="mt-3.5 pt-3 border-t border-line text-[13px] text-ink2">
+          <div>
             ◷ {hoursLabel(course.learningHours)} · {course.lessonsLabel}
-          </span>
-          <span className="flex items-baseline gap-1.5">
+          </div>
+          <div className="flex items-baseline gap-1.5 mt-1.5">
+            <span className="font-bold text-ink text-[15px] whitespace-nowrap">
+              {priceLabel(course.priceCents)}
+            </span>
             {onOffer && (
               <span className="text-ink2 text-[12.5px] line-through">
                 {money(course.compareAtCents!)}
               </span>
             )}
-            <span className="font-bold text-ink text-[15px]">
-              {priceLabel(course.priceCents)}
-            </span>
-          </span>
+          </div>
         </div>
       </div>
     </Link>
