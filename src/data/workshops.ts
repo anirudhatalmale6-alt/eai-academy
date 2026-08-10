@@ -43,6 +43,23 @@ export const WORKSHOP_PROGRAM = {
   ],
 };
 
+// Who delivers the live workshops. Angela runs the self-paced courses; the
+// live sessions are delivered by Tristan. Bio wording is only what Angela has
+// told us, nothing inferred. `photo` stays null until she sends one, and the
+// card falls back to initials so it looks finished either way.
+export const PRESENTER = {
+  name: "Tristan Tan",
+  title: "Live workshop facilitator, Empathetic AI",
+  linkedIn: "https://www.linkedin.com/in/tristantanaus",
+  photo: null as string | null,
+  bio: "Tristan is part of the Empathetic AI team and brings a finance background together with hands-on fluency in the AI tools finance teams are actually being asked to use. He has already delivered this workshop once, so what you get on the day is a session that has been run and refined with a real audience, not a first attempt.",
+  points: [
+    "Finance background, so the examples are the work you already do",
+    "Works with Copilot, Claude, OpenAI Enterprise and Gemini day to day",
+    "Has delivered this session before, with the material refined since",
+  ],
+};
+
 export const WORKSHOPS: Workshop[] = [
   {
     id: "workshop-aug-2026",

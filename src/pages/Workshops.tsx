@@ -6,10 +6,69 @@ import { WorkshopRegisterModal } from "../components/WorkshopRegisterModal";
 import {
   WORKSHOPS,
   WORKSHOP_PROGRAM,
+  PRESENTER,
   workshopPriceLabel,
   workshopIncGstLabel,
   type Workshop,
 } from "../data/workshops";
+
+// People book a live session because of who is running it, so the presenter
+// gets a proper block rather than a line of small print.
+function Presenter() {
+  const initials = PRESENTER.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  return (
+    <section className="bg-panel border border-line rounded-[22px] p-6 sm:p-9 mt-6">
+      <div className="text-accent-ink text-[12px] font-bold uppercase tracking-[1.5px]">
+        Who runs it
+      </div>
+      <div className="grid sm:grid-cols-[112px_1fr] gap-6 sm:gap-8 mt-5 items-start">
+        {PRESENTER.photo ? (
+          <img
+            src={PRESENTER.photo}
+            alt={PRESENTER.name}
+            className="w-[112px] h-[112px] rounded-2xl object-cover border border-line"
+          />
+        ) : (
+          <div className="w-[112px] h-[112px] rounded-2xl bg-plum text-white flex items-center justify-center text-[36px] font-bold tracking-[-1px]">
+            {initials}
+          </div>
+        )}
+        <div>
+          <h2 className="text-[24px] font-bold tracking-[-0.5px]">
+            {PRESENTER.name}
+          </h2>
+          <div className="text-ink2 text-[14.5px] mt-1">{PRESENTER.title}</div>
+          <p className="text-[15.5px] leading-relaxed mt-3.5 max-w-[640px]">
+            {PRESENTER.bio}
+          </p>
+          <ul className="mt-4 space-y-2">
+            {PRESENTER.points.map((p) => (
+              <li key={p} className="flex gap-3 text-[15px] items-start">
+                <span className="text-accent font-bold">✓</span>
+                {p}
+              </li>
+            ))}
+          </ul>
+          {PRESENTER.linkedIn && (
+            <a
+              href={PRESENTER.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-4 text-[14.5px] font-semibold text-accent-ink"
+            >
+              View LinkedIn profile ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function Workshops() {
   const [selected, setSelected] = useState<Workshop | null>(null);
@@ -85,6 +144,8 @@ export function Workshops() {
           ))}
         </div>
       </section>
+
+      <Presenter />
 
       {/* What we cover */}
       <section className="grid lg:grid-cols-[1.2fr_1fr] gap-5 mt-6">
