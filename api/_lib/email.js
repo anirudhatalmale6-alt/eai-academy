@@ -414,7 +414,7 @@ ${section(
   "No new enquiries today.",
 )}
 <p style="margin:24px 0 0">${button("Open your Leads page", leadsUrl || siteUrl())}</p>
-<p style="font-size:12px;line-height:1.6;color:#8a90a2;margin:14px 0 0">Enquiries also arrive instantly as they come in. This summary is once a day.</p>`;
+<p style="font-size:12px;line-height:1.6;color:#8a90a2;margin:14px 0 0">Enquiries and workshop registrations also arrive instantly as they come in. This summary is once a day.</p>`;
   return layout(inner, `Daily summary: ${signups.length} sign-ups, ${inquiries.length} enquiries`);
 }
 
