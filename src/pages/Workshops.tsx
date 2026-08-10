@@ -32,6 +32,7 @@ export function Workshops() {
           </p>
           <div className="flex flex-wrap gap-x-7 gap-y-2 mt-6 text-[14.5px] text-ink2">
             <span>◷ {WORKSHOP_PROGRAM.durationLabel} live online</span>
+            <span>▣ Runs on {WORKSHOP_PROGRAM.platform}</span>
             <span>
               ◎ {workshopPriceLabel()} per seat ({workshopIncGstLabel()})
             </span>
@@ -62,7 +63,7 @@ export function Workshops() {
               </div>
               <div className="text-ink2 text-[14px] mt-1.5">{w.timeLabel}</div>
               <div className="text-ink2 text-[14px]">
-                {WORKSHOP_PROGRAM.durationLabel}, online
+                {WORKSHOP_PROGRAM.durationLabel}, on {WORKSHOP_PROGRAM.platform}
               </div>
               <div className="mt-auto pt-5">
                 <div className="border-t border-line pt-4">

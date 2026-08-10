@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getCourse, money, hoursLabel } from "../data/courses";
+import {
+  getCourse,
+  money,
+  hoursLabel,
+  priceLabel,
+  incGstLabel,
+} from "../data/courses";
 import { EnrollModal } from "../components/EnrollModal";
 import { startCheckout } from "../lib/checkout";
 
@@ -103,7 +109,7 @@ export function CourseDetail() {
           <div className="bg-panel border border-line rounded-[20px] p-6">
             <div className="flex items-baseline gap-2.5">
               <span className="text-[30px] font-bold">
-                {money(course.priceCents)}
+                {priceLabel(course.priceCents)}
               </span>
               {onOffer ? (
                 <span className="text-ink2 text-[16px] line-through">
@@ -113,6 +119,11 @@ export function CourseDetail() {
                 !free && <span className="text-ink2 text-sm">one-time</span>
               )}
             </div>
+            {!free && (
+              <div className="text-ink2 text-[13px] mt-1">
+                {incGstLabel(course.priceCents)}
+              </div>
+            )}
             {onOffer && (
               <div
                 className="inline-block mt-2 text-[12px] font-bold rounded-full px-2.5 py-1 text-white"
@@ -145,7 +156,7 @@ export function CourseDetail() {
             <ul className="mt-5 space-y-2 text-[13.5px] text-ink2">
               <li>◷ {hoursLabel(course.learningHours)}</li>
               <li>▤ {course.lessonsLabel}</li>
-              <li>✦ Certificate of completion</li>
+              <li>✦ Certificate in this subject, shareable on LinkedIn</li>
               <li>◎ Backed by an OpenAI Select Partner</li>
             </ul>
           </div>

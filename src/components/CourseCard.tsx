@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { type Course, money, hoursLabel } from "../data/courses";
+import { type Course, money, hoursLabel, priceLabel } from "../data/courses";
 
 export function CourseCard({ course }: { course: Course }) {
   const free = course.priceCents === 0;
@@ -55,7 +55,7 @@ export function CourseCard({ course }: { course: Course }) {
               </span>
             )}
             <span className="font-bold text-ink text-[15px]">
-              {money(course.priceCents)}
+              {priceLabel(course.priceCents)}
             </span>
           </span>
         </div>

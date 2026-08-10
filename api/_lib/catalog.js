@@ -1,6 +1,10 @@
 // Server-authoritative catalogue and pricing. Never trust prices from the
 // browser. KEEP IN SYNC with src/data/courses.ts (slugs, prices, team tiers,
-// bundle price). A drift test lives in api/_lib/catalog.test.mjs.
+// bundle price) and src/data/workshops.ts.
+//
+// EVERY `cents` figure below EXCLUDES GST. Prices are advertised as
+// "A$590 + GST" and Australian GST is added at checkout by resolveItem(), so
+// the card is charged the GST-inclusive amount.
 
 const COURSES = {
   "ai-foundations-for-finance": { title: "AI Foundations for Finance", cents: 0 },
@@ -24,11 +28,12 @@ const WORKSHOPS = {
 // Amount actually charged per seat: price + GST.
 const incGst = (centsExGst) => Math.round(centsExGst * (1 + GST_RATE));
 
-// Bundle = all paid courses + certificate, at a fixed price.
+// Bundle = all paid courses, at a fixed price. Each course still carries its
+// own certificate in that subject's name (no single combined credential).
 const PAID_SLUGS = Object.keys(COURSES).filter((s) => COURSES[s].cents > 0);
 const BUNDLE = {
   id: "bundle",
-  title: "Certified AI-in-Finance Practitioner",
+  title: "The Complete AI for Finance Program",
   cents: 199000,
   includes: PAID_SLUGS,
 };
@@ -50,28 +55,36 @@ function teamDiscountPct(qty) {
   return 0;
 }
 
-// Resolve a requested item to its authoritative title + unit price (cents).
-// item = { type: "course" | "bundle", slug? }
+// Resolve a requested item to its authoritative title + unit price.
+// `cents` on the returned object is GST INCLUSIVE: it is what we charge.
+// `centsExGst` is kept for the receipt so the GST line can be shown.
+// item = { type: "course" | "bundle" | "workshop", slug? }
 function resolveItem(item) {
   if (!item || typeof item !== "object") return null;
+  const priced = (kind, title, exGst, slugs) => ({
+    kind,
+    title,
+    centsExGst: exGst,
+    cents: incGst(exGst),
+    slugs,
+  });
   if (item.type === "bundle") {
-    return { kind: "bundle", title: BUNDLE.title, cents: BUNDLE.cents, slugs: BUNDLE.includes };
+    return priced("bundle", BUNDLE.title, BUNDLE.cents, BUNDLE.includes);
   }
   if (item.type === "course") {
     const c = COURSES[item.slug];
     if (!c || c.cents <= 0) return null; // unknown or free course (free != checkout)
-    return { kind: "course", title: c.title, cents: c.cents, slugs: [item.slug] };
+    return priced("course", c.title, c.cents, [item.slug]);
   }
   if (item.type === "workshop") {
     const w = WORKSHOPS[item.slug];
     if (!w) return null;
-    // Charged GST inclusive, so the Stripe total matches "A$249 + GST".
-    return {
-      kind: "workshop",
-      title: `${w.title} — live workshop, ${w.dateLabel}`,
-      cents: incGst(w.centsExGst),
-      slugs: [item.slug],
-    };
+    return priced(
+      "workshop",
+      `${w.title} — live workshop, ${w.dateLabel}`,
+      w.centsExGst,
+      [item.slug],
+    );
   }
   return null;
 }

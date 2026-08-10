@@ -20,6 +20,10 @@ export function Courses() {
             Practical, credible AI training for finance, accounting and business
             professionals. Start free, then go as deep as you like.
           </p>
+          <p className="text-ink2 mt-3 text-[14px]">
+            Every course carries its own certificate in that subject, ready to
+            share on LinkedIn. All prices are shown excluding GST.
+          </p>
         </div>
 
         {/* Team discount is prominent here rather than buried at the bottom. */}

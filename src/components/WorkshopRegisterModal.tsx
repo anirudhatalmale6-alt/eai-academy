@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { startCheckout } from "../lib/checkout";
-import { teamTierPct } from "../data/courses";
+import { teamTierPct, seatChargeCents } from "../data/courses";
 import {
   WORKSHOP_PROGRAM,
   workshopIncGstCents,
@@ -66,7 +66,7 @@ export function WorkshopRegisterModal({ open, onClose, workshop }: Props) {
   const unitIncGst = workshopIncGstCents();
   const perSeat = custom
     ? unitIncGst
-    : Math.round(unitIncGst * (1 - (pct as number) / 100));
+    : seatChargeCents(WORKSHOP_PROGRAM.priceExGstCents, pct as number);
   const total = perSeat * n;
   const saving = unitIncGst * n - total;
 
@@ -177,7 +177,7 @@ export function WorkshopRegisterModal({ open, onClose, workshop }: Props) {
             </h3>
             <p className="text-ink2 mt-1.5 text-[14px]">
               {workshop.dateLabel}, {workshop.timeLabel} ·{" "}
-              {WORKSHOP_PROGRAM.durationLabel} online
+              {WORKSHOP_PROGRAM.durationLabel} on {WORKSHOP_PROGRAM.platform}
             </p>
 
             <form onSubmit={submit} className="mt-5 space-y-3">

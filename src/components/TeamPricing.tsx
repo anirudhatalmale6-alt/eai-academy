@@ -5,14 +5,12 @@ import {
   BUNDLE,
   money,
   teamTierPct,
+  incGst,
+  seatChargeCents,
 } from "../data/courses";
 import { InquiryModal } from "./InquiryModal";
 import { startCheckout, type CheckoutItem } from "../lib/checkout";
-import {
-  WORKSHOPS,
-  WORKSHOP_PROGRAM,
-  workshopIncGstCents,
-} from "../data/workshops";
+import { WORKSHOPS, WORKSHOP_PROGRAM } from "../data/workshops";
 
 // Team pricing block. Small teams (3 to 24) buy themselves and the volume
 // discount is applied automatically at checkout. 25+ is custom, and firms who
@@ -21,9 +19,10 @@ export function TeamPricing() {
   const [open, setOpen] = useState(false);
 
   // Buyable options: the full program bundle, each paid course, and a seat at
-  // any upcoming live workshop (workshop prices already include GST).
+  // any upcoming live workshop. `cents` is always EX GST; GST is added below
+  // exactly the way the server adds it.
   const options = [
-    { key: "bundle", kind: "bundle" as const, label: `${BUNDLE.title} (full program)`, cents: BUNDLE.priceCents },
+    { key: "bundle", kind: "bundle" as const, label: `${BUNDLE.title} (everything)`, cents: BUNDLE.priceCents },
     ...bundleCourses().map((c) => ({
       key: c.slug,
       kind: "course" as const,
@@ -34,7 +33,7 @@ export function TeamPricing() {
       key: w.id,
       kind: "workshop" as const,
       label: `Live workshop, ${w.dateLabel} — ${WORKSHOP_PROGRAM.title}`,
-      cents: workshopIncGstCents(),
+      cents: WORKSHOP_PROGRAM.priceExGstCents,
     })),
   ];
 
@@ -47,9 +46,11 @@ export function TeamPricing() {
   const n = Math.max(1, Math.floor(Number(seats) || 1));
   const pct = teamTierPct(n); // null = 25+ custom
   const custom = pct === null;
-  const perSeat = custom ? sel.cents : Math.round(sel.cents * (1 - (pct as number) / 100));
+  // Everything below is GST inclusive: it is what the card is actually charged.
+  const listPerSeat = incGst(sel.cents);
+  const perSeat = custom ? listPerSeat : seatChargeCents(sel.cents, pct as number);
   const total = perSeat * n;
-  const saving = sel.cents * n - total;
+  const saving = listPerSeat * n - total;
 
   async function checkout() {
     setMsg(null);
@@ -143,7 +144,7 @@ export function TeamPricing() {
                   </span>
                   {saving > 0 && (
                     <span className="text-ink2 text-[16px] line-through">
-                      {money(sel.cents * n)}
+                      {money(listPerSeat * n)}
                     </span>
                   )}
                 </div>
@@ -154,9 +155,7 @@ export function TeamPricing() {
                       {"  "}· {pct}% off, save {money(saving)}
                     </span>
                   )}
-                  {sel.kind === "workshop" && (
-                    <span className="block">GST included.</span>
-                  )}
+                  <span className="block">GST included in these figures.</span>
                 </div>
               </>
             )}

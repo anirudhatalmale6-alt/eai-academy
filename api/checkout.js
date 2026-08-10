@@ -44,7 +44,12 @@ export default async function handler(req, res) {
             currency: CURRENCY,
             unit_amount: unit,
             product_data: {
-              name: resolved.title + (qty > 1 ? ` (${qty} seats)` : ""),
+              // Prices are advertised ex GST; be explicit that the amount
+              // charged here includes it.
+              name:
+                resolved.title +
+                (qty > 1 ? ` (${qty} seats)` : "") +
+                " (incl. GST)",
             },
           },
         },
@@ -57,6 +62,7 @@ export default async function handler(req, res) {
         seats: String(qty),
         unit_original: String(resolved.cents),
         unit_charged: String(unit),
+        unit_ex_gst: String(resolved.centsExGst),
         discount_pct: String(pct),
         referral_code: referralCode ? String(referralCode).trim().slice(0, 64) : "",
         registration_id: registrationId ? String(registrationId).slice(0, 64) : "",

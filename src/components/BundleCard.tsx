@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   BUNDLE,
   money,
+  incGstLabel,
   bundleIncludes,
   bundleIndividualCents,
   bundleLearningHours,
@@ -66,6 +67,9 @@ export function BundleCard() {
           <div className="text-[38px] font-bold tracking-[-1px] leading-none mt-1">
             {money(BUNDLE.priceCents)}
           </div>
+          <div className="text-white/60 text-[12.5px] mt-1.5">
+            + GST · {incGstLabel(BUNDLE.priceCents)}
+          </div>
           {saving > 0 && (
             <div
               className="inline-block mt-2 text-[12px] font-bold rounded-full px-3 py-1"
@@ -82,7 +86,7 @@ export function BundleCard() {
             {buying ? "Starting checkout…" : "Get the full program →"}
           </button>
           <p className="text-white/50 text-[12px] mt-3">
-            {buyMsg ?? "Lifetime access · Certificate included"}
+            {buyMsg ?? "Lifetime access · A certificate per course"}
           </p>
         </div>
       </div>

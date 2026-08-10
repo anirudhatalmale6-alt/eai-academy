@@ -28,8 +28,9 @@ export const WORKSHOP_PROGRAM = {
     "Working with documents, spreadsheets and data",
     "Building effective human-AI workflows",
   ],
+  platform: "Microsoft Teams",
   includes: [
-    "Live 1.5 hour session with Q&A",
+    "Live 1.5 hour session on Microsoft Teams, with Q&A",
     "Recording afterwards if you cannot attend live",
     "Prompt and workflow templates to take away",
     "Attendance record for your learning hours",

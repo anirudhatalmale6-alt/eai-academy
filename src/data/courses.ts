@@ -26,6 +26,24 @@ export const money = (cents: number) => {
   return `A$${dollars.toLocaleString("en-AU", opts)}`;
 };
 
+// EVERY price in the catalog is stored EXCLUDING GST and advertised as
+// "A$590 + GST". Australian GST is added at checkout, so the card is charged
+// the GST-inclusive amount. This mirrors api/_lib/catalog.js exactly (same
+// rounding), so what the page shows is what Stripe charges.
+export const GST_RATE = 0.1;
+export const incGst = (exGstCents: number) =>
+  Math.round(exGstCents * (1 + GST_RATE));
+// Charge per seat after any team discount. Must match the server:
+// round(incGst(base) * (1 - pct/100)).
+export const seatChargeCents = (exGstCents: number, pct: number) =>
+  Math.round(incGst(exGstCents) * (1 - pct / 100));
+// "A$590 + GST" (or "Free")
+export const priceLabel = (exGstCents: number) =>
+  exGstCents === 0 ? "Free" : `${money(exGstCents)} + GST`;
+// "A$649 incl. GST"
+export const incGstLabel = (exGstCents: number) =>
+  `${money(incGst(exGstCents))} incl. GST`;
+
 // Duration is expressed in "Learning Hours" (professionals track learning hours).
 export const hoursLabel = (n: number) =>
   `${n} Learning Hour${n === 1 ? "" : "s"}`;
@@ -37,13 +55,16 @@ export const hoursLabel = (n: number) =>
 // (which courses are included, the individual total, the saving, the learning
 // hours) is derived from the paid courses below, so adding or removing a course
 // keeps the bundle in sync automatically. `extras` are non-course inclusions.
+// The bundle is deliberately NOT named after a single credential. Each course
+// carries its own certificate in that subject's name, so adding a course later
+// does not force a rename or a new qualification.
 export const BUNDLE = {
-  title: "Certified AI-in-Finance Practitioner",
+  title: "The Complete AI for Finance Program",
   blurb:
-    "Every paid course, the practitioner assessment and your certificate, as one complete program.",
+    "Every paid course in one place, with a certificate in each subject as you complete it.",
   priceCents: 199000,
   color: "#6366F1",
-  extras: ["Practitioner assessment + certificate"],
+  extras: ["A certificate for every course you complete"],
 };
 
 // Paid courses in the bundle (derived, always in sync with the catalog).

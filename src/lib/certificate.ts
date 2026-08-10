@@ -101,7 +101,9 @@ export function linkedInAddUrl(name: string, courseTitle: string) {
   return `https://www.linkedin.com/profile/add?${params.toString()}`;
 }
 
-export async function downloadCertificate(name: string, courseTitle: string) {
+// Renders the certificate and returns the canvas, so the same drawing code can
+// be downloaded or shared.
+async function renderCertificate(name: string, courseTitle: string) {
   const W = 1600;
   const H = 1131;
   const canvas = document.createElement("canvas");
@@ -364,11 +366,63 @@ export async function downloadCertificate(name: string, courseTitle: string) {
   }
   ctx.drawImage(badge, 1240 - bw / 2, 946 - bh / 2, bw, bh);
 
-  const url = canvas.toDataURL("image/png");
+  return canvas;
+}
+
+function certFileName(courseTitle: string) {
+  return `Empathetic AI Academy Certificate - ${courseTitle}.png`;
+}
+
+export async function downloadCertificate(name: string, courseTitle: string) {
+  const canvas = await renderCertificate(name, courseTitle);
+  if (!canvas) return;
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `Empathetic AI Academy Certificate - ${courseTitle}.png`;
+  a.href = canvas.toDataURL("image/png");
+  a.download = certFileName(courseTitle);
   document.body.appendChild(a);
   a.click();
   a.remove();
+}
+
+// Share the certificate. On phones and tablets this opens the native share
+// sheet with the image attached (LinkedIn, WhatsApp, email, whatever they
+// use). On desktop, where that is not supported, we save the image and open
+// the LinkedIn composer with the wording ready, so all they do is attach it.
+export async function shareCertificate(name: string, courseTitle: string) {
+  const canvas = await renderCertificate(name, courseTitle);
+  if (!canvas) return;
+
+  const text = `I've just completed ${courseTitle} with Empathetic AI Academy, an OpenAI Select Partner.`;
+  const blob: Blob | null = await new Promise((resolve) =>
+    canvas.toBlob((b) => resolve(b), "image/png"),
+  );
+
+  if (blob) {
+    const file = new File([blob], certFileName(courseTitle), {
+      type: "image/png",
+    });
+    const nav = navigator as Navigator & {
+      canShare?: (data: ShareData) => boolean;
+    };
+    if (nav.canShare && nav.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], text, title: courseTitle });
+        return;
+      } catch {
+        // Cancelled or unsupported: fall through to the desktop path.
+      }
+    }
+  }
+
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = certFileName(courseTitle);
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.open(
+    `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`,
+    "_blank",
+    "noopener,noreferrer",
+  );
 }
