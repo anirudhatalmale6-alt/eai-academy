@@ -44,7 +44,7 @@ export function Sidebar() {
         href={MAIN_SITE}
         className="mt-auto flex items-center gap-2 px-3 py-2.5 rounded-[9px] text-[13.5px] font-medium text-ink2 border border-line hover:border-ink hover:text-ink"
       >
-        <span className="text-accent">←</span> Back to empathetic-ai.com
+        <span className="text-accent">←</span> Back to main site
       </a>
     </aside>
   );
@@ -201,7 +201,7 @@ function SiteFooter() {
           </a>
         </div>
 
-        <div className="flex flex-wrap gap-x-14 gap-y-6">
+        <div className="flex flex-wrap gap-x-12 gap-y-6 pr-1">
           <div>
             <div className="text-[12px] font-bold uppercase tracking-[1.2px] text-ink2">
               Academy
