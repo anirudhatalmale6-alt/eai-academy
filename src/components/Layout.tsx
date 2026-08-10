@@ -11,6 +11,9 @@ const nav = [
   { to: "/ai-advisory", label: "AI Advisory", icon: "⛁" },
 ];
 
+// The main Empathetic AI website. The Academy always keeps a way back to it.
+const MAIN_SITE = "https://www.empathetic-ai.com";
+
 export function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-[248px] shrink-0 border-r border-line px-4 py-5 sticky top-0 h-screen bg-bg">
@@ -29,13 +32,20 @@ export function Sidebar() {
           <SideLink key={n.to} {...n} />
         ))}
         <a
-          href="https://www.empathetic-ai.com"
+          href={MAIN_SITE}
           className="flex items-center gap-3 px-3 py-2 rounded-[9px] text-[14.5px] font-medium hover:bg-black/5"
         >
           <span className="w-[18px] text-center text-accent">↗</span> AI Products
         </a>
         <SideLink to="/help" label="Help" icon="?" />
       </nav>
+
+      <a
+        href={MAIN_SITE}
+        className="mt-auto flex items-center gap-2 px-3 py-2.5 rounded-[9px] text-[13.5px] font-medium text-ink2 border border-line hover:border-ink hover:text-ink"
+      >
+        <span className="text-accent">←</span> Back to empathetic-ai.com
+      </a>
     </aside>
   );
 }
@@ -54,6 +64,12 @@ function MobileNav() {
             </span>
           </span>
         </Link>
+        <a
+          href={MAIN_SITE}
+          className="shrink-0 text-[13px] font-semibold text-accent-ink"
+        >
+          AI Products ↗
+        </a>
       </div>
       <nav className="flex gap-1.5 overflow-x-auto pb-2.5 -mx-1 px-1">
         {nav.map((n) => (
@@ -72,6 +88,12 @@ function MobileNav() {
             {n.label}
           </NavLink>
         ))}
+        <a
+          href={MAIN_SITE}
+          className="shrink-0 rounded-full px-3.5 py-1.5 text-[13.5px] font-semibold whitespace-nowrap border bg-white text-ink border-line"
+        >
+          AI Products ↗
+        </a>
       </nav>
     </div>
   );
@@ -150,7 +172,80 @@ export function Layout({ children }: { children: ReactNode }) {
           )}
         </div>
         <div key={pathname}>{children}</div>
+        <SiteFooter />
       </main>
     </div>
+  );
+}
+
+// Every Academy page ends with a way back to the main Empathetic AI website.
+function SiteFooter() {
+  return (
+    <footer className="mt-10 pt-7 border-t border-line">
+      <div className="flex flex-wrap items-start justify-between gap-6">
+        <div className="max-w-[420px]">
+          <div className="flex items-center gap-2.5">
+            <img src={mark} alt="" className="w-[26px] h-[26px]" />
+            <span className="text-[15px] font-semibold">Empathetic AI</span>
+          </div>
+          <p className="text-ink2 text-[13.5px] mt-2.5 leading-relaxed">
+            An OpenAI Select Partner building production AI for finance and
+            business. The Academy is how we share what we have learned, in
+            practical form.
+          </p>
+          <a
+            href={MAIN_SITE}
+            className="inline-block mt-3.5 text-[14px] font-semibold text-accent-ink"
+          >
+            ← Back to empathetic-ai.com
+          </a>
+        </div>
+
+        <div className="flex flex-wrap gap-x-14 gap-y-6">
+          <div>
+            <div className="text-[12px] font-bold uppercase tracking-[1.2px] text-ink2">
+              Academy
+            </div>
+            <ul className="mt-3 space-y-2">
+              {nav.map((n) => (
+                <li key={n.to}>
+                  <Link to={n.to} className="text-[14px] hover:text-accent-ink">
+                    {n.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div className="text-[12px] font-bold uppercase tracking-[1.2px] text-ink2">
+              Empathetic AI
+            </div>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <a href={MAIN_SITE} className="text-[14px] hover:text-accent-ink">
+                  AI Products ↗
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`${MAIN_SITE}/contact`}
+                  className="text-[14px] hover:text-accent-ink"
+                >
+                  Contact ↗
+                </a>
+              </li>
+              <li>
+                <Link to="/help" className="text-[14px] hover:text-accent-ink">
+                  Help
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p className="text-ink2 text-[12.5px] mt-8">
+        © {new Date().getFullYear()} Empathetic AI. All rights reserved.
+      </p>
+    </footer>
   );
 }
