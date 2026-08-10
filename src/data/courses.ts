@@ -209,18 +209,40 @@ export const COURSES: Course[] = [
     level: "Beginner",
     priceCents: 59000,
     compareAtCents: 69000,
-    learningHours: 3,
-    lessonsLabel: "10 lessons",
+    learningHours: 4,
+    lessonsLabel: "17 lessons",
     color: "#EC4899",
     outcomes: [
-      "Write prompts that produce consistent, defensible answers",
-      "Build source-traceability into every output",
-      "Reuse a prompt library for common finance and tax tasks",
+      "Interrogate a long contract, ruling or policy and get answers you can cite",
+      "Pull structured data out of invoices and statements without silent errors",
+      "Draft client-facing writing that survives partner review",
+      "Build a prompt library your whole team reuses",
     ],
     lessons: [
-      { title: "The anatomy of a reliable prompt", durationLabel: "14m" },
-      { title: "Giving the model the right context", durationLabel: "15m" },
-      { title: "Source-traceability techniques", durationLabel: "16m" },
+      // Module 1 · What makes an answer defensible
+      { title: "Why two people get different answers from the same tool", durationLabel: "12m" },
+      { title: "The five parts of a reliable prompt", durationLabel: "15m" },
+      { title: "Telling it what you do not want", durationLabel: "13m" },
+      // Module 2 · Interrogating a long document
+      { title: "Questioning a contract, lease or ruling", durationLabel: "16m" },
+      { title: "Making it quote the clause, not paraphrase it", durationLabel: "14m" },
+      { title: "Comparing two versions of the same document", durationLabel: "13m" },
+      // Module 3 · Structured data you can trust
+      { title: "From invoices and statements to a clean table", durationLabel: "16m" },
+      { title: "Designing the output so errors are visible", durationLabel: "15m" },
+      { title: "Spot-checking a batch without checking all of it", durationLabel: "14m" },
+      // Module 4 · Client-facing writing
+      { title: "Drafting advice that survives partner review", durationLabel: "15m" },
+      { title: "Matching your firm's voice, not the model's", durationLabel: "13m" },
+      { title: "The hedging problem, and how to remove it", durationLabel: "12m" },
+      // Module 5 · Research and citation
+      { title: "Making the model show its sources", durationLabel: "15m" },
+      { title: "Recognising a confident answer built on nothing", durationLabel: "14m" },
+      // Module 6 · Reviewing, not just producing
+      { title: "Using AI to review a spreadsheet or a draft", durationLabel: "15m" },
+      { title: "The adversarial prompt: asking it to argue against you", durationLabel: "13m" },
+      // Module 7 · Your prompt library
+      { title: "Building and sharing a prompt library that gets used", durationLabel: "14m" },
     ],
   },
   {
@@ -236,14 +258,37 @@ export const COURSES: Course[] = [
     lessonsLabel: "18 lessons",
     color: "#14B8A6",
     outcomes: [
-      "Map a firm task into an automatable agent workflow",
-      "Build a working agent in Copilot Studio",
-      "Keep a human in the loop for accuracy and accountability",
+      "Tell the difference between a task worth automating and one that should stay manual",
+      "Build a working agent in Copilot Studio that handles document intake end to end",
+      "Design the human sign-off so accountability never becomes ambiguous",
+      "Run an agent in production: logging, failure, and handing it over",
     ],
     lessons: [
-      { title: "What an AI agent really is", durationLabel: "13m" },
-      { title: "Building your first agent in Copilot Studio", durationLabel: "20m" },
-      { title: "Designing a safe, reviewable workflow", durationLabel: "18m" },
+      // Module 1 · What an agent is, and when it beats a prompt
+      { title: "Prompt, automation or agent: telling them apart", durationLabel: "14m" },
+      { title: "What agents are genuinely good at in finance", durationLabel: "13m" },
+      { title: "The processes you should refuse to automate", durationLabel: "15m" },
+      // Module 2 · Choosing the right process
+      { title: "Scoring a candidate process: volume, rules, risk", durationLabel: "15m" },
+      { title: "Mapping the process as it actually runs today", durationLabel: "16m" },
+      { title: "Deciding where the human sign-off sits", durationLabel: "15m" },
+      // Module 3 · Your first agent
+      { title: "Copilot Studio: the parts you actually need", durationLabel: "16m" },
+      { title: "Building a working agent from your process map", durationLabel: "20m" },
+      { title: "Testing it against the messy cases first", durationLabel: "16m" },
+      // Module 4 · Document intake
+      { title: "From email attachment to a coded entry", durationLabel: "18m" },
+      { title: "Handling the documents that do not fit the pattern", durationLabel: "16m" },
+      { title: "The approval step, and what it must show", durationLabel: "14m" },
+      // Module 5 · Exception monitoring
+      { title: "Watching for the things people forget to check", durationLabel: "15m" },
+      { title: "Alerts that get acted on rather than muted", durationLabel: "13m" },
+      // Module 6 · Human in the loop
+      { title: "Designing a sign-off that is real, not a rubber stamp", durationLabel: "16m" },
+      { title: "What the agent must record about every decision", durationLabel: "15m" },
+      // Module 7 · Running it in production
+      { title: "When it breaks: failure modes and safe stopping", durationLabel: "16m" },
+      { title: "Handover: making it survive you leaving", durationLabel: "13m" },
     ],
   },
   {
@@ -256,17 +301,38 @@ export const COURSES: Course[] = [
     priceCents: 59000,
     compareAtCents: 69000,
     learningHours: 4,
-    lessonsLabel: "14 lessons",
+    lessonsLabel: "16 lessons",
     color: "#F59E0B",
     outcomes: [
-      "Handle client data securely across Copilot and OpenAI Enterprise",
-      "Put the right review controls and audit trails in place",
-      "Write a practical AI policy for your firm",
+      "Answer the five questions your board will ask about AI, with evidence",
+      "Decide which tools are approved, for which data, and say why",
+      "Assess a proposed use case before it starts, not after it goes wrong",
+      "Leave your firm with a one-page AI policy and an evidence trail that stands up",
     ],
     lessons: [
-      { title: "Duty of care in an AI world", durationLabel: "15m" },
-      { title: "Data security in Copilot & OpenAI Enterprise", durationLabel: "16m" },
-      { title: "Building your firm's AI policy", durationLabel: "15m" },
+      // Module 1 · What your obligations already say
+      { title: "You are already regulated: what applies without new AI law", durationLabel: "15m" },
+      { title: "Australia's National AI Plan, and what it means for a firm", durationLabel: "16m" },
+      { title: "Where the duty of care actually bites", durationLabel: "14m" },
+      // Module 2 · The board conversation
+      { title: "The five questions a board will ask about AI", durationLabel: "16m" },
+      { title: "Answering them with evidence rather than reassurance", durationLabel: "15m" },
+      { title: "What to put in the board paper, and what to leave out", durationLabel: "13m" },
+      // Module 3 · Tools and data
+      { title: "Classifying your data before you approve any tool", durationLabel: "15m" },
+      { title: "Approving tools: the questions to ask a vendor", durationLabel: "16m" },
+      { title: "The approved-use matrix your team can actually follow", durationLabel: "14m" },
+      // Module 4 · Assessing a use case
+      { title: "A one-page risk assessment that takes 20 minutes", durationLabel: "15m" },
+      { title: "Deciding to proceed, proceed with controls, or decline", durationLabel: "14m" },
+      // Module 5 · The policy
+      { title: "The one-page AI policy every firm needs", durationLabel: "16m" },
+      { title: "Making the policy something people follow", durationLabel: "13m" },
+      // Module 6 · When it goes wrong
+      { title: "Incident response: the first hour", durationLabel: "15m" },
+      { title: "Telling a client something went wrong", durationLabel: "14m" },
+      // Module 7 · Evidence
+      { title: "Showing an auditor or regulator how you decided", durationLabel: "15m" },
     ],
   },
 ];
