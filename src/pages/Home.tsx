@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { COURSES } from "../data/courses";
+import { COURSES, RED_LINES } from "../data/courses";
 import { EnrollModal } from "../components/EnrollModal";
 import { InquiryModal } from "../components/InquiryModal";
 import { PartnerBadge } from "../components/PartnerBadge";
@@ -158,6 +158,41 @@ export function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Where we tell people NOT to use AI. Unusual for a training company to
+          publish, which is exactly why it builds trust with finance leaders. */}
+      <section className="bg-panel border border-line rounded-[22px] p-6 sm:p-9 mt-6">
+        <div className="max-w-[680px]">
+          <div className="text-accent-ink text-[12px] font-bold uppercase tracking-[1.5px]">
+            Our position
+          </div>
+          <h2 className="text-[26px] sm:text-[30px] font-bold tracking-[-0.6px] mt-2">
+            Where we tell people not to use AI
+          </h2>
+          <p className="text-ink2 mt-2.5 text-[15.5px] leading-relaxed">
+            Most AI training sells you on what the tools can do. Finance work
+            needs the other half of the answer too, so we teach these five
+            limits in every course, not as a disclaimer at the end.
+          </p>
+        </div>
+        <ol className="mt-7 grid sm:grid-cols-2 gap-x-9 gap-y-5">
+          {RED_LINES.map((r, i) => (
+            <li key={r.short} className="flex gap-4">
+              <span className="shrink-0 w-7 h-7 rounded-full bg-[#FEF2F2] text-[#b91c1c] text-[13px] font-bold flex items-center justify-center">
+                {i + 1}
+              </span>
+              <span>
+                <span className="block text-[15.5px] font-semibold tracking-[-0.1px]">
+                  {r.short}
+                </span>
+                <span className="block text-ink2 text-[14px] mt-1 leading-relaxed">
+                  {r.full}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* Free course CTA */}

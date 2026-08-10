@@ -1,5 +1,31 @@
 export type Level = "Beginner" | "Intermediate" | "Advanced" | "Certificate";
 
+// The five situations where finance work should not be handed to AI. These are
+// Empathetic AI's own position, set by Angela, and they are taught in every
+// course rather than tacked on at the end. Wording is hers.
+export const RED_LINES: { short: string; full: string }[] = [
+  {
+    short: "Final decisions that need professional judgement",
+    full: "Final decisions that require professional judgement, accountability or sign-off, especially where the consequences are material.",
+  },
+  {
+    short: "Acting on output without checking the source",
+    full: "Making decisions purely based on AI output without checking the underlying data, assumptions, calculations and sources.",
+  },
+  {
+    short: "Sensitive data in public AI tools",
+    full: "Handling highly sensitive or confidential financial information in public AI tools without appropriate data controls.",
+  },
+  {
+    short: "No audit trail, no explanation",
+    full: "Situations where there is no clear audit trail or where you cannot explain how the conclusion was reached.",
+  },
+  {
+    short: "Automating high-risk decisions end to end",
+    full: "Fully automating high-risk decisions involving compliance, tax, audit, credit, investment or regulatory obligations without appropriate human oversight.",
+  },
+];
+
 export interface Course {
   slug: string;
   title: string;
@@ -133,23 +159,45 @@ export const COURSES: Course[] = [
     title: "Microsoft 365 Copilot for Finance",
     tagline: "The tool most firms already have",
     summary:
-      "Use Microsoft 365 Copilot across Excel, Outlook, Word, Teams and PowerPoint for everyday finance and accounting work.",
+      "Five real finance jobs done with Microsoft 365 Copilot: bank reconciliation, month-end close, FP&A, the board pack and a live dashboard.",
     level: "Beginner",
     priceCents: 59000,
     compareAtCents: 69000,
-    learningHours: 3,
-    lessonsLabel: "11 lessons",
+    learningHours: 4,
+    lessonsLabel: "18 lessons",
     color: "#8B5CF6",
     outcomes: [
-      "Draft, summarise and analyse faster in the Microsoft 365 apps you already use",
-      "Build reliable Copilot habits for real finance and accounting tasks",
-      "Avoid the common Copilot mistakes that lead to wrong answers",
+      "Run a bank reconciliation and a month-end close with Copilot, and know exactly what to check",
+      "Build budgets, forecasts and variance commentary you can defend to a CFO",
+      "Produce a board pack and a live dashboard from your own data, in a fraction of the time",
+      "Recognise the five situations where finance work should never be handed to AI",
     ],
     lessons: [
-      { title: "Copilot in Excel for finance", durationLabel: "16m" },
-      { title: "Copilot in Outlook & Teams", durationLabel: "15m" },
-      { title: "Copilot in Word & PowerPoint", durationLabel: "14m" },
-      { title: "Getting reliable results every time", durationLabel: "15m" },
+      // Module 1 · Getting started in a finance team
+      { title: "What Copilot is, and where it lives in Microsoft 365", durationLabel: "11m" },
+      { title: "The data boundary: what Copilot can and cannot see", durationLabel: "13m" },
+      { title: "The five red lines: where AI does not belong in finance", durationLabel: "14m" },
+      // Module 2 · Bank reconciliation
+      { title: "Preparing a bank statement and ledger Copilot can read", durationLabel: "12m" },
+      { title: "Matching transactions and surfacing the exceptions", durationLabel: "16m" },
+      { title: "Explaining and clearing the unmatched items", durationLabel: "14m" },
+      // Module 3 · Month-end close
+      { title: "Building a close checklist Copilot can drive", durationLabel: "13m" },
+      { title: "Accruals, prepayments and the supporting workings", durationLabel: "16m" },
+      { title: "Flux analysis: explaining every movement worth explaining", durationLabel: "15m" },
+      // Module 4 · FP&A
+      { title: "Turning last year's actuals into a first-cut budget", durationLabel: "15m" },
+      { title: "Scenarios and sensitivities without breaking the model", durationLabel: "16m" },
+      { title: "Variance commentary in your CFO's voice", durationLabel: "14m" },
+      // Module 5 · Board and management packs
+      { title: "From numbers to a narrative the board will read", durationLabel: "15m" },
+      { title: "Building the pack in Word and PowerPoint", durationLabel: "14m" },
+      { title: "Anticipating the questions the board will ask", durationLabel: "12m" },
+      // Module 6 · Real-time dashboard
+      { title: "Designing a dashboard around the decisions it serves", durationLabel: "13m" },
+      { title: "Building it, and keeping it refreshing on its own", durationLabel: "16m" },
+      // Module 7 · Getting it right every time
+      { title: "Verification, source trails and the pre-send checklist", durationLabel: "15m" },
     ],
   },
   {
