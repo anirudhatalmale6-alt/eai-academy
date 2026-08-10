@@ -49,10 +49,11 @@ export default async function handler(req, res) {
 
   let inquiries = [];
   let signups = [];
+  let workshops = [];
   let err = "";
   try {
     const sb = supabaseAdmin();
-    const [iq, en] = await Promise.all([
+    const [iq, en, wk] = await Promise.all([
       sb
         .from("inquiries")
         .select("name,email,company,phone,message,source,created_at")
@@ -61,11 +62,19 @@ export default async function handler(req, res) {
         .from("enrollments")
         .select("first_name,email,course_slug,source,created_at")
         .order("created_at", { ascending: false }),
+      sb
+        .from("workshop_registrations")
+        .select(
+          "name,email,company,phone,workshop_id,workshop_date,seats,status,amount_cents,notes,created_at",
+        )
+        .order("created_at", { ascending: false }),
     ]);
     inquiries = iq.data || [];
     signups = en.data || [];
+    workshops = wk.data || [];
     if (iq.error) err = iq.error.message;
     if (en.error) err = en.error.message;
+    if (wk.error) err = wk.error.message;
   } catch (e) {
     err = (e && e.message) || "read failed";
   }
@@ -96,7 +105,23 @@ export default async function handler(req, res) {
     )
     .join("");
 
-  const data = { inquiries, signups };
+  const wkRows = workshops
+    .map(
+      (r) => `<tr>
+<td>${esc(fmt(r.created_at))}</td>
+<td>${esc(r.name)}</td>
+<td><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></td>
+<td>${esc(r.company)}</td>
+<td>${esc(r.workshop_date || r.workshop_id)}</td>
+<td>${esc(r.seats == null ? 1 : r.seats)}</td>
+<td>${esc(r.status)}</td>
+<td>${esc(r.amount_cents == null ? "" : `A$${(r.amount_cents / 100).toFixed(2)}`)}</td>
+<td class="msg">${esc(r.notes)}</td>
+</tr>`,
+    )
+    .join("");
+
+  const data = { inquiries, signups, workshops };
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -146,6 +171,21 @@ ${
 
 <div class="card">
 <div class="head">
+<h2>Live workshop registrations <span class="count">(${workshops.length})</span></h2>
+<div style="display:flex;gap:10px;align-items:center">
+<input class="search" id="s3" placeholder="Search registrations…" oninput="filter('t3','s3')">
+<button class="btn" onclick="csv('workshops')">Export CSV</button>
+</div>
+</div>
+${
+  workshops.length
+    ? `<div class="tblwrap"><table id="t3"><thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Company</th><th>Workshop</th><th>Seats</th><th>Status</th><th>Paid</th><th>Notes</th></tr></thead><tbody>${wkRows}</tbody></table></div>`
+    : `<p class="empty">No workshop registrations yet.</p>`
+}
+</div>
+
+<div class="card">
+<div class="head">
 <h2>Free-course sign-ups <span class="count">(${signups.length})</span></h2>
 <div style="display:flex;gap:10px;align-items:center">
 <input class="search" id="s2" placeholder="Search sign-ups…" oninput="filter('t2','s2')">
@@ -170,6 +210,8 @@ function csv(which){
   var rows = DATA[which]||[];
   var cols = which==='inquiries'
     ? ['created_at','name','email','company','phone','source','message']
+    : which==='workshops'
+    ? ['created_at','name','email','company','phone','workshop_date','workshop_id','seats','status','amount_cents','notes']
     : ['created_at','first_name','email','course_slug','source'];
   var out = [cols.join(',')];
   rows.forEach(function(r){

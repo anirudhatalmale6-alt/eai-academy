@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
   try {
     const sb = supabaseAdmin();
-    const [en, iq] = await Promise.all([
+    const [en, iq, wk] = await Promise.all([
       sb
         .from("enrollments")
         .select("first_name,email,course_slug,created_at")
@@ -45,6 +45,11 @@ export default async function handler(req, res) {
         .select("name,email,company,created_at")
         .gte("created_at", since)
         .order("created_at", { ascending: false }),
+      sb
+        .from("workshop_registrations")
+        .select("name,email,company,workshop_id,workshop_date,seats,status,created_at")
+        .gte("created_at", since)
+        .order("created_at", { ascending: false }),
     ]);
 
     const signups = (en.data || []).map((r) => ({
@@ -52,8 +57,9 @@ export default async function handler(req, res) {
       courseTitle: courseTitle(r.course_slug),
     }));
     const inquiries = iq.data || [];
+    const workshops = wk.data || [];
 
-    if (!signups.length && !inquiries.length && !force) {
+    if (!signups.length && !inquiries.length && !workshops.length && !force) {
       res.status(200).json({ ok: true, sent: false, reason: "nothing new" });
       return;
     }
@@ -64,6 +70,7 @@ export default async function handler(req, res) {
     const result = await sendDailyDigest({
       signups,
       inquiries,
+      workshops,
       sinceLabel: `last ${hours} hours`,
       leadsUrl,
     });
@@ -73,6 +80,7 @@ export default async function handler(req, res) {
       sent: true,
       signups: signups.length,
       inquiries: inquiries.length,
+      workshops: workshops.length,
       email: result && result.ok ? "sent" : result,
     });
   } catch (err) {

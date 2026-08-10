@@ -141,8 +141,9 @@ export async function sendWelcomeEmail({ to, firstName, courseTitle, courseSlug 
 function sourceLabel(source) {
   const map = {
     "team-pricing": "Team pricing enquiry",
-    "advisory": "Enterprise AI Advisory enquiry",
-    "enterprise-advisory": "Enterprise AI Advisory enquiry",
+    "advisory": "AI Advisory enquiry",
+    "enterprise-advisory": "AI Advisory enquiry",
+    "workshop-private": "Private workshop enquiry",
     "ai-product": "Product demo request",
     "demo": "Demo request",
     "demo-form": "Contact form (main site)",
@@ -248,9 +249,82 @@ export async function sendSignupNotification({ firstName, email, courseTitle }) 
   });
 }
 
+// Internal alert when someone books a seat at a live workshop. These are
+// paying registrations, so they go out instantly rather than waiting for the
+// daily summary. Fixed admin recipient.
+export function workshopEmailHtml({
+  name,
+  email,
+  company,
+  phone,
+  workshopDate,
+  seats,
+  notes,
+}) {
+  const row = (k, v) =>
+    v
+      ? `<tr><td style="padding:6px 0;color:#6b7280;font-size:13px;width:120px;vertical-align:top">${esc(
+          k,
+        )}</td><td style="padding:6px 0;color:#0f172a;font-size:14px">${esc(v)}</td></tr>`
+      : "";
+  const inner = `
+<div style="display:inline-block;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:14px">New workshop registration</div>
+<p style="font-size:15px;line-height:1.6;margin:0 0 16px">Someone just booked a place at a live workshop.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #eef0f3;border-radius:10px;margin:0 0 18px">
+<tr><td style="padding:14px 16px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+${row("Name", name)}
+${row("Email", email)}
+${row("Company", company)}
+${row("Phone", phone)}
+${row("Workshop", workshopDate)}
+${row("Seats", seats == null ? "1" : String(seats))}
+${row("Notes", notes)}
+</table>
+</td></tr></table>
+<p style="font-size:13px;line-height:1.6;color:#8a90a2;margin:0">Payment status is on your Leads page. Reply to this email to reach them directly.</p>`;
+  return layout(inner, `Workshop registration: ${name || email || "new booking"}`);
+}
+
+export async function sendWorkshopNotification({
+  name,
+  email,
+  company,
+  phone,
+  workshopDate,
+  seats,
+  notes,
+}) {
+  const to = process.env.EMAIL_ADMIN || "service@empathetic-ai.com";
+  const n = seats == null ? 1 : Number(seats) || 1;
+  const who = [name, company].filter(Boolean).join(", ");
+  return sendEmail({
+    to,
+    subject: `Workshop registration${who ? ` — ${who}` : ""}${
+      n > 1 ? ` (${n} seats)` : ""
+    }`,
+    html: workshopEmailHtml({
+      name,
+      email,
+      company,
+      phone,
+      workshopDate,
+      seats: n,
+      notes,
+    }),
+    replyTo: email && String(email).includes("@") ? String(email) : undefined,
+  });
+}
+
 // Once-a-day summary of new free-course sign-ups (and any new enquiries), so
 // the inbox stays quiet but nothing is missed. Sent to the fixed admin inbox.
-export function dailyDigestHtml({ signups = [], inquiries = [], sinceLabel, leadsUrl }) {
+export function dailyDigestHtml({
+  signups = [],
+  inquiries = [],
+  workshops = [],
+  sinceLabel,
+  leadsUrl,
+}) {
   const sRows = signups
     .map(
       (r) =>
@@ -276,6 +350,24 @@ export function dailyDigestHtml({ signups = [], inquiries = [], sinceLabel, lead
           r.email,
         )}</a></td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
           r.company || "-",
+        )}</td></tr>`,
+    )
+    .join("");
+  const wRows = workshops
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.name || "-",
+        )}</td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px"><a href="mailto:${esc(
+          r.email,
+        )}" style="color:#2563EB;text-decoration:none">${esc(
+          r.email,
+        )}</a></td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.workshop_date || r.workshop_id || "-",
+        )}</td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.seats == null ? "1" : String(r.seats),
+        )}</td><td style="padding:8px 10px;border-top:1px solid #eef0f3;font-size:14px;color:#0f172a">${esc(
+          r.status || "-",
         )}</td></tr>`,
     )
     .join("");
@@ -308,6 +400,13 @@ ${section(
   "No new sign-ups today.",
 )}
 ${section(
+  "New workshop registrations",
+  workshops.length,
+  ["Name", "Email", "Workshop", "Seats", "Status"],
+  wRows,
+  "No new workshop registrations today.",
+)}
+${section(
   "New enquiries",
   inquiries.length,
   ["Name", "Email", "Company"],
@@ -319,16 +418,26 @@ ${section(
   return layout(inner, `Daily summary: ${signups.length} sign-ups, ${inquiries.length} enquiries`);
 }
 
-export async function sendDailyDigest({ signups, inquiries, sinceLabel, leadsUrl }) {
+export async function sendDailyDigest({
+  signups,
+  inquiries,
+  workshops,
+  sinceLabel,
+  leadsUrl,
+}) {
   const to = process.env.EMAIL_ADMIN || "service@empathetic-ai.com";
   const nS = (signups || []).length;
   const nI = (inquiries || []).length;
+  const nW = (workshops || []).length;
+  const parts = [
+    `${nS} new sign-up${nS === 1 ? "" : "s"}`,
+    ...(nW ? [`${nW} workshop registration${nW === 1 ? "" : "s"}`] : []),
+    `${nI} new enquir${nI === 1 ? "y" : "ies"}`,
+  ];
   return sendEmail({
     to,
-    subject: `Daily summary — ${nS} new sign-up${nS === 1 ? "" : "s"}, ${nI} new enquir${
-      nI === 1 ? "y" : "ies"
-    }`,
-    html: dailyDigestHtml({ signups, inquiries, sinceLabel, leadsUrl }),
+    subject: `Daily summary — ${parts.join(", ")}`,
+    html: dailyDigestHtml({ signups, inquiries, workshops, sinceLabel, leadsUrl }),
   });
 }
 

@@ -8,6 +8,11 @@ import {
 } from "../data/courses";
 import { InquiryModal } from "./InquiryModal";
 import { startCheckout, type CheckoutItem } from "../lib/checkout";
+import {
+  WORKSHOPS,
+  WORKSHOP_PROGRAM,
+  workshopIncGstCents,
+} from "../data/workshops";
 
 // Team pricing block. Small teams (3 to 24) buy themselves and the volume
 // discount is applied automatically at checkout. 25+ is custom, and firms who
@@ -15,10 +20,22 @@ import { startCheckout, type CheckoutItem } from "../lib/checkout";
 export function TeamPricing() {
   const [open, setOpen] = useState(false);
 
-  // Buyable options: the full program bundle, plus each paid course.
+  // Buyable options: the full program bundle, each paid course, and a seat at
+  // any upcoming live workshop (workshop prices already include GST).
   const options = [
-    { key: "bundle", label: `${BUNDLE.title} (full program)`, cents: BUNDLE.priceCents },
-    ...bundleCourses().map((c) => ({ key: c.slug, label: c.title, cents: c.priceCents })),
+    { key: "bundle", kind: "bundle" as const, label: `${BUNDLE.title} (full program)`, cents: BUNDLE.priceCents },
+    ...bundleCourses().map((c) => ({
+      key: c.slug,
+      kind: "course" as const,
+      label: c.title,
+      cents: c.priceCents,
+    })),
+    ...WORKSHOPS.map((w) => ({
+      key: w.id,
+      kind: "workshop" as const,
+      label: `Live workshop, ${w.dateLabel} — ${WORKSHOP_PROGRAM.title}`,
+      cents: workshopIncGstCents(),
+    })),
   ];
 
   const [selKey, setSelKey] = useState(options[0].key);
@@ -38,7 +55,11 @@ export function TeamPricing() {
     setMsg(null);
     setBuying(true);
     const item: CheckoutItem =
-      selKey === "bundle" ? { type: "bundle" } : { type: "course", slug: selKey };
+      sel.kind === "bundle"
+        ? { type: "bundle" }
+        : sel.kind === "workshop"
+          ? { type: "workshop", slug: sel.key }
+          : { type: "course", slug: sel.key };
     const err = await startCheckout(item, n);
     if (err) setMsg(err);
     setBuying(false);
@@ -56,7 +77,7 @@ export function TeamPricing() {
         <p className="text-ink2 mt-2 text-[15.5px]">
           Training a whole finance team or firm? Enrol several people together
           and everyone saves. The more seats, the bigger the discount, applied
-          across any course or the full program.
+          across any course, the full program, or a live workshop.
         </p>
       </div>
 
@@ -132,6 +153,9 @@ export function TeamPricing() {
                     <span className="font-semibold text-accent-ink">
                       {"  "}· {pct}% off, save {money(saving)}
                     </span>
+                  )}
+                  {sel.kind === "workshop" && (
+                    <span className="block">GST included.</span>
                   )}
                 </div>
               </>

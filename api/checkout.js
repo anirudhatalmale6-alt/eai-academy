@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
-    const { item, quantity, referralCode, email } = body;
+    const { item, quantity, referralCode, email, registrationId, name, company } = body;
 
     const resolved = resolveItem(item);
     if (!resolved) return res.status(400).json({ error: "Unknown item" });
@@ -59,9 +59,15 @@ export default async function handler(req, res) {
         unit_charged: String(unit),
         discount_pct: String(pct),
         referral_code: referralCode ? String(referralCode).trim().slice(0, 64) : "",
+        registration_id: registrationId ? String(registrationId).slice(0, 64) : "",
+        buyer_name: name ? String(name).slice(0, 120) : "",
+        buyer_company: company ? String(company).slice(0, 120) : "",
       },
       success_url: `${origin}/#/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/#/courses`,
+      cancel_url:
+        resolved.kind === "workshop"
+          ? `${origin}/#/workshops`
+          : `${origin}/#/courses`,
     });
 
     return res.status(200).json({ url: session.url });

@@ -5,7 +5,7 @@
 // Stripe session id.
 import Stripe from "stripe";
 import { supabaseAdmin } from "./_lib/supabaseAdmin.js";
-import { COMMISSION_RATE, COURSES, BUNDLE } from "./_lib/catalog.js";
+import { COMMISSION_RATE, COURSES, BUNDLE, WORKSHOPS } from "./_lib/catalog.js";
 import { sendReceiptEmail, audLabel } from "./_lib/email.js";
 
 function readRawBody(req) {
@@ -51,8 +51,31 @@ async function handleCompletedSession(session) {
   if (!orderRows || orderRows.length === 0) return;
   const orderId = orderRows[0].id;
 
+  // 2a) Live workshop seat: confirm the registration instead of granting
+  // course access. Falls back to matching on email + workshop if the browser
+  // never sent us a registration id.
+  if (kind === "workshop") {
+    const patch = {
+      status: "paid",
+      order_id: orderId,
+      seats,
+      amount_cents: session.amount_total,
+    };
+    const regId = (md.registration_id || "").trim();
+    if (regId) {
+      await db.from("workshop_registrations").update(patch).eq("id", regId);
+    } else if (email && slugs[0]) {
+      await db
+        .from("workshop_registrations")
+        .update(patch)
+        .eq("workshop_id", slugs[0])
+        .eq("email", email)
+        .eq("status", "pending");
+    }
+  }
+
   // 2) Grant entitlements to the buyer for each course slug.
-  if (email && slugs.length) {
+  if (kind !== "workshop" && email && slugs.length) {
     const rows = slugs.map((slug) => ({
       email,
       course_slug: slug,
@@ -93,10 +116,13 @@ async function handleCompletedSession(session) {
   // break the webhook (which would make Stripe retry a completed order).
   if (email) {
     try {
+      const w = WORKSHOPS[slugs[0]];
       const title =
         kind === "bundle"
           ? BUNDLE.title
-          : (COURSES[slugs[0]] && COURSES[slugs[0]].title) || "your course";
+          : kind === "workshop" && w
+            ? `${w.title} — live workshop, ${w.dateLabel}`
+            : (COURSES[slugs[0]] && COURSES[slugs[0]].title) || "your course";
       const fullName =
         (session.customer_details && session.customer_details.name) || "";
       const firstName = fullName.trim().split(/\s+/)[0] || "";

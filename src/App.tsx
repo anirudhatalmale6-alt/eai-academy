@@ -6,7 +6,8 @@ import { CourseDetail } from "./pages/CourseDetail";
 import { Login } from "./pages/Login";
 import { Admin } from "./pages/Admin";
 import { EnterpriseAdvisory } from "./pages/EnterpriseAdvisory";
-import { TeamPricingPage } from "./pages/TeamPricingPage";
+import { Team } from "./pages/Team";
+import { Workshops } from "./pages/Workshops";
 import { CheckoutSuccess } from "./pages/CheckoutSuccess";
 import { MyCourses } from "./pages/MyCourses";
 import { ComingSoon } from "./pages/ComingSoon";
@@ -20,9 +21,12 @@ export default function App() {
         <Route path="/course/:slug" element={<CourseDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/certifications" element={<ComingSoon title="Certifications" />} />
+        <Route path="/workshops" element={<Workshops />} />
+        <Route path="/ai-advisory" element={<EnterpriseAdvisory />} />
+        {/* Old links kept working. */}
         <Route path="/enterprise-advisory" element={<EnterpriseAdvisory />} />
-        <Route path="/team-pricing" element={<TeamPricingPage />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/team-pricing" element={<Team />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/my-courses" element={<MyCourses />} />
         <Route path="/help" element={<ComingSoon title="Help & Support" />} />

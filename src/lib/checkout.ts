@@ -27,7 +27,8 @@ export function getReferral(): string | null {
 
 export type CheckoutItem =
   | { type: "course"; slug: string }
-  | { type: "bundle" };
+  | { type: "bundle" }
+  | { type: "workshop"; slug: string };
 
 // Start checkout. Returns an error message string on failure, or null on
 // success (the browser is redirected to Stripe). If the payment backend is not
@@ -36,6 +37,7 @@ export async function startCheckout(
   item: CheckoutItem,
   quantity = 1,
   email?: string,
+  extra?: { registrationId?: string; name?: string; company?: string },
 ): Promise<string | null> {
   try {
     const res = await fetch("/api/checkout", {
@@ -45,6 +47,9 @@ export async function startCheckout(
         item,
         quantity,
         email,
+        registrationId: extra?.registrationId,
+        name: extra?.name,
+        company: extra?.company,
         referralCode: getReferral() || undefined,
       }),
     });

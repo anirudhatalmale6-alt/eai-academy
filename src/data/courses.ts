@@ -183,9 +183,9 @@ export const COURSES: Course[] = [
     tagline: "Deploy AI safely in regulated work",
     summary:
       "Roll out Copilot and OpenAI Enterprise without breaching duty of care: data security, review controls, audit trails and a firm AI policy.",
-    level: "Advanced",
-    priceCents: 69000,
-    compareAtCents: 79000,
+    level: "Intermediate",
+    priceCents: 59000,
+    compareAtCents: 69000,
     learningHours: 4,
     lessonsLabel: "14 lessons",
     color: "#F59E0B",

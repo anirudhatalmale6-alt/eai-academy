@@ -36,7 +36,7 @@ export function EnterpriseAdvisory() {
         <div className="max-w-[720px]">
           <PartnerBadge />
           <div className="text-accent-ink text-[12px] font-bold uppercase tracking-[1.5px] mt-5">
-            Enterprise AI Advisory
+            AI Advisory
           </div>
           <h1 className="text-[34px] sm:text-[46px] font-bold tracking-[-1.4px] leading-[1.03] mt-2 text-ink">
             AI Transformation Advisory

@@ -258,3 +258,68 @@ create policy "inquiries anon insert" on public.inquiries
 drop policy if exists "inquiries admin read" on public.inquiries;
 create policy "inquiries admin read" on public.inquiries
   for select using (public.has_role(auth.uid(), 'admin'));
+
+-- ---------------------------------------------------------------------------
+-- Live workshop registrations
+-- A seat is registered first (status 'pending'), then confirmed to 'paid' by
+-- the Stripe webhook, or left as 'invoice' when a firm asks to be invoiced.
+-- The browser generates the row id so it can pass it to checkout: anon can
+-- insert but cannot read rows back (admin-only read policy).
+-- ---------------------------------------------------------------------------
+create table if not exists public.workshop_registrations (
+  id uuid primary key default gen_random_uuid(),
+  workshop_id text not null,                -- e.g. 'workshop-aug-2026'
+  workshop_date text,                       -- human label, e.g. '28 August 2026'
+  name text,
+  email text not null,
+  company text,
+  phone text,
+  seats integer not null default 1,
+  notes text,
+  status text not null default 'pending',   -- pending | paid | invoice | cancelled
+  order_id uuid references public.orders(id) on delete set null,
+  amount_cents integer,
+  source text,
+  created_at timestamptz not null default now()
+);
+alter table public.workshop_registrations enable row level security;
+
+create index if not exists workshop_registrations_workshop_idx
+  on public.workshop_registrations (workshop_id, created_at desc);
+
+drop policy if exists "workshop reg anon insert" on public.workshop_registrations;
+create policy "workshop reg anon insert" on public.workshop_registrations
+  for insert to anon, authenticated
+  with check (char_length(email) between 3 and 255 and status = 'pending');
+
+drop policy if exists "workshop reg admin read" on public.workshop_registrations;
+create policy "workshop reg admin read" on public.workshop_registrations
+  for select using (public.has_role(auth.uid(), 'admin'));
+
+-- ---------------------------------------------------------------------------
+-- Instant email alerts (pg_net -> /api/notify)
+-- Applied separately because they carry the NOTIFY_SECRET, which is not kept
+-- in the repo. Template below; replace <NOTIFY_SECRET> with the Vercel env var
+-- value and run once per table that should alert instantly.
+--
+--   create extension if not exists pg_net with schema extensions;
+--
+--   create or replace function public.notify_new_inquiry()
+--   returns trigger language plpgsql security definer
+--   set search_path = public, net, extensions as $fn$
+--   begin
+--     perform net.http_post(
+--       url := 'https://eai-academy.vercel.app/api/notify',
+--       body := jsonb_build_object('type','INSERT','table','inquiries','record', to_jsonb(NEW)),
+--       headers := jsonb_build_object('Content-Type','application/json','x-notify-secret','<NOTIFY_SECRET>'),
+--       timeout_milliseconds := 5000);
+--     return NEW;
+--   end; $fn$;
+--
+--   create trigger trg_notify_new_inquiry after insert on public.inquiries
+--     for each row execute function public.notify_new_inquiry();
+--
+-- The same pattern is applied to public.workshop_registrations via
+-- public.notify_new_workshop_registration(). Free-course sign-ups
+-- (public.enrollments) deliberately have NO trigger: they are reported once a
+-- day by the /api/daily-digest cron instead.

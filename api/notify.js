@@ -5,8 +5,12 @@
 // is fixed by EMAIL_ADMIN, so this endpoint cannot be abused to send mail to
 // third parties. Always returns 200 so the database trigger never retries.
 
-import { sendInquiryNotification, sendSignupNotification } from "./_lib/email.js";
-import { COURSES, BUNDLE } from "./_lib/catalog.js";
+import {
+  sendInquiryNotification,
+  sendSignupNotification,
+  sendWorkshopNotification,
+} from "./_lib/email.js";
+import { COURSES, BUNDLE, WORKSHOPS } from "./_lib/catalog.js";
 
 function courseTitleFromSlug(slug) {
   if (!slug) return null;
@@ -41,7 +45,20 @@ export default async function handler(req, res) {
     const record = (body && body.record) || body || {};
     const table = (body && body.table) || "inquiries";
 
-    if (table === "enrollments") {
+    if (table === "workshop_registrations") {
+      // New live-workshop booking.
+      const w = WORKSHOPS[record.workshop_id];
+      await sendWorkshopNotification({
+        name: record.name,
+        email: record.email,
+        company: record.company,
+        phone: record.phone,
+        workshopDate:
+          record.workshop_date || (w && w.dateLabel) || record.workshop_id,
+        seats: record.seats,
+        notes: record.notes,
+      });
+    } else if (table === "enrollments") {
       // New free-course sign-up.
       await sendSignupNotification({
         firstName: record.first_name,
