@@ -213,33 +213,33 @@ export const COURSES: Course[] = [
     lessonsLabel: "17 lessons",
     color: "#EC4899",
     outcomes: [
-      "Interrogate a long contract, ruling or policy and get answers you can cite",
-      "Pull structured data out of invoices and statements without silent errors",
-      "Draft client-facing writing that survives partner review",
+      "Write prompts that give you the same reliable answer every time",
+      "Interrogate a long document and get answers you can trace to the source",
+      "Turn messy documents into structured data with the errors made visible",
       "Build a prompt library your whole team reuses",
     ],
     lessons: [
-      // Module 1 · What makes an answer defensible
+      // Module 1 · What makes an answer reliable
       { title: "Why two people get different answers from the same tool", durationLabel: "12m" },
       { title: "The five parts of a reliable prompt", durationLabel: "15m" },
       { title: "Telling it what you do not want", durationLabel: "13m" },
-      // Module 2 · Interrogating a long document
-      { title: "Questioning a contract, lease or ruling", durationLabel: "16m" },
-      { title: "Making it quote the clause, not paraphrase it", durationLabel: "14m" },
+      // Module 2 · Working with long documents
+      { title: "Questioning a long document instead of summarising it", durationLabel: "16m" },
+      { title: "Making it quote the source, not paraphrase it", durationLabel: "14m" },
       { title: "Comparing two versions of the same document", durationLabel: "13m" },
       // Module 3 · Structured data you can trust
-      { title: "From invoices and statements to a clean table", durationLabel: "16m" },
+      { title: "From documents to a clean, checkable table", durationLabel: "16m" },
       { title: "Designing the output so errors are visible", durationLabel: "15m" },
       { title: "Spot-checking a batch without checking all of it", durationLabel: "14m" },
-      // Module 4 · Client-facing writing
-      { title: "Drafting advice that survives partner review", durationLabel: "15m" },
-      { title: "Matching your firm's voice, not the model's", durationLabel: "13m" },
+      // Module 4 · Writing that goes out under your name
+      { title: "Drafting so the reviewer edits rather than rewrites", durationLabel: "15m" },
+      { title: "Matching your voice, not the model's", durationLabel: "13m" },
       { title: "The hedging problem, and how to remove it", durationLabel: "12m" },
       // Module 5 · Research and citation
       { title: "Making the model show its sources", durationLabel: "15m" },
       { title: "Recognising a confident answer built on nothing", durationLabel: "14m" },
       // Module 6 · Reviewing, not just producing
-      { title: "Using AI to review a spreadsheet or a draft", durationLabel: "15m" },
+      { title: "Using AI to review a spreadsheet, a deck or a draft", durationLabel: "15m" },
       { title: "The adversarial prompt: asking it to argue against you", durationLabel: "13m" },
       // Module 7 · Your prompt library
       { title: "Building and sharing a prompt library that gets used", durationLabel: "14m" },
@@ -247,10 +247,10 @@ export const COURSES: Course[] = [
   },
   {
     slug: "automating-finance-workflows",
-    title: "Automating Finance Workflows with AI Agents",
+    title: "Automating Business & Finance Workflows with AI Agents",
     tagline: "Copilot Studio & OpenAI",
     summary:
-      "Design agent workflows in Copilot Studio and OpenAI that handle real firm tasks end to end, with a human in the loop.",
+      "Design agent workflows in Copilot Studio and OpenAI that handle real business and finance tasks end to end, with a human in the loop.",
     level: "Intermediate",
     priceCents: 59000,
     compareAtCents: 69000,
@@ -266,7 +266,7 @@ export const COURSES: Course[] = [
     lessons: [
       // Module 1 · What an agent is, and when it beats a prompt
       { title: "Prompt, automation or agent: telling them apart", durationLabel: "14m" },
-      { title: "What agents are genuinely good at in finance", durationLabel: "13m" },
+      { title: "What agents are genuinely good at, and what they are not", durationLabel: "13m" },
       { title: "The processes you should refuse to automate", durationLabel: "15m" },
       // Module 2 · Choosing the right process
       { title: "Scoring a candidate process: volume, rules, risk", durationLabel: "15m" },
@@ -277,7 +277,7 @@ export const COURSES: Course[] = [
       { title: "Building a working agent from your process map", durationLabel: "20m" },
       { title: "Testing it against the messy cases first", durationLabel: "16m" },
       // Module 4 · Document intake
-      { title: "From email attachment to a coded entry", durationLabel: "18m" },
+      { title: "From email attachment to a processed record", durationLabel: "18m" },
       { title: "Handling the documents that do not fit the pattern", durationLabel: "16m" },
       { title: "The approval step, and what it must show", durationLabel: "14m" },
       // Module 5 · Exception monitoring
@@ -307,12 +307,12 @@ export const COURSES: Course[] = [
       "Answer the five questions your board will ask about AI, with evidence",
       "Decide which tools are approved, for which data, and say why",
       "Assess a proposed use case before it starts, not after it goes wrong",
-      "Leave your firm with a one-page AI policy and an evidence trail that stands up",
+      "Leave with a one-page AI policy and an evidence trail that stands up",
     ],
     lessons: [
       // Module 1 · What your obligations already say
       { title: "You are already regulated: what applies without new AI law", durationLabel: "15m" },
-      { title: "Australia's National AI Plan, and what it means for a firm", durationLabel: "16m" },
+      { title: "Australia's National AI Plan, and what it means for you", durationLabel: "16m" },
       { title: "Where the duty of care actually bites", durationLabel: "14m" },
       // Module 2 · The board conversation
       { title: "The five questions a board will ask about AI", durationLabel: "16m" },
@@ -330,7 +330,7 @@ export const COURSES: Course[] = [
       { title: "Making the policy something people follow", durationLabel: "13m" },
       // Module 6 · When it goes wrong
       { title: "Incident response: the first hour", durationLabel: "15m" },
-      { title: "Telling a client something went wrong", durationLabel: "14m" },
+      { title: "Telling a client or your board something went wrong", durationLabel: "14m" },
       // Module 7 · Evidence
       { title: "Showing an auditor or regulator how you decided", durationLabel: "15m" },
     ],

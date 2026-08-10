@@ -10,16 +10,16 @@ const COURSES = {
   "ai-foundations-for-finance": { title: "AI Foundations for Finance", cents: 0 },
   "microsoft-365-copilot-for-finance": { title: "Microsoft 365 Copilot for Finance", cents: 59000 },
   "prompting-for-auditable-answers": { title: "Prompting for Reliable, Auditable Answers", cents: 59000 },
-  "automating-finance-workflows": { title: "Automating Finance Workflows with AI Agents", cents: 59000 },
+  "automating-finance-workflows": { title: "Automating Business & Finance Workflows with AI Agents", cents: 59000 },
   "ai-governance-risk-compliance": { title: "AI Governance, Risk & Compliance for Firms", cents: 59000 },
 };
 
-// Live workshops: one 1.5 hour online session, same program, three dates.
-// Priced EX GST (A$249 + GST); Australian GST is added at checkout.
+// Live workshops: one half-day (3 hour) online session, same program, three dates.
+// Priced EX GST (A$549 + GST); Australian GST is added at checkout.
 // KEEP IN SYNC with src/data/workshops.ts.
 const GST_RATE = 0.1;
 const WORKSHOP_TITLE = "Using AI in Finance and Business Workflows";
-const WORKSHOP_EX_GST = 24900;
+const WORKSHOP_EX_GST = 54900;
 const WORKSHOPS = {
   "workshop-aug-2026": { title: WORKSHOP_TITLE, dateLabel: "28 August 2026", centsExGst: WORKSHOP_EX_GST },
   "workshop-sep-2026": { title: WORKSHOP_TITLE, dateLabel: "24 September 2026", centsExGst: WORKSHOP_EX_GST },

@@ -46,8 +46,11 @@ function Presenter() {
           <p className="text-[15.5px] leading-relaxed mt-3.5 max-w-[640px]">
             {PRESENTER.bio}
           </p>
-          <ul className="mt-4 space-y-2">
-            {PRESENTER.points.map((p) => (
+          <div className="text-accent-ink text-[12px] font-bold uppercase tracking-[1.5px] mt-6">
+            {PRESENTER.takeawaysHeading}
+          </div>
+          <ul className="mt-3 space-y-2">
+            {PRESENTER.takeaways.map((p) => (
               <li key={p} className="flex gap-3 text-[15px] items-start">
                 <span className="text-accent font-bold">✓</span>
                 {p}
@@ -154,7 +157,7 @@ export function Workshops() {
             What we cover
           </h2>
           <p className="text-ink2 mt-2 text-[15px]">
-            Ninety minutes, no theory for its own sake. Every section is
+            Half a day, no theory for its own sake. Every section is
             something you can apply to your own work straight after.
           </p>
           <ol className="mt-6 space-y-3.5">

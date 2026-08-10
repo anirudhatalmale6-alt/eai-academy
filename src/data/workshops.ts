@@ -1,6 +1,11 @@
-// Live workshops: one 1.5 hour online session run on three dates.
-// Price is A$249 + GST per seat; GST is added at checkout, so the card charge
-// is A$273.90. KEEP IN SYNC with api/_lib/catalog.js (ids, price, dates).
+// Live workshops: one half-day (3 hour) online session run on three dates.
+// Price is A$549 + GST per seat; GST is added at checkout, so the card charge
+// is A$603.90. KEEP IN SYNC with api/_lib/catalog.js (ids, price, dates).
+//
+// On the length: A$549 sits in the AU half-day masterclass bracket (Team 400
+// charge $799 + GST for a half day, PM-Partners from $795 + GST for a full
+// day), whereas 1.5 hour CPD webinars sell for $198 to $250. So the price and
+// the duration were moved together.
 
 export const GST_RATE = 0.1;
 
@@ -16,10 +21,10 @@ export interface Workshop {
 export const WORKSHOP_PROGRAM = {
   title: "Using AI in Finance and Business Workflows",
   eyebrow: "Live online workshop",
-  durationLabel: "1.5 hours",
-  priceExGstCents: 24900,
+  durationLabel: "3 hours",
+  priceExGstCents: 54900,
   blurb:
-    "A practical, hands-on session on using today's AI tools in real finance and business work. Bring your own tasks and leave with workflows you can use the same week.",
+    "A practical, hands-on half day on using today's AI tools in real finance and business work. Bring your own tasks and leave with workflows you can use the same week.",
   agenda: [
     "Microsoft Copilot, Claude, OpenAI Enterprise and Google Gemini",
     "Choosing the right AI tool for different tasks",
@@ -27,10 +32,12 @@ export const WORKSHOP_PROGRAM = {
     "Automating routine finance and business workflows",
     "Working with documents, spreadsheets and data",
     "Building effective human-AI workflows",
+    "Hands-on block: build one workflow on your own task, with help on the call",
+    "Where AI should not be used, and what to check before you rely on it",
   ],
   platform: "Microsoft Teams",
   includes: [
-    "Live 1.5 hour session on Microsoft Teams, with Q&A",
+    "Live 3 hour session on Microsoft Teams, with a hands-on block and Q&A",
     "Recording afterwards if you cannot attend live",
     "Prompt and workflow templates to take away",
     "Attendance record for your learning hours",
@@ -44,19 +51,22 @@ export const WORKSHOP_PROGRAM = {
 };
 
 // Who delivers the live workshops. Angela runs the self-paced courses; the
-// live sessions are delivered by Tristan. Bio wording is only what Angela has
-// told us, nothing inferred. `photo` stays null until she sends one, and the
-// card falls back to initials so it looks finished either way.
+// live sessions are delivered by Tristan. The bio is Angela's own wording,
+// used verbatim. Her three bullets are written as learner outcomes rather than
+// as credentials, so they render under "What you will take away", not as
+// claims about him. `photo` stays null until she sends one, and the card falls
+// back to initials so it looks finished either way.
 export const PRESENTER = {
   name: "Tristan Tan",
   title: "Live workshop facilitator, Empathetic AI",
   linkedIn: "https://www.linkedin.com/in/tristantanaus",
   photo: null as string | null,
-  bio: "Tristan is part of the Empathetic AI team and brings a finance background together with hands-on fluency in the AI tools finance teams are actually being asked to use. He has already delivered this workshop once, so what you get on the day is a session that has been run and refined with a real audience, not a first attempt.",
-  points: [
-    "Finance background, so the examples are the work you already do",
-    "Works with Copilot, Claude, OpenAI Enterprise and Gemini day to day",
-    "Has delivered this session before, with the material refined since",
+  bio: "Tristan is part of the Empathetic AI team and has educated over a thousand professionals on how to scale AI individually and across the enterprise. As a domain expert in finance, law and tax, Tristan is an AI builder that has used AI to develop and deploy finance related applications and built scalable enterprise workflows.",
+  takeawaysHeading: "What you will take away",
+  takeaways: [
+    "Create AI driven workflows that have been tested, verified and scaled through hands on experience.",
+    "Learn to leverage AI directly into your enterprise applications to accelerate workflows and improve efficiency.",
+    "Create your own AI embedded systems for finance directly within the Microsoft environment, leveraging the full suite of Copilot tools and Powerapps.",
   ],
 };
 
@@ -66,27 +76,27 @@ export const WORKSHOPS: Workshop[] = [
     dateISO: "2026-08-28",
     dateLabel: "Friday 28 August 2026",
     shortDate: "28 Aug",
-    timeLabel: "12:00pm to 1:30pm AEST",
+    timeLabel: "9:30am to 12:30pm AEST",
   },
   {
     id: "workshop-sep-2026",
     dateISO: "2026-09-24",
     dateLabel: "Thursday 24 September 2026",
     shortDate: "24 Sep",
-    timeLabel: "12:00pm to 1:30pm AEST",
+    timeLabel: "9:30am to 12:30pm AEST",
   },
   {
     id: "workshop-oct-2026",
     dateISO: "2026-10-23",
     dateLabel: "Friday 23 October 2026",
     shortDate: "23 Oct",
-    timeLabel: "12:00pm to 1:30pm AEDT",
+    timeLabel: "9:30am to 12:30pm AEDT",
   },
 ];
 
 export const getWorkshop = (id: string) => WORKSHOPS.find((w) => w.id === id);
 
-// A$249.00 style label from cents.
+// A$549.00 style label from cents.
 const aud = (cents: number) => {
   const dollars = cents / 100;
   const opts = Number.isInteger(dollars)
@@ -98,8 +108,8 @@ const aud = (cents: number) => {
 export const workshopIncGstCents = (exGstCents = WORKSHOP_PROGRAM.priceExGstCents) =>
   Math.round(exGstCents * (1 + GST_RATE));
 
-// "A$249 + GST" — what we advertise.
+// "A$549 + GST" — what we advertise.
 export const workshopPriceLabel = () => `${aud(WORKSHOP_PROGRAM.priceExGstCents)} + GST`;
-// "A$273.90 incl. GST" — what is actually charged.
+// "A$603.90 incl. GST" — what is actually charged.
 export const workshopIncGstLabel = () => `${aud(workshopIncGstCents())} incl. GST`;
 export const audLabel = aud;
