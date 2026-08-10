@@ -118,7 +118,9 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="grid md:grid-cols-[248px_1fr] min-h-screen">
       <Sidebar />
-      <main className="px-4 sm:px-6 md:px-7 pt-0 md:pt-4 pb-12">
+      {/* min-w-0 so a wide child (the scrolling mobile nav) cannot stretch the
+          grid column and push the whole page sideways. */}
+      <main className="min-w-0 px-4 sm:px-6 md:px-7 pt-0 md:pt-4 pb-12">
         <MobileNav />
         <div className="flex justify-end items-center gap-3.5 h-11 mb-1.5">
           <span className="hidden sm:flex items-center gap-2 bg-panel border border-line rounded-[10px] px-3.5 py-2 text-ink2 text-sm w-[240px]">
