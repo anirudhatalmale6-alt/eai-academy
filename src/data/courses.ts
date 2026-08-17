@@ -1,4 +1,8 @@
-export type Level = "Beginner" | "Intermediate" | "Advanced" | "Certificate";
+// Difficulty only. "Certificate" is deliberately NOT a level: in Australia,
+// Certificate I to IV are protected AQF qualification titles, so a course
+// labelled "Level: Certificate" would read as a claim to AQF status we do not
+// have. Every course issues a certificate of completion regardless of level.
+export type Level = "Beginner" | "Intermediate" | "Advanced";
 
 // The five situations where finance work should not be handed to AI. These are
 // Empathetic AI's own position, set by Angela, and they are taught in every
@@ -130,23 +134,27 @@ export const teamTierPct = (seats: number): number | null => {
 // and managed from the admin.
 export const COURSES: Course[] = [
   {
+    // Slug deliberately unchanged: entitlements and existing URLs depend on it.
+    // The display title dropped "for Finance" because this is the widest point
+    // of the funnel and the qualifier turned away the business half of the
+    // audience. Every finance example inside the course is unchanged.
     slug: "ai-foundations-for-finance",
-    title: "AI Foundations for Finance",
+    title: "AI Foundations",
     tagline: "Start here, no experience needed",
     summary:
-      "What AI can and can't do in finance, plus the Copilot, ChatGPT and OpenAI Enterprise landscape for Australian firms. Used responsibly.",
+      "What AI can and can't do in professional work, plus the Copilot, ChatGPT and OpenAI Enterprise landscape for Australian firms. Used responsibly.",
     level: "Beginner",
     priceCents: 0,
     learningHours: 2,
     lessonsLabel: "6 lessons",
     color: "#3B82F6",
     outcomes: [
-      "Understand where AI genuinely helps in finance work, and where it doesn't",
+      "Understand where AI genuinely helps in your work, and where it doesn't",
       "Know the difference between Copilot, ChatGPT and OpenAI Enterprise, and which fits your firm",
       "Use AI responsibly within professional and regulatory obligations",
     ],
     lessons: [
-      { title: "Why AI matters for finance professionals", durationLabel: "10m" },
+      { title: "Why AI matters for your work", durationLabel: "10m" },
       { title: "Copilot vs ChatGPT vs OpenAI Enterprise", durationLabel: "14m" },
       { title: "What AI is good at (and what to avoid)", durationLabel: "12m" },
       { title: "Responsible use & professional judgement", durationLabel: "15m" },

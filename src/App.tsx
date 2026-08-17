@@ -11,6 +11,7 @@ import { Workshops } from "./pages/Workshops";
 import { CheckoutSuccess } from "./pages/CheckoutSuccess";
 import { MyCourses } from "./pages/MyCourses";
 import { ComingSoon } from "./pages/ComingSoon";
+import { Legal } from "./pages/Legal";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/team-pricing" element={<Team />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/my-courses" element={<MyCourses />} />
+        <Route path="/legal" element={<Legal />} />
         <Route path="/help" element={<ComingSoon title="Help & Support" />} />
         <Route path="*" element={<ComingSoon title="Page not found" />} />
       </Routes>

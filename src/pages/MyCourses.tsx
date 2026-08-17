@@ -123,14 +123,24 @@ export function MyCourses() {
                     <div className="grid grid-cols-2 gap-2 mt-2">
                       <button
                         onClick={() =>
-                          downloadCertificate(certName.trim(), c.title)
+                          downloadCertificate(
+                            certName.trim(),
+                            c.title,
+                            c.priceCents > 0,
+                          )
                         }
                         className="btn btn-white justify-center text-[13.5px]"
                       >
                         ✦ Certificate
                       </button>
                       <button
-                        onClick={() => shareCertificate(certName.trim(), c.title)}
+                        onClick={() =>
+                          shareCertificate(
+                            certName.trim(),
+                            c.title,
+                            c.priceCents > 0,
+                          )
+                        }
                         className="btn btn-white justify-center text-[13.5px]"
                       >
                         ↗ Share

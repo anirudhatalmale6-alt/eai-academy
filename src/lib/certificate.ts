@@ -103,7 +103,11 @@ export function linkedInAddUrl(name: string, courseTitle: string) {
 
 // Renders the certificate and returns the canvas, so the same drawing code can
 // be downloaded or shared.
-async function renderCertificate(name: string, courseTitle: string) {
+async function renderCertificate(
+  name: string,
+  courseTitle: string,
+  assessed = true,
+) {
   const W = 1600;
   const H = 1131;
   const canvas = document.createElement("canvas");
@@ -232,6 +236,20 @@ async function renderCertificate(name: string, courseTitle: string) {
   ctx.fillStyle = INK;
   ctx.font = "700 38px Georgia, 'Times New Roman', serif";
   wrapText(ctx, courseTitle, W / 2, 616, W - 420, 48);
+
+  // A free 80-minute course must not produce the same artifact as a A$590
+  // assessed one, or the paid certificate quietly stops meaning anything on a
+  // LinkedIn profile. Same design and same pride in sharing it, different and
+  // honest wording. "Assessed by examination" is only claimed where it is true.
+  ctx.fillStyle = "#8a8996";
+  ctx.font = "600 19px Georgia, serif";
+  letterspaced(
+    ctx,
+    assessed ? "ASSESSED BY EXAMINATION" : "FOUNDATION COURSE",
+    W / 2,
+    664,
+    3,
+  );
 
   // Ornate gold award medallion, centred (beaded edge, star, laurel wreath, E monogram)
   const scx = W / 2;
@@ -366,6 +384,23 @@ async function renderCertificate(name: string, courseTitle: string) {
   }
   ctx.drawImage(badge, 1240 - bw / 2, 946 - bh / 2, bw, bh);
 
+  // Compliance footnote, in the margin below both frames so it reads as fine
+  // print rather than part of the certificate design.
+  //
+  // In Australia the word "certificate" is not restricted, but implying that
+  // non-accredited training is nationally recognised is an offence: Certificate
+  // I to IV and Diploma are protected AQF titles. Our courses are not AQF
+  // qualifications, so we say so on the artifact itself. This is also what lets
+  // a university or an employer's compliance team accept it without asking.
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#9a99a6";
+  ctx.font = "400 15px Georgia, serif";
+  ctx.fillText(
+    "A professional credential issued by Empathetic AI. Not a nationally recognised qualification under the Australian Qualifications Framework.",
+    W / 2,
+    1105,
+  );
+
   return canvas;
 }
 
@@ -373,8 +408,12 @@ function certFileName(courseTitle: string) {
   return `Empathetic AI Academy Certificate - ${courseTitle}.png`;
 }
 
-export async function downloadCertificate(name: string, courseTitle: string) {
-  const canvas = await renderCertificate(name, courseTitle);
+export async function downloadCertificate(
+  name: string,
+  courseTitle: string,
+  assessed = true,
+) {
+  const canvas = await renderCertificate(name, courseTitle, assessed);
   if (!canvas) return;
   const a = document.createElement("a");
   a.href = canvas.toDataURL("image/png");
@@ -388,8 +427,12 @@ export async function downloadCertificate(name: string, courseTitle: string) {
 // sheet with the image attached (LinkedIn, WhatsApp, email, whatever they
 // use). On desktop, where that is not supported, we save the image and open
 // the LinkedIn composer with the wording ready, so all they do is attach it.
-export async function shareCertificate(name: string, courseTitle: string) {
-  const canvas = await renderCertificate(name, courseTitle);
+export async function shareCertificate(
+  name: string,
+  courseTitle: string,
+  assessed = true,
+) {
+  const canvas = await renderCertificate(name, courseTitle, assessed);
   if (!canvas) return;
 
   const text = `I've just completed ${courseTitle} with Empathetic AI Academy, an OpenAI Select Partner.`;

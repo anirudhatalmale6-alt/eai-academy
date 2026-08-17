@@ -239,11 +239,27 @@ function SiteFooter() {
                   Help
                 </Link>
               </li>
+              <li>
+                <Link to="/legal" className="text-[14px] hover:text-accent-ink">
+                  Terms, refunds &amp; privacy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
       </div>
-      <p className="text-ink2 text-[12.5px] mt-8">
+      {/* Non-accredited status, stated once site-wide. In Australia it is an
+          offence to promote non-accredited training as if it carried AQF
+          status, so this sits on every page rather than only next to the
+          certificate. It is also the line a university or an employer's
+          compliance team needs before they will approve our courses. */}
+      <p className="text-ink2 text-[12.5px] mt-8 max-w-[720px] leading-relaxed">
+        Empathetic AI Academy courses are professional development, assessed and
+        certified by Empathetic AI. They are not nationally recognised
+        qualifications under the Australian Qualifications Framework and are not
+        delivered by a Registered Training Organisation.
+      </p>
+      <p className="text-ink2 text-[12.5px] mt-3">
         © {new Date().getFullYear()} Empathetic AI. All rights reserved.
       </p>
     </footer>
