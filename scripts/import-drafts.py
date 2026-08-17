@@ -72,6 +72,12 @@ def text_of(fragment: str) -> str:
     s = re.sub(r"</p>", "\n\n", s, flags=re.I)
     s = re.sub(r"</li>", "\n", s, flags=re.I)
     s = re.sub(r"<li[^>]*>", "• ", s, flags=re.I)
+    # Tables carry real teaching content (the Copilot licence tiers, the tool
+    # comparison). Stripping the tags without separators runs every cell
+    # together into one unreadable sentence, so keep the row and cell breaks.
+    s = re.sub(r"</t[dh]>\s*(?=<t[dh])", " · ", s, flags=re.I)
+    s = re.sub(r"</tr>", "\n", s, flags=re.I)
+    s = re.sub(r"<tr[^>]*>", "", s, flags=re.I)
     s = re.sub(r"<[^>]+>", "", s)
     s = html.unescape(s)
     s = re.sub(r"[ \t]+", " ", s)
