@@ -10,7 +10,7 @@ import {
 } from "../lib/certificate";
 import { loadBestAttempt, loadProgress } from "../lib/progress";
 import { COURSE_CONTENT } from "../data/course-content.generated";
-import { hasFinalQuiz } from "../data/final-quizzes";
+import { certificateRule, hasFinalQuiz } from "../data/final-quizzes";
 
 // Lesson count comes from the built content, not the marketing label, so the
 // counter can never disagree with what is actually in the player.
@@ -164,7 +164,10 @@ export function MyCourses() {
                       </p>
                     )}
 
-                    {passed[c.slug] ? (
+                    {(certificateRule(c.priceCents) === "completion"
+                      ? lessonCount(c.slug) > 0 &&
+                        (progress[c.slug] ?? 0) >= lessonCount(c.slug)
+                      : passed[c.slug]) ? (
                       <>
                         <div className="grid grid-cols-2 gap-2 mt-3">
                           <button
@@ -204,9 +207,11 @@ export function MyCourses() {
                       </>
                     ) : (
                       <p className="text-[12.5px] text-ink2 mt-3 leading-relaxed border-t border-line pt-3">
-                        {hasFinalQuiz(c.slug)
-                          ? "Your certificate unlocks when you pass the final assessment at 80%."
-                          : "The final assessment for this subject is still being written."}
+                        {certificateRule(c.priceCents) === "completion"
+                          ? "Your certificate unlocks when you finish all the lessons. This course is not assessed by examination."
+                          : hasFinalQuiz(c.slug)
+                            ? "Your certificate unlocks when you pass the final assessment at 80%."
+                            : "The final assessment for this subject is still being written."}
                       </p>
                     )}
                   </div>

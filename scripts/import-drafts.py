@@ -250,12 +250,18 @@ def parse_course(spec):
             if lesson:
                 lessons.append(lesson)
 
+        # Module knowledge checks only. Some modules also carry a block headed
+        # "Final quiz sample", which is a preview of the assessment written for
+        # Angela's benefit. Importing one as an end-of-module check shows the
+        # learner an exam question early and, in Course 1, showed the identical
+        # question twice.
         check = None
-        qm = re.search(r'<div class="quiz">(.*?)</div>\s*</div>', block, re.S)
-        if not qm:
-            qm = re.search(r'<div class="quiz">(.*?)</div>', block, re.S)
-        if qm:
+        for qm in re.finditer(r'<div class="quiz">(.*?)</div>\s*(?:</div>)?', block, re.S):
+            if re.search(r"final quiz", qm.group(1)[:200], re.I):
+                continue
             check = parse_quiz(qm.group(1))
+            if check:
+                break
 
         if not lessons:
             raise SystemExit(f"{spec['slug']}/{module_id}: no lessons parsed")

@@ -1225,16 +1225,7 @@ export const COURSE_CONTENT: CourseContent[] = [
             ]
           }
         ],
-        "check": {
-          "prompt": "Final quiz sample. A colleague sends you a research note drafted with AI, citing three ATO rulings. What do you do first?",
-          "options": [
-            "Check the reasoning is sound",
-            "Open all three rulings and confirm they exist and say what is claimed",
-            "Rewrite it in the firm's voice"
-          ],
-          "correctIndex": 1,
-          "explanation": "Sound reasoning built on a citation that does not exist is still worthless, and it is the failure most likely to reach a client."
-        }
+        "check": null
       }
     ]
   },
@@ -1748,16 +1739,7 @@ export const COURSE_CONTENT: CourseContent[] = [
             ]
           }
         ],
-        "check": {
-          "prompt": "Final quiz sample. Your invoice agent has run for a month with a 100 percent approval rate. What does that tell you?",
-          "options": [
-            "It is working perfectly",
-            "The approval step may not be functioning as a control, and should be investigated",
-            "The threshold is set too low"
-          ],
-          "correctIndex": 1,
-          "explanation": "It might be perfect. But an approval that never rejects anything is indistinguishable from no approval, and you cannot tell which you have without looking."
-        }
+        "check": null
       }
     ]
   },
@@ -2201,16 +2183,7 @@ export const COURSE_CONTENT: CourseContent[] = [
             ]
           }
         ],
-        "check": {
-          "prompt": "Final quiz sample. A regulator asks how your firm governs its use of AI. Which is the strongest response?",
-          "options": [
-            "\"We do not use AI for anything client related\"",
-            "\"We take it very seriously and follow best practice\"",
-            "\"Here is our policy, our approved-use matrix, our assessments for three use cases, and the board minute noting them\""
-          ],
-          "correctIndex": 2,
-          "explanation": "A is rarely true and is easily disproved by asking a junior. B is a non-answer. C is a file."
-        }
+        "check": null
       }
     ]
   },

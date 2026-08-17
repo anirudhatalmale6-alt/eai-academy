@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCourse } from "../data/courses";
 import { COURSE_CONTENT } from "../data/course-content.generated";
 import type { Lesson, SectionKind } from "../data/content-types";
-import { FINAL_QUIZZES, hasFinalQuiz } from "../data/final-quizzes";
+import { certificateRule, FINAL_QUIZZES, hasFinalQuiz } from "../data/final-quizzes";
 import { FinalQuiz, KnowledgeCheck } from "../components/Quiz";
 import {
   completeLesson,
@@ -206,7 +206,24 @@ export function Learn() {
       {/* Lesson or quiz */}
       <main>
         {isQuiz ? (
-          !hasFinalQuiz(slug) ? (
+          certificateRule(course.priceCents) === "completion" ? (
+            // The free course is not examined. Finishing it is the bar, and the
+            // certificate says "Foundation course" rather than claiming an
+            // assessment that never happened.
+            <div className="bg-panel border border-line rounded-[20px] p-9">
+              <h1 className="text-[26px] font-bold">
+                {allLessonsDone ? "Course complete" : "Keep going"}
+              </h1>
+              <p className="text-ink2 mt-2 max-w-[540px] leading-relaxed">
+                {allLessonsDone
+                  ? "This course is not assessed by examination, so finishing the lessons is the bar. Your certificate is in My Courses."
+                  : `You have finished ${completedCount} of ${total} lessons. This course is not examined, so completing them is all that is needed.`}
+              </p>
+              <Link to="/my-courses" className="btn btn-accent mt-5">
+                {allLessonsDone ? "Get your certificate →" : "See your progress →"}
+              </Link>
+            </div>
+          ) : !hasFinalQuiz(slug) ? (
             <div className="bg-panel border border-line rounded-[20px] p-9">
               <h1 className="text-[26px] font-bold">Assessment in preparation</h1>
               <p className="text-ink2 mt-2 max-w-[540px] leading-relaxed">
