@@ -12,6 +12,7 @@ import { CheckoutSuccess } from "./pages/CheckoutSuccess";
 import { MyCourses } from "./pages/MyCourses";
 import { ComingSoon } from "./pages/ComingSoon";
 import { Legal } from "./pages/Legal";
+import { Learn } from "./pages/Learn";
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/course/:slug" element={<CourseDetail />} />
+        <Route path="/course/:slug/learn" element={<Learn />} />
+        <Route path="/course/:slug/learn/:lessonId" element={<Learn />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/workshops" element={<Workshops />} />

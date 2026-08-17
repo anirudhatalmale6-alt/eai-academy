@@ -323,3 +323,60 @@ create policy "workshop reg admin read" on public.workshop_registrations
 -- public.notify_new_workshop_registration(). Free-course sign-ups
 -- (public.enrollments) deliberately have NO trigger: they are reported once a
 -- day by the /api/daily-digest cron instead.
+
+-- ---------------------------------------------------------------------------
+-- Lesson progress and assessments
+-- Added 17 August 2026 with the lesson player.
+-- ---------------------------------------------------------------------------
+
+-- One row per lesson a learner has finished. The unique constraint is what
+-- makes the client-side upsert idempotent, so revisiting a lesson neither
+-- errors nor moves the original completion date.
+create table if not exists public.lesson_progress (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  course_slug text not null,
+  lesson_id text not null,
+  completed_at timestamptz not null default now(),
+  unique (user_id, course_slug, lesson_id)
+);
+alter table public.lesson_progress enable row level security;
+
+create index if not exists lesson_progress_user_course_idx
+  on public.lesson_progress (user_id, course_slug);
+
+drop policy if exists "own progress readable" on public.lesson_progress;
+create policy "own progress readable" on public.lesson_progress
+  for select using (auth.uid() = user_id or public.has_role(auth.uid(), 'admin'));
+
+drop policy if exists "own progress writable" on public.lesson_progress;
+create policy "own progress writable" on public.lesson_progress
+  for insert with check (auth.uid() = user_id);
+
+-- Every attempt is kept, not just the best. Unlimited attempts are allowed, so
+-- the history is the evidence that a pass was earned rather than guessed at
+-- once, and it is what we would show if a certificate were ever questioned.
+create table if not exists public.quiz_attempts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  course_slug text not null,
+  score integer not null,
+  total integer not null,
+  passed boolean not null,
+  created_at timestamptz not null default now()
+);
+alter table public.quiz_attempts enable row level security;
+
+create index if not exists quiz_attempts_user_course_idx
+  on public.quiz_attempts (user_id, course_slug, score desc);
+
+drop policy if exists "own attempts readable" on public.quiz_attempts;
+create policy "own attempts readable" on public.quiz_attempts
+  for select using (auth.uid() = user_id or public.has_role(auth.uid(), 'admin'));
+
+-- Deliberately insert-only for the learner: a score can be added but never
+-- edited or deleted from the browser, so a pass cannot be manufactured by
+-- rewriting a failed attempt.
+drop policy if exists "own attempts writable" on public.quiz_attempts;
+create policy "own attempts writable" on public.quiz_attempts
+  for insert with check (auth.uid() = user_id);

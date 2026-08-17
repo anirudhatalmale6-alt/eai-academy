@@ -145,6 +145,12 @@ export function CourseDetail() {
                   ? "Starting checkout…"
                   : "Enrol now →"}
             </button>
+            <Link
+              to={`/course/${course.slug}/learn`}
+              className="btn btn-white w-full justify-center mt-2"
+            >
+              Preview the lessons →
+            </Link>
             {!free && !buyMsg && (
               <p className="text-ink2 text-[12.5px] mt-3 text-center">
                 Secure checkout via Stripe. Lifetime access.

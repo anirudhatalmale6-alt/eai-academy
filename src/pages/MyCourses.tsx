@@ -8,12 +8,27 @@ import {
   shareCertificate,
   linkedInAddUrl,
 } from "../lib/certificate";
+import { loadBestAttempt, loadProgress } from "../lib/progress";
+import { COURSE_CONTENT } from "../data/course-content.generated";
+import { hasFinalQuiz } from "../data/final-quizzes";
+
+// Lesson count comes from the built content, not the marketing label, so the
+// counter can never disagree with what is actually in the player.
+const lessonCount = (slug: string) =>
+  COURSE_CONTENT.find((c) => c.slug === slug)?.modules.reduce(
+    (n, m) => n + m.lessons.length,
+    0,
+  ) ?? 0;
 
 export function MyCourses() {
   const { user, loading } = useAuth();
   const [slugs, setSlugs] = useState<string[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [certName, setCertName] = useState("");
+  // A certificate is only offered once the final assessment has been passed.
+  // Handing one out on purchase would make it a receipt, not a credential.
+  const [passed, setPassed] = useState<Record<string, boolean>>({});
+  const [progress, setProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const saved = localStorage.getItem("eai_cert_name");
@@ -31,6 +46,28 @@ export function MyCourses() {
         else setSlugs([...new Set((data ?? []).map((r) => r.course_slug))]);
       });
   }, [user]);
+
+  useEffect(() => {
+    if (!slugs?.length) return;
+    slugs.forEach((slug) => {
+      loadBestAttempt(slug).then((r) =>
+        setPassed((p) => ({ ...p, [slug]: Boolean(r?.passed) })),
+      );
+      loadProgress(slug).then((ids) => {
+        // Same guard as the player: only count lessons that still exist, so a
+        // re-import that renumbers lessons cannot show "22 of 18".
+        const live = new Set(
+          COURSE_CONTENT.find((c) => c.slug === slug)?.modules.flatMap((m) =>
+            m.lessons.map((l) => l.id),
+          ) ?? [],
+        );
+        setProgress((p) => ({
+          ...p,
+          [slug]: ids.filter((id) => live.has(id)).length,
+        }));
+      });
+    });
+  }, [slugs]);
 
   if (loading) {
     return <div className="p-10 text-ink2">Loading…</div>;
@@ -115,46 +152,63 @@ export function MyCourses() {
                       {hoursLabel(c.learningHours)} · {c.lessonsLabel}
                     </p>
                     <Link
-                      to={`/course/${c.slug}`}
+                      to={`/course/${c.slug}/learn`}
                       className="btn btn-dark w-full justify-center mt-4 text-[14px]"
                     >
-                      Continue →
+                      {(progress[c.slug] ?? 0) > 0 ? "Continue →" : "Start learning →"}
                     </Link>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      <button
-                        onClick={() =>
-                          downloadCertificate(
-                            certName.trim(),
-                            c.title,
-                            c.priceCents > 0,
-                          )
-                        }
-                        className="btn btn-white justify-center text-[13.5px]"
-                      >
-                        ✦ Certificate
-                      </button>
-                      <button
-                        onClick={() =>
-                          shareCertificate(
-                            certName.trim(),
-                            c.title,
-                            c.priceCents > 0,
-                          )
-                        }
-                        className="btn btn-white justify-center text-[13.5px]"
-                      >
-                        ↗ Share
-                      </button>
-                    </div>
-                    <a
-                      href={linkedInAddUrl(certName.trim(), c.title)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn w-full justify-center text-[13.5px] text-white mt-2"
-                      style={{ backgroundColor: "#0a66c2" }}
-                    >
-                      Add to LinkedIn profile
-                    </a>
+
+                    {lessonCount(c.slug) > 0 && (
+                      <p className="text-[12.5px] text-ink2 mt-2">
+                        {progress[c.slug] ?? 0} of {lessonCount(c.slug)} lessons
+                      </p>
+                    )}
+
+                    {passed[c.slug] ? (
+                      <>
+                        <div className="grid grid-cols-2 gap-2 mt-3">
+                          <button
+                            onClick={() =>
+                              downloadCertificate(
+                                certName.trim(),
+                                c.title,
+                                c.priceCents > 0,
+                              )
+                            }
+                            className="btn btn-white justify-center text-[13.5px]"
+                          >
+                            ✦ Certificate
+                          </button>
+                          <button
+                            onClick={() =>
+                              shareCertificate(
+                                certName.trim(),
+                                c.title,
+                                c.priceCents > 0,
+                              )
+                            }
+                            className="btn btn-white justify-center text-[13.5px]"
+                          >
+                            ↗ Share
+                          </button>
+                        </div>
+                        <a
+                          href={linkedInAddUrl(certName.trim(), c.title)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn w-full justify-center text-[13.5px] text-white mt-2"
+                          style={{ backgroundColor: "#0a66c2" }}
+                        >
+                          Add to LinkedIn profile
+                        </a>
+                      </>
+                    ) : (
+                      <p className="text-[12.5px] text-ink2 mt-3 leading-relaxed border-t border-line pt-3">
+                        {hasFinalQuiz(c.slug)
+                          ? "Your certificate unlocks when you pass the final assessment at 80%."
+                          : "The final assessment for this subject is still being written."}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
