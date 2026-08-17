@@ -73,31 +73,30 @@ export const PRESENTER = {
   ],
 };
 
-// Times moved from 9:30am-12:30pm to a 12:00-1:30pm lunchtime slot: the
-// presenter works full time, so a weekday morning no longer works, and
-// lunchtime is the slot AU CPD webinars use because attendees can join without
-// booking leave. Awaiting the client's confirmation of the slot.
+// 11:30am to 1:00pm, confirmed by the client with the presenter. It was
+// 9:30am-12:30pm when this was a half day; he works full time, so the session
+// now runs across lunch and attendees do not need to book leave for it.
 export const WORKSHOPS: Workshop[] = [
   {
     id: "workshop-aug-2026",
     dateISO: "2026-08-28",
     dateLabel: "Friday 28 August 2026",
     shortDate: "28 Aug",
-    timeLabel: "12:00pm to 1:30pm AEST",
+    timeLabel: "11:30am to 1:00pm AEST",
   },
   {
     id: "workshop-sep-2026",
     dateISO: "2026-09-24",
     dateLabel: "Thursday 24 September 2026",
     shortDate: "24 Sep",
-    timeLabel: "12:00pm to 1:30pm AEST",
+    timeLabel: "11:30am to 1:00pm AEST",
   },
   {
     id: "workshop-oct-2026",
     dateISO: "2026-10-23",
     dateLabel: "Friday 23 October 2026",
     shortDate: "23 Oct",
-    timeLabel: "12:00pm to 1:30pm AEDT",
+    timeLabel: "11:30am to 1:00pm AEDT",
   },
 ];
 
