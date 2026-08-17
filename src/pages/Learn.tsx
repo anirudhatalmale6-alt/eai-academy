@@ -23,12 +23,27 @@ const SECTION_LABEL: Partial<Record<SectionKind, string>> = {
   takeaway: "Takeaway",
 };
 
-function Section({ kind, body }: { kind: SectionKind; body: string }) {
+function Section({
+  kind,
+  body,
+  label,
+}: {
+  kind: SectionKind;
+  body: string;
+  label?: string;
+}) {
   if (kind === "prompt") {
     return (
-      <pre className="bg-ink text-[#e2e8f0] rounded-xl p-4 my-4 text-[13.5px] leading-[1.55] whitespace-pre-wrap font-mono overflow-x-auto">
-        {body}
-      </pre>
+      <div className="my-4">
+        {label && (
+          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink2 mb-1.5">
+            {label}
+          </p>
+        )}
+        <pre className="bg-ink text-[#e2e8f0] rounded-xl p-4 text-[13.5px] leading-[1.55] whitespace-pre-wrap font-mono overflow-x-auto">
+          {body}
+        </pre>
+      </div>
     );
   }
   if (kind === "redline") {
@@ -46,12 +61,12 @@ function Section({ kind, body }: { kind: SectionKind; body: string }) {
     );
   }
 
-  const label = SECTION_LABEL[kind];
+  const heading = label ?? SECTION_LABEL[kind];
   return (
     <div className="my-4">
-      {label && (
+      {heading && (
         <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink2 mb-1.5">
-          {label}
+          {heading}
         </p>
       )}
       {body.split("\n\n").map((para, i) => (
@@ -253,7 +268,7 @@ export function Learn() {
 
               <div className="mt-5">
                 {current.lesson.sections.map((s, i) => (
-                  <Section key={i} kind={s.kind} body={s.body} />
+                  <Section key={i} kind={s.kind} body={s.body} label={s.label} />
                 ))}
               </div>
             </article>

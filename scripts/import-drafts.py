@@ -55,6 +55,15 @@ SOURCES = [
 
 # The eyebrow headings the drafts use, mapped to the section kinds the player
 # renders. Anything unrecognised is kept as a plain note rather than dropped.
+KIND_LABEL = {
+    "outcome": "What you will be able to do",
+    "idea": "The idea",
+    "do": "Do this",
+    "check": "Check this",
+    "watch": "Watch out",
+    "takeaway": "Takeaway",
+}
+
 KIND_BY_EYEBROW = {
     "what you will be able to do": "outcome",
     "the idea": "idea",
@@ -156,7 +165,14 @@ def parse_lesson(fragment: str, module_id: str, index: int):
         if t.group("eyebrow") is not None:
             pending = KIND_BY_EYEBROW.get(text_of(t.group("eyebrow")).lower(), "note")
         elif t.group("prompt") is not None:
-            sections.append({"kind": "prompt", "body": text_of(t.group("prompt"))})
+            # A prompt often follows its eyebrow directly with no prose in
+            # between. Carry the pending heading onto the prompt, otherwise
+            # "Do this" drifts down and labels the paragraph after it.
+            block = {"kind": "prompt", "body": text_of(t.group("prompt"))}
+            if pending:
+                block["label"] = KIND_LABEL.get(pending, "")
+                pending = None
+            sections.append(block)
         elif t.group("red") is not None:
             sections.append({"kind": "redline", "body": text_of(t.group("red"))})
         elif t.group("au") is not None:

@@ -19,6 +19,9 @@ export type SectionKind =
 export interface LessonSection {
   kind: SectionKind;
   body: string;
+  // Set when a prompt directly follows its heading in the draft, so the
+  // heading renders above the prompt rather than drifting to the next block.
+  label?: string;
 }
 
 export interface Lesson {

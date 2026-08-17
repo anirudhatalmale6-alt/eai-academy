@@ -180,10 +180,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Compare the transactions in the Bank sheet with those in the\nLedger sheet. Match on amount and date within three days.\nReturn three tables: matched, in the bank but not the ledger,\nand in the ledger but not the bank. For each unmatched item\ninclude the date, amount, description, and your best guess at\nthe reason. Do not delete or alter any source rows."
+                "body": "Compare the transactions in the Bank sheet with those in the\nLedger sheet. Match on amount and date within three days.\nReturn three tables: matched, in the bank but not the ledger,\nand in the ledger but not the bank. For each unmatched item\ninclude the date, amount, description, and your best guess at\nthe reason. Do not delete or alter any source rows.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "Three tables, not one verdict. The shape of the request determines whether you get something reviewable."
               },
               {
@@ -215,7 +216,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Using only the unmatched table above, write a short note for\nthe file. Group the items into: timing differences, likely\nmissing entries, and items needing investigation. For each\ngroup give the count, the total value, and one sentence on\nwhat needs to happen next. Plain professional English, no\nbullet point jargon."
+                "body": "Using only the unmatched table above, write a short note for\nthe file. Group the items into: timing differences, likely\nmissing entries, and items needing investigation. For each\ngroup give the count, the total value, and one sentence on\nwhat needs to happen next. Plain professional English, no\nbullet point jargon.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -287,7 +289,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "From the attached invoice schedule, calculate the accrual\nrequired at 31 August for services received but not yet\ninvoiced. Show the calculation for each supplier as a separate\nrow: supplier, period covered, daily rate, days accrued, amount.\nThen give the total. Do not round until the total."
+                "body": "From the attached invoice schedule, calculate the accrual\nrequired at 31 August for services received but not yet\ninvoiced. Show the calculation for each supplier as a separate\nrow: supplier, period covered, daily rate, days accrued, amount.\nThen give the total. Do not round until the total.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -322,7 +325,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Compare this month's trial balance with last month's. List\nevery account where the movement is greater than 10 percent\nor 5,000 dollars, whichever is smaller. For each, give the\nmovement in dollars and percent, and propose the most likely\nexplanation based on the transactions in that account. Mark\neach explanation as confirmed or unconfirmed. Everything you\npropose is unconfirmed."
+                "body": "Compare this month's trial balance with last month's. List\nevery account where the movement is greater than 10 percent\nor 5,000 dollars, whichever is smaller. For each, give the\nmovement in dollars and percent, and propose the most likely\nexplanation based on the transactions in that account. Mark\neach explanation as confirmed or unconfirmed. Everything you\npropose is unconfirmed.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -372,10 +376,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Build a 12 month budget from the actuals in this sheet, using\nexactly these drivers and no others:\n- revenue grows 6 percent on prior year, spread on the same\n seasonal pattern as last year\n- salaries rise 3.5 percent from 1 July\n- all other costs rise with revenue except rent and insurance,\n which are fixed\nShow each line as prior year, driver applied, budget. If any\nline does not fit these rules, list it separately rather than\nguessing."
+                "body": "Build a 12 month budget from the actuals in this sheet, using\nexactly these drivers and no others:\n- revenue grows 6 percent on prior year, spread on the same\n seasonal pattern as last year\n- salaries rise 3.5 percent from 1 July\n- all other costs rise with revenue except rent and insurance,\n which are fixed\nShow each line as prior year, driver applied, budget. If any\nline does not fit these rules, list it separately rather than\nguessing.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "\"List it separately rather than guessing\" is the most useful sentence in this course. It converts silent invention into a visible question."
               },
               {
@@ -403,7 +408,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Using the budget on this sheet, build three scenarios that\nchange only the assumptions block, never the formulas:\n- base: as built\n- downside: revenue growth 0 percent, debtor days up by 15\n- upside: revenue growth 12 percent, headcount up by two from\n January\nFor each, show revenue, EBITDA and closing cash. Then tell me\nwhich single assumption moves closing cash the most."
+                "body": "Using the budget on this sheet, build three scenarios that\nchange only the assumptions block, never the formulas:\n- base: as built\n- downside: revenue growth 0 percent, debtor days up by 15\n- upside: revenue growth 12 percent, headcount up by two from\n January\nFor each, show revenue, EBITDA and closing cash. Then tell me\nwhich single assumption moves closing cash the most.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -434,7 +440,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Here is our commentary from the last two months. Match its\nlength, tone and level of detail exactly. Using the variance\ntable below, draft this month's commentary. Rules: name the\ndriver, quantify it, say whether it is timing or permanent,\nand state what we are doing about it. No adjectives that do\nnot carry information. Anything you cannot support from the\ntable, leave as [TO CONFIRM]."
+                "body": "Here is our commentary from the last two months. Match its\nlength, tone and level of detail exactly. Using the variance\ntable below, draft this month's commentary. Rules: name the\ndriver, quantify it, say whether it is timing or permanent,\nand state what we are doing about it. No adjectives that do\nnot carry information. Anything you cannot support from the\ntable, leave as [TO CONFIRM].",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -471,7 +478,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "From the management accounts and the variance commentary\nattached, propose the five most decision-relevant messages for\na board, ranked. For each: the message in one sentence, the\nevidence behind it, and the decision or action it should prompt.\nExclude anything that is interesting but does not require a\nboard-level decision."
+                "body": "From the management accounts and the variance commentary\nattached, propose the five most decision-relevant messages for\na board, ranked. For each: the message in one sentence, the\nevidence behind it, and the decision or action it should prompt.\nExclude anything that is interesting but does not require a\nboard-level decision.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -498,7 +506,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Turn this board paper into a 10 slide deck using our template.\nOne message per slide as the headline. Put supporting numbers\nin the slide body, and move all detailed schedules to an\nappendix. Do not re-type any figure: reference the source\ntable so I can check each one."
+                "body": "Turn this board paper into a 10 slide deck using our template.\nOne message per slide as the headline. Put supporting numbers\nin the slide body, and move all detailed schedules to an\nappendix. Do not re-type any figure: reference the source\ntable so I can check each one.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -525,7 +534,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "You are a non-executive director with a finance background,\nreading this pack for the first time. List the ten questions\nyou would ask, hardest first. For each, note whether the pack\nalready answers it, answers it partially, or does not answer\nit at all."
+                "body": "You are a non-executive director with a finance background,\nreading this pack for the first time. List the ten questions\nyou would ask, hardest first. For each, note whether the pack\nalready answers it, answers it partially, or does not answer\nit at all.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -571,7 +581,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Our operations manager needs to decide weekly on stock\npurchasing and casual rostering. Propose the smallest set of\nmeasures that supports exactly those two decisions. For each,\nsay what action a change in it should trigger. Then list the\nmeasures we currently report that do not support either\ndecision."
+                "body": "Our operations manager needs to decide weekly on stock\npurchasing and casual rostering. Propose the smallest set of\nmeasures that supports exactly those two decisions. For each,\nsay what action a change in it should trigger. Then list the\nmeasures we currently report that do not support either\ndecision.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -598,10 +609,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Build a summary sheet from the transactions table with these\nmeasures: [your list from 6.1]. Use formulas that reference the\nwhole table so new rows are picked up automatically. Do not\npaste any values. Then tell me exactly what would break if next\nmonth's export has an extra column or renamed headers."
+                "body": "Build a summary sheet from the transactions table with these\nmeasures: [your list from 6.1]. Use formulas that reference the\nwhole table so new rows are picked up automatically. Do not\npaste any values. Then tell me exactly what would break if next\nmonth's export has an extra column or renamed headers.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "That last question is the important one. Knowing the failure mode in advance is what stops a dashboard quietly going stale."
               },
               {
@@ -713,10 +725,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "ROLE You are reviewing this as a senior accountant.\nSOURCE Use only the attached trial balance and the prior year\n comparison. Do not use outside knowledge.\nTASK Identify the five accounts most likely to contain an\n error, and say why for each.\nSHAPE A table: account, movement, reason for suspicion,\n what I should check.\nLIMIT If the data does not support a suspicion, return fewer\n than five rows rather than filling the table."
+                "body": "ROLE You are reviewing this as a senior accountant.\nSOURCE Use only the attached trial balance and the prior year\n comparison. Do not use outside knowledge.\nTASK Identify the five accounts most likely to contain an\n error, and say why for each.\nSHAPE A table: account, movement, reason for suspicion,\n what I should check.\nLIMIT If the data does not support a suspicion, return fewer\n than five rows rather than filling the table.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "That last line is the one people leave out, and it is the one that stops the model manufacturing a fifth answer to satisfy your request."
               },
               {
@@ -794,7 +807,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Using only this lease, answer each question separately. For\neach, quote the exact clause you relied on and give the clause\nnumber. If the lease does not answer the question, say NOT\nADDRESSED rather than reasoning from general knowledge.\n\n1. What is the review mechanism and when does it apply?\n2. Who pays outgoings, and are any excluded?\n3. What are the make-good obligations at the end of term?\n4. Is there an option to renew, and what triggers it?"
+                "body": "Using only this lease, answer each question separately. For\neach, quote the exact clause you relied on and give the clause\nnumber. If the lease does not answer the question, say NOT\nADDRESSED rather than reasoning from general knowledge.\n\n1. What is the review mechanism and when does it apply?\n2. Who pays outgoings, and are any excluded?\n3. What are the make-good obligations at the end of term?\n4. Is there an option to renew, and what triggers it?",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -821,7 +835,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Quote the relevant text word for word, in quotation marks,\nexactly as it appears including any defined terms. Then, on a\nseparate line, give your plain English reading. Never merge\nthe two."
+                "body": "Quote the relevant text word for word, in quotation marks,\nexactly as it appears including any defined terms. Then, on a\nseparate line, give your plain English reading. Never merge\nthe two.",
+                "label": "Do this"
               },
               {
                 "kind": "watch",
@@ -844,10 +859,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Compare version A and version B of this agreement. List only\nchanges that alter an obligation, a payment, a timeframe or a\nrisk allocation. For each: the clause, the old wording, the\nnew wording, and who it now favours. Ignore formatting and\npure drafting changes. Then separately list anything removed\nentirely."
+                "body": "Compare version A and version B of this agreement. List only\nchanges that alter an obligation, a payment, a timeframe or a\nrisk allocation. For each: the clause, the old wording, the\nnew wording, and who it now favours. Ignore formatting and\npure drafting changes. Then separately list anything removed\nentirely.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "\"Anything removed entirely\" is asked for separately because deletions are what get missed. There is no new text to notice."
               },
               {
@@ -881,7 +897,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Extract these fields from each attached invoice into one table:\n- supplier_name: exactly as printed\n- abn: digits only, or MISSING\n- invoice_date: DD/MM/YYYY as printed, do not reformat or infer\n- invoice_number: as printed\n- subtotal_ex_gst, gst_amount, total_inc_gst: numbers only\n- source_file: the file name\n\nRules: never calculate a field that is not printed. If GST is\nnot shown, write MISSING, do not derive it. One row per\ninvoice, no merged rows."
+                "body": "Extract these fields from each attached invoice into one table:\n- supplier_name: exactly as printed\n- abn: digits only, or MISSING\n- invoice_date: DD/MM/YYYY as printed, do not reformat or infer\n- invoice_number: as printed\n- subtotal_ex_gst, gst_amount, total_inc_gst: numbers only\n- source_file: the file name\n\nRules: never calculate a field that is not printed. If GST is\nnot shown, write MISSING, do not derive it. One row per\ninvoice, no merged rows.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -908,10 +925,11 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Add two columns to the table above:\n- confidence: high, medium or low, based on how clearly the\n field was printed\n- flag: any row where a field was hard to read, where two\n values could have been the field, or where the arithmetic\n does not tie\n\nThen, below the table, state: how many rows you produced, how\nmany documents you were given, and any document you could not\nprocess at all."
+                "body": "Add two columns to the table above:\n- confidence: high, medium or low, based on how clearly the\n field was printed\n- flag: any row where a field was hard to read, where two\n values could have been the field, or where the arithmetic\n does not tie\n\nThen, below the table, state: how many rows you produced, how\nmany documents you were given, and any document you could not\nprocess at all.",
+                "label": "Do this"
               },
               {
-                "kind": "do",
+                "kind": "note",
                 "body": "Row count against document count is a ten-second check that catches silently skipped files, which is the extraction error people notice last."
               },
               {
@@ -981,7 +999,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Write a client letter setting out the following advice.\nThe conclusion is mine and is not open for revision:\n[your conclusion]\nThe facts you may rely on are these and only these:\n[facts]\nStructure: what we were asked, what we found, what we\nrecommend, what we need from you.\nDo not add caveats I have not given you. Do not restate the\nlaw in general terms. If a fact is needed that I have not\nprovided, mark it [FACT NEEDED] rather than assuming it."
+                "body": "Write a client letter setting out the following advice.\nThe conclusion is mine and is not open for revision:\n[your conclusion]\nThe facts you may rely on are these and only these:\n[facts]\nStructure: what we were asked, what we found, what we\nrecommend, what we need from you.\nDo not add caveats I have not given you. Do not restate the\nlaw in general terms. If a fact is needed that I have not\nprovided, mark it [FACT NEEDED] rather than assuming it.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -1008,7 +1027,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Here are three letters we have sent. Study the sentence\nlength, how we open, how we deliver bad news, and how much we\nexplain before we recommend. Match those patterns. Do not\nmatch the content.\n\nNow draft the following letter in that voice: [brief]"
+                "body": "Here are three letters we have sent. Study the sentence\nlength, how we open, how we deliver bad news, and how much we\nexplain before we recommend. Match those patterns. Do not\nmatch the content.\n\nNow draft the following letter in that voice: [brief]",
+                "label": "Do this"
               },
               {
                 "kind": "takeaway",
@@ -1031,7 +1051,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Rewrite the draft below. Remove every sentence that does not\ncarry information. Delete phrases like \"it is important to\nnote\", \"this may vary\", and any recommendation to seek\nprofessional advice, since we are the professional advice.\nKeep every number and every deadline. Aim for about 30 percent\nshorter without losing content."
+                "body": "Rewrite the draft below. Remove every sentence that does not\ncarry information. Delete phrases like \"it is important to\nnote\", \"this may vary\", and any recommendation to seek\nprofessional advice, since we are the professional advice.\nKeep every number and every deadline. Aim for about 30 percent\nshorter without losing content.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -1068,7 +1089,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Answer using only sources you have actually retrieved in this\nsession. For each claim, give the source and a direct quote\nfrom it. If you did not retrieve a source for a claim, mark it\nUNSOURCED. Do not produce a citation you cannot quote from."
+                "body": "Answer using only sources you have actually retrieved in this\nsession. For each claim, give the source and a direct quote\nfrom it. If you did not retrieve a source for a claim, mark it\nUNSOURCED. Do not produce a citation you cannot quote from.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -1132,7 +1154,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Review this workbook as a careful reviewer would. Look for:\nformulas inconsistent with the rest of their row or column,\nhard-coded numbers inside formulas, references pointing\noutside the intended range, totals that do not equal the sum\nof their parts, and anything labelled in a way that does not\nmatch what it calculates. List findings by severity with the\ncell reference. Do not change anything."
+                "body": "Review this workbook as a careful reviewer would. Look for:\nformulas inconsistent with the rest of their row or column,\nhard-coded numbers inside formulas, references pointing\noutside the intended range, totals that do not equal the sum\nof their parts, and anything labelled in a way that does not\nmatch what it calculates. List findings by severity with the\ncell reference. Do not change anything.",
+                "label": "Do this"
               },
               {
                 "kind": "check",
@@ -1159,7 +1182,8 @@ export const COURSE_CONTENT: CourseContent[] = [
               },
               {
                 "kind": "prompt",
-                "body": "Here is my conclusion and the reasoning behind it. Argue\nagainst it as strongly as the evidence allows. Identify the\nweakest link, what assumption it rests on, and what evidence\nwould overturn it. Do not be balanced. Do not reassure me."
+                "body": "Here is my conclusion and the reasoning behind it. Argue\nagainst it as strongly as the evidence allows. Identify the\nweakest link, what assumption it rests on, and what evidence\nwould overturn it. Do not be balanced. Do not reassure me.",
+                "label": "Do this"
               },
               {
                 "kind": "takeaway",
