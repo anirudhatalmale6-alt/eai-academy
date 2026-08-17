@@ -149,7 +149,7 @@ export function CourseDetail() {
               to={`/course/${course.slug}/learn`}
               className="btn btn-white w-full justify-center mt-2"
             >
-              Preview the lessons →
+              Read module 1 free →
             </Link>
             {!free && !buyMsg && (
               <p className="text-ink2 text-[12.5px] mt-3 text-center">

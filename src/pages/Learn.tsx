@@ -11,6 +11,8 @@ import {
   loadProgress,
   recordQuizAttempt,
 } from "../lib/progress";
+import { FREE_PREVIEW_MODULES, useAccess } from "../lib/entitlement";
+import { money } from "../data/courses";
 
 // How each section of a lesson is introduced. The drafts use these headings,
 // so a learner sees the same shape Angela reviewed.
@@ -84,6 +86,7 @@ export function Learn() {
   const course = getCourse(slug);
   const content = COURSE_CONTENT.find((c) => c.slug === slug);
 
+  const access = useAccess(slug, course?.priceCents ?? 0);
   const [done, setDone] = useState<string[]>([]);
   const [best, setBest] = useState<{ score: number; total: number; passed: boolean } | null>(
     null,
@@ -141,6 +144,12 @@ export function Learn() {
 
   const quizQuestions = FINAL_QUIZZES[slug] ?? [];
 
+  // In preview, only the first module is readable. Everything else, including
+  // the assessment, needs the course to have been bought.
+  const locked = (moduleIndex: number) =>
+    access === "preview" && moduleIndex >= FREE_PREVIEW_MODULES;
+  const currentLocked = locked(current.moduleIndex);
+
   return (
     <div className="mt-1 grid lg:grid-cols-[290px_1fr] gap-6">
       {/* Contents */}
@@ -164,10 +173,11 @@ export function Learn() {
         </div>
 
         <nav className="mt-5 grid gap-4">
-          {content.modules.map((m) => (
+          {content.modules.map((m, mi) => (
             <div key={m.id}>
               <p className="text-[12px] font-bold uppercase tracking-[0.1em] text-ink2">
                 {m.number}. {m.title}
+                {locked(mi) && <span className="ml-1.5 opacity-60">🔒</span>}
               </p>
               <div className="grid gap-0.5 mt-1.5">
                 {m.lessons.map((l) => {
@@ -206,7 +216,20 @@ export function Learn() {
       {/* Lesson or quiz */}
       <main>
         {isQuiz ? (
-          certificateRule(course.priceCents) === "completion" ? (
+          access === "preview" ? (
+            // The assessment is what issues the certificate, so it is never
+            // available on a preview.
+            <div className="bg-panel border border-line rounded-[20px] p-9">
+              <h1 className="text-[26px] font-bold">Part of the course</h1>
+              <p className="text-ink2 mt-2 max-w-[540px] leading-relaxed">
+                The final assessment and the certificate come with the course.
+                Module 1 is open to read first.
+              </p>
+              <Link to={`/course/${slug}`} className="btn btn-accent mt-5">
+                Enrol for {money(course.priceCents)} + GST →
+              </Link>
+            </div>
+          ) : certificateRule(course.priceCents) === "completion" ? (
             // The free course is not examined. Finishing it is the bar, and the
             // certificate says "Foundation course" rather than claiming an
             // assessment that never happened.
@@ -260,6 +283,37 @@ export function Learn() {
           )
         ) : (
           <>
+            {currentLocked ? (
+              <div className="bg-panel border border-line rounded-[20px] p-6 sm:p-9">
+                <p className="text-[12.5px] font-bold uppercase tracking-[0.12em] text-ink2">
+                  Module {content.modules[current.moduleIndex].number} ·{" "}
+                  {content.modules[current.moduleIndex].title}
+                </p>
+                <h1 className="text-[26px] sm:text-[31px] font-bold tracking-[-0.7px] mt-2 leading-[1.2]">
+                  {current.lesson.number} {current.lesson.title}
+                </h1>
+                <p className="text-ink2 mt-5 max-w-[540px] leading-relaxed">
+                  Module 1 is open so you can see how the course is written and
+                  judge whether it is for you. The remaining{" "}
+                  {content.modules.length - FREE_PREVIEW_MODULES} modules are
+                  part of the course.
+                </p>
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <Link to={`/course/${slug}`} className="btn btn-accent">
+                    Enrol for {money(course.priceCents)} + GST →
+                  </Link>
+                  <Link
+                    to={`/course/${slug}/learn/${flat[0].lesson.id}`}
+                    className="btn btn-white"
+                  >
+                    Back to module 1
+                  </Link>
+                </div>
+                <p className="text-ink2 text-[13px] mt-5">
+                  Already bought it? Sign in and it will unlock.
+                </p>
+              </div>
+            ) : (
             <article className="bg-white border border-line rounded-[20px] p-6 sm:p-9">
               <p className="text-[12.5px] font-bold uppercase tracking-[0.12em] text-ink2">
                 Module {content.modules[current.moduleIndex].number} ·{" "}
@@ -290,13 +344,17 @@ export function Learn() {
               </div>
             </article>
 
-            {current.isLastOfModule &&
+            )}
+
+            {!currentLocked &&
+              current.isLastOfModule &&
               content.modules[current.moduleIndex].check && (
                 <KnowledgeCheck
                   question={content.modules[current.moduleIndex].check!}
                 />
               )}
 
+            {!currentLocked && (
             <div className="flex flex-wrap items-center gap-3 mt-6">
               {index > 0 && (
                 <Link
@@ -316,6 +374,7 @@ export function Learn() {
                     : "Mark complete and continue →"}
               </button>
             </div>
+            )}
           </>
         )}
       </main>
